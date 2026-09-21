@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="page.title">Acme — Module name</title>
+
+    <!-- ══ ANTI-FLASH ═════════════════════════════════════════════════════
+         Everything restored from storage that affects layout or visibility
+         is applied to <html> HERE, before the stylesheets, before the first
+         paint. Move any of this below and the user watches the menu open and
+         snap shut on every navigation.
+
+         Every try/catch is load-bearing: localStorage throws outright in some
+         privacy modes, and one uncaught error blanks the page.
+         ═══════════════════════════════════════════════════════════════════ -->
+    <script>
+        try {
+            if (localStorage.getItem('app.sidebar.collapsed') === '1') {
+                document.documentElement.classList.add('sb-collapsed');
+            }
+        } catch (_e) { /* storage unavailable */ }
+
+        try {
+            // Nav items only administrators may follow are hidden from the
+            // cached role, so a reviewer never sees them appear and vanish.
+            // The session request re-applies this once it answers.
+            var _u = JSON.parse(localStorage.getItem('app.user') || 'null');
+            if (_u && _u.role && _u.role !== 'Administrator') {
+                document.documentElement.classList.add('role-user');
+            }
+        } catch (_e) { }
+
+        try {
+            var _p = JSON.parse(localStorage.getItem('app.preferences') || '{}');
+            var _lang = _p.language || 'en';
+            document.documentElement.lang = _lang;
+            if (_lang !== 'en') document.documentElement.classList.add('i18n-pending');
+        } catch (_e) { }
+    </script>
+    <style>
+        html.i18n-pending [data-i18n],
+        html.i18n-pending [data-i18n-html] {
+            visibility: hidden;
+        }
+    </style>
+
+    <!-- Order matters: palette, then shell (written in palette tokens),
+         then this page (written in both). -->
+    <link rel="stylesheet" href="/theme.css">
+    <link rel="stylesheet" href="/shell.css">
+    <link rel="stylesheet" href="styles.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="app-body">
+    <div class="shell">
+
+        <!-- ══ SIDEBAR ═══════════════════════════════════════════════════ -->
+        <aside class="sidebar" aria-label="Primary navigation">
+            <div class="sidebar-brand">
+                <img src="/assets/logo.svg" alt="Acme" class="brand-logo">
+                <!-- Shown only when collapsed, when the wordmark no longer fits -->
+                <img src="/assets/mark.svg" alt="" aria-hidden="true" class="brand-mark">
+            </div>
+
+            <nav class="sidebar-nav" aria-label="Modules">
+                <div class="sidebar-section" data-i18n="nav.workspace">Workspace</div>
+
+                <!-- aria-current is the announcement; .is-active is the styling.
+                     Ship both. -->
+                <a class="nav-item is-active" href="/overview" aria-current="page">
+                    <span class="nav-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <rect x="3" y="3" width="7" height="7" rx="1" />
+                            <rect x="14" y="3" width="7" height="7" rx="1" />
+                            <rect x="3" y="14" width="7" height="7" rx="1" />
+                            <rect x="14" y="14" width="7" height="7" rx="1" />
+                        </svg>
+                    </span>
+                    <span class="nav-label" data-i18n="nav.overview">Overview</span>
+                </a>
+
+                <a class="nav-item" href="/records" data-admin-only>
+                    <span class="nav-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M14 3v4a2 2 0 0 0 2 2h4" />
+                            <path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z" />
+                            <path d="M9 13h6" />
+                            <path d="M9 17h4" />
+                        </svg>
+                    </span>
+                    <span class="nav-label" data-i18n="nav.records">Records</span>
+                    <span class="nav-badge">12</span>
+                </a>
+
+                <a class="nav-item" href="/settings">
+                    <span class="nav-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="3" />
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                        </svg>
+                    </span>
+                    <span class="nav-label" data-i18n="nav.settings">Settings</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="sidebar-toggle" type="button" data-toggle-sidebar>
+                    <span class="toggle-icon" aria-hidden="true">&#8249;</span>
+                    <span data-i18n="nav.collapse">Collapse</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- ══ TOPBAR ════════════════════════════════════════════════════
+             Sharp corners, no shadow, one hairline underneath, and exactly
+             ONE vertical divider — before the user menu. -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <h1 class="topbar-title" data-i18n="page.heading">Overview</h1>
+            </div>
+
+            <div class="topbar-right">
+                <button class="icon-btn" type="button" aria-label="Notifications"
+                    data-i18n-attr="aria-label:topbar.notifications">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                    </svg>
+                    <span class="badge-dot" aria-hidden="true">3</span>
+                </button>
+
+                <div class="user-menu" role="button" tabindex="0" aria-haspopup="menu" aria-expanded="false"
+                    aria-label="Account menu" data-i18n-attr="aria-label:topbar.account_menu">
+                    <span class="user-avatar" aria-hidden="true">AN</span>
+                    <span class="user-info">
+                        <span class="user-name">A. Nguyen</span>
+                        <span class="user-role" data-i18n="role.admin">Administrator</span>
+                    </span>
+                    <span class="user-caret" aria-hidden="true">&#9662;</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- ══ MAIN ══════════════════════════════════════════════════════
+             min-width: 0 on .main is what stops one wide table from
+             stretching the grid column and pushing the sidebar off screen. -->
+        <main class="main" id="main" tabindex="-1">
+            <div class="container">
+
+                <div class="page-title">
+                    <h1 data-i18n="page.h1">Overview</h1>
+                    <p data-i18n="page.sub">What happened across every module today.</p>
+                </div>
+
+                <section class="card" aria-labelledby="cardTitle">
+                    <div class="card-head">
+                        <div>
+                            <h3 class="card-title" id="cardTitle" data-i18n="card.title">Section title</h3>
+                            <p class="note" data-i18n="card.note">One sentence of context, capped near 72ch so it
+                                stays readable.</p>
+                        </div>
+                        <div class="actions">
+                            <button class="btn btn-sm" type="button" data-i18n="action.export">Export</button>
+                            <button class="btn btn-primary" type="button" data-i18n="action.run">Run</button>
+                        </div>
+                    </div>
+
+                    <!-- Filter row: flex-wrap, align to the baseline, a Clear
+                         button that hides itself, and a live result count. -->
+                    <div class="filters" role="search">
+                        <label class="field">
+                            <span data-i18n="filter.source">Source</span>
+                            <select id="filterSource">
+                                <option value="" data-i18n="filter.source_all">All sources</option>
+                            </select>
+                        </label>
+                        <label class="field field-grow">
+                            <span data-i18n="filter.search">Search</span>
+                            <input type="search" id="filterSearch" spellcheck="false"
+                                data-i18n-attr="placeholder:filter.search_ph" placeholder="Search by name">
+                        </label>
+                        <button type="button" class="link-btn" id="filterClear" hidden
+                            data-i18n="filter.clear">Clear filters</button>
+                    </div>
+                    <p class="filter-note" id="filterNote" aria-live="polite" hidden></p>
+
+                    <div class="tiles" id="tiles"></div>
+
+                    <div class="table-wrap">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="num">#</th>
+                                    <th data-i18n="col.name">Name</th>
+                                    <th data-i18n="col.state">State</th>
+                                    <th class="num" data-i18n="col.total">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="rows"></tbody>
+                        </table>
+                    </div>
+
+                    <p class="empty" id="empty" hidden></p>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="/shell.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>

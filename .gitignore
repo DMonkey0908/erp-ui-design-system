@@ -1,0 +1,12 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.idea/
+.vscode/
+*.swp
+
+# This repo is documentation only — no build, no dependencies.
+# If that ever changes, add the build output here rather than committing it.
