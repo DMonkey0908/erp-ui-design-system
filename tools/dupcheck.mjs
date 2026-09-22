@@ -63,9 +63,21 @@ can cannot could should would may might must will shall
 here there thing things something anything nothing
 `.trim().split(/\s+/));
 
+/**
+ * Drop the section a pack is REQUIRED to quote core in.
+ *
+ * An override has to name the rule it contradicts, verbatim, or a reader
+ * cannot tell which rule is being overridden - the build already fails a pack
+ * that declares one without defending it. So the overlap in that section is
+ * the mechanism working, not a duplicate.
+ */
+function dropOverrides(md) {
+  return md.replace(/^##\s+Overrides\s*$[\s\S]*?(?=^##\s)/m, ' ');
+}
+
 /** Prose only: code examples share vocabulary by necessity and prove nothing. */
 function prose(md) {
-  return md
+  return dropOverrides(md)
     .replace(/```[\s\S]*?```/g, ' ')
     .replace(/^#.*$/gm, ' ')
     .replace(/`[^`]*`/g, ' ')

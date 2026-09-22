@@ -101,6 +101,32 @@ Dense, dark-chrome operational software: admin panels, operations consoles, back
 Skill name: `erp-ui-design`
 
 Keywords: `erp`, `admin panel`, `back-office`, `operations console`, `internal tool`, `dashboard`, `data table`, `dense`, `dark chrome`, `enterprise`
+
+### `mobile-app` - Mobile app *(beta)*
+
+Installed apps held in one hand: iOS and Android, native or cross-platform, used in short interrupted sessions.
+
+**Optimises for:** One thumb, on a screen that will be interrupted before the task is finished.
+**Density:** comfortable - 17pt/16sp body, 44pt minimum row height, 16pt screen margins
+
+**Choose it when the project is:**
+
+- an installed app on a phone or tablet, native or cross-platform
+- a screen operated with a thumb rather than a cursor
+- a question about where a control belongs on a small screen
+- a screen that must survive being backgrounded, rotated or interrupted
+- porting a desktop or web screen down to a phone
+
+**Do NOT choose it for:**
+
+- desktop admin panels, operations consoles and anything used with a mouse at desk distance - use the erp pack
+- marketing sites and landing pages, even the ones read on a phone - use the consumer-web pack, which optimises for a stranger's first five seconds rather than for a returning user's thumb
+- dense data tables and any screen whose job is to show twenty rows at once
+- watch, TV and spatial interfaces, whose input and viewing distance are different problems again
+
+Skill name: `mobile-app-design`
+
+Keywords: `mobile app`, `ios`, `android`, `thumb zone`, `bottom sheet`, `tab bar`, `touch target`, `safe area`, `gesture`, `swiftui`, `jetpack compose`, `react native`, `flutter`
 <!-- PACKS:END:select -->
 
 ### Matching rules
@@ -129,8 +155,8 @@ human will use this with a different tool than you, install that tool's format.
 | Assistant | Install | Always in context |
 |---|---|---|
 | Claude Code, Claude Desktop | `dist/claude/<skill-name>/` -> `.claude/skills/<skill-name>/` | ~200 tokens (the description only) |
-| Gemini CLI / Code Assist | `dist/gemini/<id>-lean/` -> repo root | **~1,800 tokens** |
-| Codex, Cursor, any `AGENTS.md` tool | `dist/gpt/<id>-lean/` -> repo root | **~1,800 tokens** |
+| Gemini CLI / Code Assist | `dist/gemini/<id>-lean/` -> repo root | **~2,150 tokens** |
+| Codex, Cursor, any `AGENTS.md` tool | `dist/gpt/<id>-lean/` -> repo root | **~2,150 tokens** |
 | Gemini Gem | `dist/gemini/<id>.GEMINI.md` | whole file - paste-in only |
 | Custom GPT | `dist/gpt/<id>.custom-gpt-instructions.md` | Fenced block -> Instructions; `<id>.AGENTS.md` -> Knowledge |
 <!-- COST:END:install -->
@@ -143,7 +169,7 @@ the activation block, the thesis, the hard rules, and an index. The assistant
 opens the one reference its task needs, the way the Claude skill already does.
 
 <!-- COST:START:install-note -->
-That is **~1,800 tokens instead of ~30,000 tokens**, on every request, including every
+That is **~2,150 tokens instead of ~30,000 tokens**, on every request, including every
 request with nothing to do with UI.
 <!-- COST:END:install-note -->
 

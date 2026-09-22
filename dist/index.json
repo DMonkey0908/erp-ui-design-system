@@ -179,6 +179,77 @@
         "projectRules": "dist/snippets/erp.project-rules.md",
         "lifecycle": "dist/snippets/erp.lifecycle.md"
       }
+    },
+    {
+      "id": "mobile-app",
+      "name": "Mobile app",
+      "status": "beta",
+      "summary": "Installed apps held in one hand: iOS and Android, native or cross-platform, used in short interrupted sessions.",
+      "summaryVi": "Ứng dụng đã cài, cầm bằng một tay: iOS và Android, native hay cross-platform, dùng trong những phiên ngắn và hay bị ngắt quãng.",
+      "optimisesFor": "One thumb, on a screen that will be interrupted before the task is finished.",
+      "when": [
+        "an installed app on a phone or tablet, native or cross-platform",
+        "a screen operated with a thumb rather than a cursor",
+        "a question about where a control belongs on a small screen",
+        "a screen that must survive being backgrounded, rotated or interrupted",
+        "porting a desktop or web screen down to a phone"
+      ],
+      "notFor": [
+        "desktop admin panels, operations consoles and anything used with a mouse at desk distance - use the erp pack",
+        "marketing sites and landing pages, even the ones read on a phone - use the consumer-web pack, which optimises for a stranger's first five seconds rather than for a returning user's thumb",
+        "dense data tables and any screen whose job is to show twenty rows at once",
+        "watch, TV and spatial interfaces, whose input and viewing distance are different problems again"
+      ],
+      "keywords": [
+        "mobile app",
+        "ios",
+        "android",
+        "thumb zone",
+        "bottom sheet",
+        "tab bar",
+        "touch target",
+        "safe area",
+        "gesture",
+        "swiftui",
+        "jetpack compose",
+        "react native",
+        "flutter"
+      ],
+      "density": "comfortable - 17pt/16sp body, 44pt minimum row height, 16pt screen margins",
+      "surfaces": {
+        "chrome": "the tab bar and the navigation bar - translucent over the content, flush with the system, never a frame around it",
+        "canvas": "the scrolling content itself; there is no separate page background behind it",
+        "content": "list rows separated by inset dividers, not cards",
+        "floating": "sheets that rise from the bottom edge - the dominant modal form; dialogs are the exception",
+        "accent": "one value per surface, and it marks the single primary action per screen",
+        "semantic": "success/warning/danger/info, with danger reserved for what cannot be undone"
+      },
+      "overrides": [
+        {
+          "rule": "core/03-layout.md: never remove functionality at a smaller size - change its form",
+          "why": "A phone is not a smaller size of something, it is the only size. This pack removes functionality outright rather than compacting it: a secondary report, a bulk edit, a twelve-column table are moved to the web app and linked, because the compacted version of each one is worse than an honest absence. The core rule protects a responsive layout from dropping features as the viewport narrows; it is not a mandate to fit a desktop feature set onto a phone."
+        }
+      ],
+      "skillName": "mobile-app-design",
+      "platform": {
+        "input": [
+          "touch"
+        ],
+        "minTarget": "44pt",
+        "note": "One thumb, on a device held while walking. 44pt on iOS and 48dp on Android are the platform floors; this pack treats them as the floor and puts anything used often into the reachable arc at the bottom."
+      },
+      "install": {
+        "claude": "dist/claude/mobile-app-design/",
+        "gemini": "dist/gemini/mobile-app-lean/",
+        "geminiSingleFile": "dist/gemini/mobile-app.GEMINI.md",
+        "gpt": "dist/gpt/mobile-app-lean/",
+        "gptSingleFile": "dist/gpt/mobile-app.AGENTS.md",
+        "customGpt": null,
+        "cursor": "dist/cursor/mobile-app.mdc",
+        "copilot": "dist/copilot/mobile-app.instructions.md",
+        "projectRules": "dist/snippets/mobile-app.project-rules.md",
+        "lifecycle": "dist/snippets/mobile-app.lifecycle.md"
+      }
     }
   ]
 }
