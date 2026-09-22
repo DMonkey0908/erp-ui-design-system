@@ -263,7 +263,10 @@
     min-height: var(--target-min);
     min-width: var(--target-min);
     padding-inline: var(--space-md);
-    border: 1px solid var(--separator);
+    /* The only thing saying this is a control, since its fill matches the
+       surface behind it - so it is an interactive boundary at 3:1, not a
+       structural hairline. */
+    border: 1px solid var(--border-control);
     border-radius: var(--radius-control);
     background: var(--surface);
     color: var(--text);
@@ -574,7 +577,7 @@
     box-sizing: border-box;
     min-height: var(--target-min);
     padding: var(--space-md);
-    border: 1px solid var(--separator);
+    border: 1px solid var(--border-control);
     border-radius: var(--radius-control);
     background: var(--bg);
     color: var(--text);

@@ -1861,19 +1861,37 @@ number that somebody else supplied, and a palette with opinions fights it.
 
   "text":           { "light": "#0b0b0f", "dark": "#f2f2f7" },
   "text-secondary": { "light": "#5b5b66", "dark": "#a1a1aa" },
-  "text-tertiary":  { "light": "#8e8e99", "dark": "#7a7a85" },
+  "text-tertiary":  { "light": "#6e6e79", "dark": "#92929d" },
 
   "separator":      { "light": "#d8d8de", "dark": "#38383c" },
+  "border-control": { "light": "#8b8b96", "dark": "#74747f" },
   "fill-quiet":     { "light": "#f2f2f7", "dark": "#2c2c2e" },
 
   "success":        { "light": "#1a7f45", "dark": "#48d17e" },
-  "warning":        { "light": "#9a6600", "dark": "#f0b429" },
+  "warning":        { "light": "#986400", "dark": "#f0b429" },
   "danger":         { "light": "#c7212f", "dark": "#ff6b6b" },
   "info":           { "light": "#5b5b66", "dark": "#a1a1aa" }
 }
 ```
 
-Three things that are specific to this domain:
+#### Two kinds of line, and only one of them is a hairline
+
+`separator` and `border-control` look like the same grey and are held to
+different standards, which is the distinction that gets collapsed.
+
+- **`separator` is structural** — the line between two rows, under a bar. It
+  separates content from content, so it may be as quiet as it likes. A 3:1
+  divider reads as a rule, and neither platform draws one.
+- **`border-control` is the only thing saying "this is a control"** on a button
+  or a field whose fill matches the surface behind it. That is an interactive
+  boundary, so core `05-accessibility.md` holds it to 3:1 — and it is the
+  commonest way a bordered control on a white background quietly fails.
+
+Reach for `separator` by default and `border-control` the moment the line is
+the edge of something tappable. If a control's fill already differs from the
+surface, neither applies and the fill is doing the work.
+
+Three more things that are specific to this domain:
 
 - **Two values per colour, always, and dark mode is not optional.** A phone
   switches theme on a schedule the user set, on a device they are holding in
@@ -2233,10 +2251,10 @@ pending   a HOLLOW dot - a 2pt ring, nothing inside
 label     always present; the dot is the second signal, never the first
 ```
 
-The hollow ring is doing real work: it is the one status difference that
-survives greyscale, a colour-vision deficiency and a screenshot, which core
-`05-accessibility.md` requires and which a set of differently-tinted dots does
-not deliver on its own.
+The hollow ring is doing real work. It is the one status difference still
+readable once hue is gone — on a printout, to a reader who cannot separate red
+from green, in a screenshot pasted into a ticket. Core `05-accessibility.md`
+holds the requirement; a set of differently-tinted dots does not meet it.
 
 A **badge** — the count on a tab, or on a row — follows one rule that is easy
 to get wrong:
@@ -2548,6 +2566,12 @@ This file is what a phone needs on top.
 - [ ] The screen survives the largest Dynamic Type step: rows grow, labels
       wrap, nothing clips.
 - [ ] No row has a fixed height.
+
+#### Colour
+- [ ] A bordered control whose fill matches its surface uses `border-control`,
+      not `separator` — the border is the only thing identifying it.
+- [ ] Every text-on-surface pair in the palette was computed, not eyeballed,
+      against the lightest and darkest surface each one lands on.
 
 #### Safe areas
 - [ ] Insets are read at runtime, never hardcoded.

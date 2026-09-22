@@ -37,10 +37,10 @@ const every = Math.max(1, Math.ceil(n / Math.max(2, Math.floor(iw / 48))));
 .hw-axis-label { fill: var(--paper-text-3); font-size: 11px; font-variant-numeric: tabular-nums; }
 .hw-axis-title { fill: var(--paper-text-2); font-size: 11px; font-weight: 600; }
 
-.hw-line { fill: none; stroke: var(--brand-red); stroke-width: 2;
+.hw-line { fill: none; stroke: var(--brand); stroke-width: 2;
            stroke-linejoin: round; stroke-linecap: round; }
 
-.hw-dot  { fill: var(--brand-red); stroke: var(--paper); stroke-width: 2; }
+.hw-dot  { fill: var(--brand); stroke: var(--paper); stroke-width: 2; }
 .hw-dot.is-dim { opacity: 0.18; }
 
 .hw-crosshair { stroke: var(--paper-text-3); stroke-width: 1; shape-rendering: crispEdges; }
@@ -51,7 +51,7 @@ const every = Math.max(1, Math.ceil(n / Math.max(2, Math.floor(iw / 48))));
 marks, not content, and at this density a 13px axis crowds the plot.
 
 Charts live on **paper**: the plot sits inside a white card, so the series is
-the on-paper accent (`--brand-red`), never the on-dark one.
+the on-paper accent (`--brand`), never the on-dark one.
 
 ## The gradient fill, as configured here
 
@@ -60,7 +60,7 @@ Core explains why it is anchored to the value scale. The stops this domain uses:
 ```css
 .hw-area { fill: url(#hwAreaGradient); }
 
-.hw-area-grad stop { stop-color: var(--brand-red); }
+.hw-area-grad stop { stop-color: var(--brand); }
 .hw-area-grad stop:nth-child(1) { stop-opacity: 0.34; }
 .hw-area-grad stop:nth-child(2) { stop-opacity: 0.13; }
 .hw-area-grad stop:nth-child(3) { stop-opacity: 0.015; }
@@ -134,7 +134,7 @@ explicitly. `opacity: revert` here yields `1`, not your stylesheet value — cor
   font-size: 0.75rem; color: var(--paper-text-2);
   pointer-events: none;
 }
-.hw-tip-key  { width: 14px; height: 2px; border-radius: 1px; background: var(--brand-red); }
+.hw-tip-key  { width: 14px; height: 2px; border-radius: 1px; background: var(--brand); }
 .hw-tip-rows { display: grid; grid-template-columns: auto auto; gap: 2px 14px; margin: 0; }
 .hw-tip-rows dt { color: var(--paper-text-3); }
 .hw-tip-rows dd { margin: 0; text-align: right; color: var(--paper-text);

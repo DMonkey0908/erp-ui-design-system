@@ -46,7 +46,7 @@ core gives: `#0d7a6f` on `#14100e` is muddy and hard to read.
 
   --text:      #14100e;   /* warm near-black, never #000 */
   --text-2:    #57514c;
-  --text-3:    #8b8279;   /* captions, meta - not body copy */
+  --text-3:    #766d64;   /* captions, meta - quiet, and still 4.5:1 */
 
   --line:      #e8e3dc;   /* hairline, used sparingly */
   --line-2:    #d5cec4;   /* input borders */
@@ -69,8 +69,14 @@ core gives: `#0d7a6f` on `#14100e` is muddy and hard to read.
 as harsh at large sizes — and this pack uses large sizes. `#14100e` carries the
 warmth of the canvas.
 
-**`--text-3` is not body copy.** It is for captions, timestamps and meta. Used
-for a paragraph it fails contrast at the sizes anyone will actually read.
+**`--text-3` is not body copy.** It is for captions, timestamps and meta — and
+it is quiet because of where it sits in the hierarchy, not because it is faint.
+It clears 4.5:1 against every surface it lands on, which a caption needs as much
+as a paragraph does; WCAG does not have a lower bar for small print, and small
+print is precisely where people assume it does.
+
+An earlier value of this token did not clear it. It read correctly — it looked
+the way metadata is supposed to look — which is exactly why nobody noticed.
 
 ## Type
 

@@ -58,7 +58,7 @@ This file is what an operational tool needs on top.
 Core covers the universal ones. These are the ERP-shaped versions.
 
 **The accent on the wrong surface.** The domain-specific instance: an active
-sidebar item painted in `--brand-red` instead of `--brand-red-on-dark`. It
+sidebar item painted in `--brand` instead of `--brand-on-dark`. It
 passes a brand review and is invisible against `#0a0a0c`. Check this first on
 any dark-chrome build.
 

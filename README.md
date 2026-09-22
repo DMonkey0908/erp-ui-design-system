@@ -48,7 +48,7 @@ assistant opens the one reference its task needs.
 |---|---|
 | Claude skill | ~200 tokens (the description, for routing) |
 | Lean `GEMINI.md` / `AGENTS.md` | ~2,200 tokens |
-| Single merged file (Gems, Custom GPT) | ~30,350 tokens |
+| Single merged file (Gems, Custom GPT) | ~30,700 tokens |
 
 Roughly a 93% reduction against pasting the whole system into a context
 file, on every request, including the ones with nothing to do with UI.

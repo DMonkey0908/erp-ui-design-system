@@ -23,6 +23,12 @@ This file is what a phone needs on top.
       wrap, nothing clips.
 - [ ] No row has a fixed height.
 
+### Colour
+- [ ] A bordered control whose fill matches its surface uses `border-control`,
+      not `separator` — the border is the only thing identifying it.
+- [ ] Every text-on-surface pair in the palette was computed, not eyeballed,
+      against the lightest and darkest surface each one lands on.
+
 ### Safe areas
 - [ ] Insets are read at runtime, never hardcoded.
 - [ ] The bottom bar adds the bottom inset as padding, so nothing sits under

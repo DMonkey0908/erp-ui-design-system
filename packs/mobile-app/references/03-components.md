@@ -62,10 +62,10 @@ pending   a HOLLOW dot - a 2pt ring, nothing inside
 label     always present; the dot is the second signal, never the first
 ```
 
-The hollow ring is doing real work: it is the one status difference that
-survives greyscale, a colour-vision deficiency and a screenshot, which core
-`05-accessibility.md` requires and which a set of differently-tinted dots does
-not deliver on its own.
+The hollow ring is doing real work. It is the one status difference still
+readable once hue is gone — on a printout, to a reader who cannot separate red
+from green, in a screenshot pasted into a ticket. Core `05-accessibility.md`
+holds the requirement; a set of differently-tinted dots does not meet it.
 
 A **badge** — the count on a tab, or on a row — follows one rule that is easy
 to get wrong:
