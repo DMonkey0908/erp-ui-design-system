@@ -89,7 +89,7 @@ Keywords: `erp`, `admin panel`, `back-office`, `operations console`, `internal t
   storefront and its admin). Install the pack for the part being worked on now,
   and tell the user the other half may want a different one later.
 - **If nothing fits, install nothing and say so.** Core alone is a legitimate
-  outcome — see step 6. Inventing a pack that does not exist, or forcing the
+  outcome — see step 7. Inventing a pack that does not exist, or forcing the
   nearest one, is the failure mode this step exists to prevent.
 - **Status matters.** `stable` is ready to use. `beta` is usable with gaps.
   `draft` is not ready; tell the user before installing one.
@@ -218,6 +218,36 @@ and points at the installed skill for everything else. A rules file that
 duplicates the whole system is a second copy that goes stale — and it is the
 copy that is always in context, so it is the one that gets believed.
 
+### Record what you did
+
+**Write a manifest.** Removal later depends on it, and an agent that has to
+guess which files it added is an agent that deletes somebody's `CLAUDE.md`.
+
+`.ui-design-ecosystem.json`, at the project root:
+
+```json
+{
+  "pack": "erp",
+  "installed": "2026-09-22",
+  "source": "https://github.com/DMonkey0908/ui-design-ecosystem",
+  "scope": "project",
+  "lifecycle": "keep",
+  "created": [
+    ".claude/skills/erp-ui-design/",
+    ".cursor/rules/erp-ui.mdc"
+  ],
+  "appended": [
+    { "path": "CLAUDE.md", "marker": "ui-design-ecosystem:erp" }
+  ],
+  "reinstall": "curl -fsSL https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main/INSTALL.md"
+}
+```
+
+`created` is only for paths **you** created. A file that already existed goes in
+`appended` with its marker, never in `created`.
+
+`lifecycle` is `keep` unless the user asked otherwise — see step 6.
+
 ### Verify it actually fires
 
 Do not report this as working without checking. Start a fresh session and ask
@@ -230,7 +260,69 @@ The response should show the system applied — tokens rather than raw hex,
 If it does not, the trigger is too narrow. Say so to the user rather than
 leaving them to discover it.
 
-## Step 6 — When no pack fits
+## Step 6 — Lifecycle: keep it, or tear it down when the work is over
+
+Some users want the install to be temporary — in for the work, out when the work
+is done. This is supported, and it is **opt-in**, because whether it is worth
+doing depends entirely on the format and the answer is not obvious.
+
+### What it actually saves
+
+Idle cost, per request, when nobody is doing UI work:
+
+| Format | Cost when idle | Worth removing? |
+|---|---|---|
+| Claude skill | ~200 tokens — only the `description` is loaded, for routing | **No.** You would trade automatic activation for a rounding error. |
+| Cursor `.mdc` | 0 until a matching file is opened | **No.** It is already conditional. |
+| Copilot instructions | 0 until a matching file is opened | **No.** Same. |
+| Project rules snippet | ~340 tokens, every request | Marginal. |
+| `GEMINI.md` / `AGENTS.md` | **~21,000 tokens, every request** | **Yes.** This is the one that matters. |
+
+So: on a merged build this is a real optimisation and worth offering
+unprompted. On a Claude skill it is close to pointless, and it costs the
+automatic activation that made installing worthwhile — the next UI request
+arrives with nothing loaded, and needs a network round trip to work.
+
+**If the user asks for automatic removal across the board, say this once,
+recommend `keep` for the skill and glob-driven formats, then do what they
+decide.** It is their machine.
+
+### Turning it on
+
+Set `"lifecycle": "remove-after-task"` in the manifest, and append the policy
+block so the assistant that does the work knows the install is temporary:
+
+```bash
+BASE=https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main
+curl -fsSL "$BASE/dist/snippets/erp.lifecycle.md" >> CLAUDE.md
+```
+
+### Removing, when the time comes
+
+**Trigger:** the user says the UI work is finished. Their words. Not a passing
+build, not a merged pull request, not your judgement that the screen looks done.
+
+Then:
+
+1. **Read `.ui-design-ecosystem.json`.** No manifest, no automatic removal —
+   tell the user what you believe is installed and let them confirm. Guessing
+   paths here is how a shared instructions file gets destroyed.
+2. **Delete only what `created` lists**, and only when `scope` is `project`.
+3. **For `appended`, delete between the `:begin` and `:end` markers** and
+   nothing else. Everything outside them belongs to the project.
+4. **If a path is tracked in version control, ask first.** Deleting it is a
+   repository change, and a teammate loses it too.
+5. **Delete the manifest last**, and print its `reinstall` line so the user can
+   bring it back with one command.
+
+**Never remove** while UI work is unmerged, uncommitted or in review; when the
+user has said only one screen is done; or when the install is global — a global
+install belongs to the user, not to the task.
+
+**Never remove a pack you did not install.** If the manifest is missing or names
+a different session, say so and stop.
+
+## Step 7 — When no pack fits
 
 Common, and not a failure. Install **core only**: roughly eighty domain-neutral
 rules — tokens, typography, layout, motion, accessibility, i18n, charts, review
@@ -254,7 +346,7 @@ Then tell the user their domain has no pack yet, and that
 thesis another domain would reject; if their project has one, it is worth
 writing down whether or not it is ever contributed back.
 
-## Step 7 — Verify, then report
+## Step 8 — Verify, then report
 
 ```bash
 ls .claude/skills/erp-ui-design/           # SKILL.md, core/, pack/, assets/
@@ -298,5 +390,8 @@ installed skill, which the next update silently discards.
   exist. Say so rather than approximating.
 - **Do not edit `dist/`.** Contributions go to `core/` or `packs/`, rebuilt with
   `npm run build`.
+- **Do not remove an install you did not make**, or one with no manifest, or a
+  global one. Ask instead.
+- **Do not treat a passing build as the user saying they are done.**
 - **Say what you did and how to undo it.** Anything that changes how an
   assistant behaves should be visible and reversible.

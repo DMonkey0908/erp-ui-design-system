@@ -86,7 +86,8 @@
         "customGpt": "dist/gpt/erp.custom-gpt-instructions.md",
         "cursor": "dist/cursor/erp.mdc",
         "copilot": "dist/copilot/erp.instructions.md",
-        "projectRules": "dist/snippets/erp.project-rules.md"
+        "projectRules": "dist/snippets/erp.project-rules.md",
+        "lifecycle": "dist/snippets/erp.lifecycle.md"
       }
     }
   ]

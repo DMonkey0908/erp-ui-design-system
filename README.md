@@ -56,6 +56,26 @@ Being honest about the limit: only the glob-driven tools are deterministic.
 Everywhere else this raises the odds substantially and does not guarantee.
 `INSTALL.md` has a test to confirm it actually fires in your setup.
 
+### Or install it only for as long as the work lasts
+
+An install can be temporary: in for the job, removed when the user says the UI
+work is finished. Set `"lifecycle": "remove-after-task"` in the install
+manifest and the assistant tears it down on confirmation, deleting only what it
+created and only between its own markers.
+
+Worth knowing what it saves before turning it on. Idle cost per request:
+
+| Format | Idle cost | Worth removing? |
+|---|---|---|
+| Claude skill | ~200 tokens (only the `description`, for routing) | No — a rounding error, and you lose automatic activation |
+| Cursor / Copilot rule | 0 until a matching file is opened | No — already conditional |
+| `GEMINI.md` / `AGENTS.md` | **~21,000 tokens, every request** | **Yes** — this is the one that matters |
+
+So it is a real optimisation on a merged build and close to pointless on a
+skill. [`INSTALL.md`](INSTALL.md) step 6 has the manifest format and the rules
+for removing safely — chiefly: never remove what you did not install, and never
+treat a passing build as the user saying they are done.
+
 ## The packs
 
 <!-- PACKS:START:en -->

@@ -55,6 +55,26 @@ Nói thẳng giới hạn: chỉ nhóm công cụ chạy theo glob là chắc ch
 cái này nâng xác suất lên đáng kể chứ không đảm bảo. `INSTALL.md` có kèm một bài
 test để xác nhận nó có thật sự kích hoạt trên máy bạn.
 
+### Hoặc chỉ cài trong lúc còn làm việc
+
+Bản cài có thể là tạm thời: cài vào để làm, xong việc thì gỡ. Đặt
+`"lifecycle": "remove-after-task"` trong manifest, trợ lý sẽ gỡ khi người dùng
+xác nhận đã xong — chỉ xoá đúng thứ nó tạo ra, và chỉ trong phạm vi marker của
+chính nó.
+
+Nên biết nó tiết kiệm được gì trước khi bật. Chi phí thường trực mỗi request:
+
+| Định dạng | Chi phí khi nhàn rỗi | Có đáng gỡ? |
+|---|---|---|
+| Claude skill | ~200 token (chỉ `description`, dùng để định tuyến) | Không — không đáng kể, mà mất luôn tự kích hoạt |
+| Rule của Cursor / Copilot | 0 cho tới khi mở file khớp glob | Không — vốn đã có điều kiện |
+| `GEMINI.md` / `AGENTS.md` | **~21.000 token, mọi request** | **Có** — đây mới là chỗ đáng |
+
+Tức là với bản merged thì đây là tối ưu thật, còn với skill thì gần như vô
+nghĩa. [`INSTALL.md`](../INSTALL.md) bước 6 có định dạng manifest và luật gỡ an
+toàn — quan trọng nhất: không gỡ thứ mình không cài, và không coi build xanh là
+người dùng đã nói xong.
+
 ## Các pack
 
 <!-- PACKS:START:vi -->
