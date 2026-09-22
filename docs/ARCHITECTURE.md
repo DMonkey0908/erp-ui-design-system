@@ -80,10 +80,10 @@ about.
 
 ### 1. Merged file size - RESOLVED
 
-Adding core pushed the merged `GEMINI.md` and `AGENTS.md` to ~26,000 tokens,
-and those files sit in context on **every** request, including every request
-with nothing to do with UI. Claude's build was unaffected, because it only
-loads the reference it needs.
+Adding core pushed the merged `GEMINI.md` and `AGENTS.md` past twenty thousand
+tokens, and those files sit in context on **every** request, including every
+request with nothing to do with UI. Claude's build was unaffected, because it
+only loads the reference it needs.
 
 Resolved by giving the merged targets the same treatment: a **lean layout**,
 `dist/<kind>/<id>-lean/`, with a small entry file beside the references on
@@ -91,8 +91,11 @@ disk. The entry carries only what must always be true - the activation block,
 the domain thesis, the hard rules, and an index of what to open. The assistant
 opens the one reference its task needs.
 
-**~1,700 tokens instead of ~26,000.** The merged single file stays, because a
-Gem's Instructions field and a Custom GPT take text rather than a directory.
+**Roughly a twentieth of the size.** The exact figures are measured at build
+time and injected into the `COST` regions of `README.md` and `INSTALL.md`,
+because they moved every time core grew and were hand-maintained in six places
+across two languages. The merged single file stays, because a Gem's
+Instructions field and a Custom GPT take text rather than a directory.
 
 What this trades: an agent can answer from the index without opening anything.
 The entry file is written to make that feel like the shortcut it is, and the
@@ -100,8 +103,8 @@ hard rules are in it so that even a lazy pass is not a wrong one. Whether that
 holds up is worth watching once someone uses it in anger.
 
 It also makes the `remove-after-task` lifecycle largely unnecessary. That
-policy existed because 26k tokens sat there between UI tasks; 1.7k does not
-justify tearing down an install and re-fetching it.
+policy existed because tens of thousands of tokens sat there between UI tasks;
+the lean entry does not justify tearing down an install and re-fetching it.
 
 ### 2. Pack inheritance - NOT NEEDED, still resisted
 

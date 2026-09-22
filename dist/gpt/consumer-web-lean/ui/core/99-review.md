@@ -62,6 +62,17 @@ waived by any domain.
 - [ ] Focus is locatable at the viewing distance the screen is used at, never
       absent and never duplicated.
 
+### Visual language
+- [ ] Any named style in use has an answer for what happens when it is
+      unsupported, switched off by a system preference, or handed twice the
+      content.
+- [ ] A translucent surface has an opaque fallback, and its text sits on a
+      plate rather than on the blur.
+- [ ] An asymmetric grid reads in DOM order, and has a stated single-column
+      order.
+- [ ] A 3D scene has a frame budget, a poster frame and a non-visual path to
+      the same information.
+
 ### Accessibility
 - [ ] Nothing is mouse-only.
 - [ ] Tab order matches the visual order.
@@ -139,6 +150,10 @@ accessibility tree, so the label it was carrying no longer exists.
 
 **Placeholder text used as a label.** It disappears at the moment the user wants
 to check what they are filling in.
+
+**A style with no degraded state.** Translucency on a browser without backdrop
+blur, a 3D scene that never loads, a heavy border under forced colours. The
+screen does not look plainer — it stops working.
 
 **A spinner where the wait did not need one.** It appears and vanishes inside a
 third of a second, and the user reads the flash as a stutter in an interface

@@ -40,14 +40,16 @@ Cài vào một repo là dùng **bản lean**: một file entry ngắn — `GEMI
 giữ khối kích hoạt, luận điểm, luật cứng và mục lục; trợ lý tự mở đúng file
 reference mà tác vụ cần.
 
+<!-- COST:START:vi -->
 | Bản cài | Thường trực trong context |
 |---|---|
 | Claude skill | ~200 token (chỉ `description`, để định tuyến) |
-| Lean `GEMINI.md` / `AGENTS.md` | ~1.700 token |
-| Bản merged một file (Gems, Custom GPT) | ~26.000 token |
+| Lean `GEMINI.md` / `AGENTS.md` | ~1.800 token |
+| Bản merged một file (Gems, Custom GPT) | ~30.000 token |
 
-Giảm khoảng 93% so với dán cả hệ thống vào file context, tính trên **mọi**
+Giảm khoảng 94% so với dán cả hệ thống vào file context, tính trên **mọi**
 request — kể cả những request chẳng liên quan gì tới UI.
+<!-- COST:END:vi -->
 
 ### Nó tự chạy, không cần gọi tên
 
@@ -84,8 +86,8 @@ Nên biết nó tiết kiệm được gì trước khi bật. Chi phí thườn
 |---|---|---|
 | Claude skill | ~200 token (chỉ `description`, dùng để định tuyến) | Không — không đáng kể, mà mất luôn tự kích hoạt |
 | Rule của Cursor / Copilot | 0 cho tới khi mở file khớp glob | Không — vốn đã có điều kiện |
-| Lean `GEMINI.md` / `AGENTS.md` | ~1.700 token | Hiếm khi |
-| Bản merged một file | ~26.000 token, mọi request | Có — nhưng nên dùng bản lean thay thế |
+| Lean `GEMINI.md` / `AGENTS.md` | con số lean ở bảng trên | Hiếm khi |
+| Bản merged một file | con số merged ở bảng trên, mọi request | Có — nhưng nên dùng bản lean thay thế |
 
 Phần lớn giờ đã thành không cần thiết, vì bản lean đã xử lý đúng cái chi phí mà
 quy tắc này sinh ra để giải quyết. [`INSTALL.md`](../INSTALL.md) bước 6 có định
@@ -197,7 +199,8 @@ Lý do đầy đủ, và các quyết định còn bỏ ngỏ, nằm trong
 ## Core ép tuân thủ gì, dù bạn đang dựng cái gì
 
 Khoảng một trăm luật trải trên token, typography, layout, motion, feedback,
-input, accessibility, i18n, charts và review — mỗi luật kèm hệ quả. Vài ví dụ:
+input, accessibility, i18n, charts, ngôn ngữ thị giác và review — mỗi luật kèm
+hệ quả. Vài ví dụ:
 
 - **Mỗi màu nhấn cần một giá trị cho mỗi bề mặt.** Màu thương hiệu chọn để đọc
   trên nền trắng sẽ tàng hình trên nền gần đen. Lỗi phổ biến nhất của giao diện

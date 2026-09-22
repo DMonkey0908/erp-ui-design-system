@@ -23,8 +23,8 @@
  *   dist/snippets/<id>.{project-rules,lifecycle}.md          append to a rules file
  *
  * Lean is the default for a repo; merged exists because a Gem's Instructions
- * field and a Custom GPT take text, not a directory. The difference is ~1.7k
- * tokens against ~26k, on every request.
+ * field and a Custom GPT take text, not a directory. The difference is about
+ * twentyfold, on every request; injectCostTables() measures it.
  *
  * And once, for the catalogue:
  *   dist/index.json                                          machine-readable pack list
@@ -900,6 +900,95 @@ function injectPackTables(packs) {
   }
 }
 
+/**
+ * Measure what each install shape actually costs in context, and write it into
+ * the docs.
+ *
+ * These numbers were hand-maintained, and they went stale the first time core
+ * grew - twice in one afternoon, in six places, in two languages. That is the
+ * same second-source-of-truth problem the pack tables have, with the same fix:
+ * measure the generated files and inject the result.
+ *
+ * ~4 characters per token is the usual English approximation. It is rough, and
+ * it does not need to be better: the claim these numbers support is "the lean
+ * layout is an order of magnitude smaller", and that survives being 20% out.
+ */
+function costs(packs) {
+  const tok = (p) => Math.round(read(p).length / 4 / 50) * 50;
+  const lean = packs.map(({ meta }) => tok(join(DIST, 'gemini', `${meta.id}-lean`, 'GEMINI.md')));
+  const merged = packs.map(({ meta }) => tok(join(DIST, 'gemini', `${meta.id}.GEMINI.md`)));
+  const max = (xs) => Math.max(...xs);
+  const n = (x) => x.toLocaleString('en-US');
+
+  const leanTok = max(lean);
+  const mergedTok = max(merged);
+  return {
+    lean: leanTok, merged: mergedTok,
+    leanEn: `~${n(leanTok)} tokens`,
+    mergedEn: `~${n(mergedTok)} tokens`,
+    leanVi: `~${n(leanTok).replace(/,/g, '.')} token`,
+    mergedVi: `~${n(mergedTok).replace(/,/g, '.')} token`,
+    saved: Math.round((1 - leanTok / mergedTok) * 100),
+  };
+}
+
+/**
+ * Replace the region between `<!-- COST:START:<kind> -->` and its END marker,
+ * the same way the pack tables work.
+ */
+function injectCostTables(packs) {
+  const c = costs(packs);
+  const renderers = {
+    en: () => [
+      '| Install | Always in context |',
+      '|---|---|',
+      '| Claude skill | ~200 tokens (the description, for routing) |',
+      `| Lean \`GEMINI.md\` / \`AGENTS.md\` | ${c.leanEn} |`,
+      `| Single merged file (Gems, Custom GPT) | ${c.mergedEn} |`,
+      '',
+      `Roughly a ${c.saved}% reduction against pasting the whole system into a context`,
+      'file, on every request, including the ones with nothing to do with UI.',
+    ].join(NL),
+
+    vi: () => [
+      '| Bản cài | Thường trực trong context |',
+      '|---|---|',
+      '| Claude skill | ~200 token (chỉ `description`, để định tuyến) |',
+      `| Lean \`GEMINI.md\` / \`AGENTS.md\` | ${c.leanVi} |`,
+      `| Bản merged một file (Gems, Custom GPT) | ${c.mergedVi} |`,
+      '',
+      `Giảm khoảng ${c.saved}% so với dán cả hệ thống vào file context, tính trên **mọi**`,
+      'request — kể cả những request chẳng liên quan gì tới UI.',
+    ].join(NL),
+
+    install: () => [
+      '| Assistant | Install | Always in context |',
+      '|---|---|---|',
+      '| Claude Code, Claude Desktop | `dist/claude/<skill-name>/` -> `.claude/skills/<skill-name>/` | ~200 tokens (the description only) |',
+      `| Gemini CLI / Code Assist | \`dist/gemini/<id>-lean/\` -> repo root | **${c.leanEn}** |`,
+      `| Codex, Cursor, any \`AGENTS.md\` tool | \`dist/gpt/<id>-lean/\` -> repo root | **${c.leanEn}** |`,
+      '| Gemini Gem | `dist/gemini/<id>.GEMINI.md` | whole file - paste-in only |',
+      '| Custom GPT | `dist/gpt/<id>.custom-gpt-instructions.md` | Fenced block -> Instructions; `<id>.AGENTS.md` -> Knowledge |',
+    ].join(NL),
+
+    'install-note': () => `That is **${c.leanEn} instead of ${c.mergedEn}**, on every request, including every${NL}request with nothing to do with UI.`,
+  };
+
+  for (const file of ['README.md', 'docs/README.vi.md', 'INSTALL.md']) {
+    const path = join(ROOT, file);
+    if (!existsSync(path)) continue;
+    let body = read(path);
+    let touched = false;
+    for (const [kind, render] of Object.entries(renderers)) {
+      const re = new RegExp(`(<!-- COST:START:${kind} -->)[\\s\\S]*?(<!-- COST:END:${kind} -->)`, 'g');
+      if (!re.test(body)) continue;
+      body = body.replace(re, `$1${NL}${render()}${NL}$2`);
+      touched = true;
+    }
+    if (touched) emit(path, body);
+  }
+}
+
 // --- run --------------------------------------------------------------------
 
 lintCore();
@@ -937,6 +1026,7 @@ if (!only.length) lintPacks(loaded);
 if (!only.length) {
   buildIndex(loaded);
   injectPackTables(loaded);
+  injectCostTables(loaded);
 }
 
 if (problems.length) {

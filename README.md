@@ -41,14 +41,16 @@ A repository install is a **lean layout**: a short entry file - `GEMINI.md`,
 holds the activation block, the thesis, the hard rules and an index; the
 assistant opens the one reference its task needs.
 
+<!-- COST:START:en -->
 | Install | Always in context |
 |---|---|
 | Claude skill | ~200 tokens (the description, for routing) |
-| Lean `GEMINI.md` / `AGENTS.md` | ~1,700 tokens |
-| Single merged file (Gems, Custom GPT) | ~26,000 tokens |
+| Lean `GEMINI.md` / `AGENTS.md` | ~1,800 tokens |
+| Single merged file (Gems, Custom GPT) | ~30,000 tokens |
 
-Roughly a 93% reduction against pasting the whole system into a context file,
-on every request, including the ones with nothing to do with UI.
+Roughly a 94% reduction against pasting the whole system into a context
+file, on every request, including the ones with nothing to do with UI.
+<!-- COST:END:en -->
 
 ### It fires without being asked
 
@@ -85,8 +87,8 @@ Worth knowing what it saves before turning it on. Idle cost per request:
 |---|---|---|
 | Claude skill | ~200 tokens (only the `description`, for routing) | No — a rounding error, and you lose automatic activation |
 | Cursor / Copilot rule | 0 until a matching file is opened | No — already conditional |
-| Lean `GEMINI.md` / `AGENTS.md` | ~1,700 tokens | Rarely |
-| Merged single file | ~26,000 tokens, every request | Yes — but prefer the lean layout instead |
+| Lean `GEMINI.md` / `AGENTS.md` | the lean figure above | Rarely |
+| Merged single file | the merged figure above, every request | Yes — but prefer the lean layout instead |
 
 Mostly this is now moot, because the lean layout removed the cost it was
 solving. [`INSTALL.md`](INSTALL.md) step 6 has the manifest format and the
@@ -200,8 +202,8 @@ Full reasoning, and the decisions still open, in
 ## What core enforces, whatever you are building
 
 Roughly a hundred rules across tokens, typography, layout, motion, feedback,
-input, accessibility, i18n, charts and review — each with its consequence
-attached. A sample:
+input, accessibility, i18n, charts, visual language and review — each with its
+consequence attached. A sample:
 
 - **Every accent needs one value per surface.** A brand colour chosen to read on
   white disappears on near-black. The commonest bug in a dark-chrome UI is an

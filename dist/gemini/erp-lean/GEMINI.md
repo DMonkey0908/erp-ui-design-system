@@ -90,6 +90,7 @@ what this system exists to prevent. Do not answer from this index.
 | `ui/core/07-charts.md` | Charts |
 | `ui/core/08-feedback.md` | Feedback |
 | `ui/core/09-input.md` | Input |
+| `ui/core/10-visual-language.md` | Visual language |
 | `ui/core/99-review.md` | Review |
 
 ### Pack - this domain
