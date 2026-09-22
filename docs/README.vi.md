@@ -28,10 +28,32 @@ https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main/INSTALL.m
 ```
 
 [`INSTALL.md`](../INSTALL.md) viết cho agent đọc: xác định loại dự án trước, đối
-chiếu với tín hiệu loại trừ trong catalogue, cài đúng **một** pack, rồi báo lại
-đã đổi gì và gỡ ra bằng cách nào. Có catalogue máy đọc được ở
-[`dist/index.json`](../dist/index.json) và một [`llms.txt`](../llms.txt) ở gốc
-repo.
+chiếu với tín hiệu loại trừ trong catalogue, cài đúng **một** pack, gắn cho nó
+tự kích hoạt, rồi báo lại đã đổi gì và gỡ ra bằng cách nào. Có catalogue máy đọc
+được ở [`dist/index.json`](../dist/index.json) và một [`llms.txt`](../llms.txt)
+ở gốc repo.
+
+### Nó tự chạy, không cần gọi tên
+
+Cài xong là lần cuối phải nghĩ tới nó. Yêu cầu dựng một màn hình, hay bảo "làm
+cái bảng này đẹp hơn", là hệ thống tự áp dụng.
+
+| Công cụ | Cơ chế kích hoạt | Chắc chắn? |
+|---|---|---|
+| Cursor | `.cursor/rules/*.mdc`, gắn theo glob file | **Có** |
+| GitHub Copilot | `.github/instructions/*.instructions.md`, `applyTo` globs | **Có** |
+| Claude Code / Desktop | `description` của skill, Claude tự chọn theo tác vụ | Không — là phán đoán |
+| Gemini, Codex, Custom GPT | nằm trong context mọi request | Luôn nạp, nhưng áp dụng vẫn do phán đoán |
+
+Mọi bản build đều mở đầu bằng [khối kích hoạt](../core/ACTIVATION.md): khi nào
+áp dụng, làm gì trước khi viết dòng code đầu tiên, và tuyệt đối không làm gì dù
+người dùng yêu cầu. Khối này là thứ biến một tài liệu tham khảo thành phản xạ —
+thiếu nó, trợ lý có sẵn luật trong tay, vẫn viết UI theo thói quen cũ, rồi trích
+luật ra khi bị chất vấn.
+
+Nói thẳng giới hạn: chỉ nhóm công cụ chạy theo glob là chắc chắn. Chỗ còn lại,
+cái này nâng xác suất lên đáng kể chứ không đảm bảo. `INSTALL.md` có kèm một bài
+test để xác nhận nó có thật sự kích hoạt trên máy bạn.
 
 ## Các pack
 

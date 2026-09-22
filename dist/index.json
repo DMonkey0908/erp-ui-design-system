@@ -83,7 +83,10 @@
         "claude": "dist/claude/erp-ui-design/",
         "gemini": "dist/gemini/erp.GEMINI.md",
         "gpt": "dist/gpt/erp.AGENTS.md",
-        "customGpt": "dist/gpt/erp.custom-gpt-instructions.md"
+        "customGpt": "dist/gpt/erp.custom-gpt-instructions.md",
+        "cursor": "dist/cursor/erp.mdc",
+        "copilot": "dist/copilot/erp.instructions.md",
+        "projectRules": "dist/snippets/erp.project-rules.md"
       }
     }
   ]

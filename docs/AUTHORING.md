@@ -97,6 +97,28 @@ between the `PACKS:START` / `PACKS:END` markers. Do not edit them by hand. A
 hand-maintained catalogue is a second source of truth, and the copy that goes
 stale is the one an agent reads when it picks a pack.
 
+## Activation
+
+You do not write this. `core/ACTIVATION.md` is injected at the top of every
+build, and the glue files for Cursor, Copilot and project rules files are
+generated from `pack.json`.
+
+What a pack owes the activation layer is accurate metadata:
+
+- **`skill.description`** is the trigger for Claude. Cover the verbs UI work
+  actually arrives as - not only "build", but restyle, fix the spacing, make
+  this look better, review. A description that only matches "build an ERP" will
+  sit unused through every "clean up this table".
+- **`notFor`** is what stops the glob-driven tools firing the pack on the wrong
+  file, and what an agent rules it out by.
+- **`optimisesFor`** appears verbatim in the Cursor rule, so it has to read as
+  an instruction, not as marketing.
+
+If a rule is important enough that an assistant should never break it even
+without loading the references, it belongs in `core/ACTIVATION.md` - which
+means it must be universal. A domain-specific hard rule belongs in `PACK.md`
+under non-negotiables instead.
+
 ## What core will reject
 
 The build fails if `core/references/` gains a concrete colour outside a code

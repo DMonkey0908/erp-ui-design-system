@@ -89,7 +89,7 @@ Keywords: `erp`, `admin panel`, `back-office`, `operations console`, `internal t
   storefront and its admin). Install the pack for the part being worked on now,
   and tell the user the other half may want a different one later.
 - **If nothing fits, install nothing and say so.** Core alone is a legitimate
-  outcome — see step 5. Inventing a pack that does not exist, or forcing the
+  outcome — see step 6. Inventing a pack that does not exist, or forcing the
   nearest one, is the failure mode this step exists to prevent.
 - **Status matters.** `stable` is ready to use. `beta` is usable with gaps.
   `draft` is not ready; tell the user before installing one.
@@ -161,7 +161,76 @@ npx degit DMonkey0908/ui-design-ecosystem/dist/claude/erp-ui-design \
   on the next update. Project-specific deviations go in the project's own
   instruction file, alongside the reason.
 
-## Step 5 — When no pack fits
+## Step 5 — Make it fire on its own
+
+**Do not skip this. It is the difference between a system that is installed and
+one that is used.**
+
+An installed pack that nobody remembers to invoke changes nothing. The goal is
+that the next person who asks for a screen, or for a table to look better, gets
+this system applied without saying its name.
+
+How automatic that can be depends on the tool, and the difference is worth
+knowing before you promise the user anything:
+
+| Tool | Trigger | Deterministic? |
+|---|---|---|
+| Cursor | `.cursor/rules/*.mdc` with globs — attaches when a matching file is in play | **Yes** |
+| GitHub Copilot | `.github/instructions/*.instructions.md` with `applyTo` globs | **Yes** |
+| Claude Code / Desktop | Skill `description` — Claude selects it per task | No: a judgement call |
+| Gemini, Codex, Custom GPT | The file is in context on every request | Always loaded, still applied by judgement |
+
+For the judgement-call tools, the generated builds already open with an
+activation block — when it applies, what to do before writing the first line,
+and what never to do. That is what converts a reference document into a reflex.
+Adding a project rules snippet on top makes it considerably more reliable.
+
+### Cursor
+
+```bash
+BASE=https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main
+mkdir -p .cursor/rules
+curl -fsSL "$BASE/dist/cursor/erp.mdc" -o .cursor/rules/erp-ui.mdc
+```
+
+### GitHub Copilot
+
+```bash
+mkdir -p .github/instructions
+curl -fsSL "$BASE/dist/copilot/erp.instructions.md" \
+  -o .github/instructions/erp-ui.instructions.md
+```
+
+### Claude Code, Codex, Windsurf, or any always-loaded rules file
+
+Append the snippet to the project's own instruction file — `CLAUDE.md`,
+`AGENTS.md`, `.windsurfrules`:
+
+```bash
+curl -fsSL "$BASE/dist/snippets/erp.project-rules.md" >> CLAUDE.md
+```
+
+**Append, never overwrite.** That file holds project instructions that have
+nothing to do with UI, and replacing it is a silent, hard-to-notice loss.
+
+The snippet is deliberately small: it carries the trigger and the hard rules,
+and points at the installed skill for everything else. A rules file that
+duplicates the whole system is a second copy that goes stale — and it is the
+copy that is always in context, so it is the one that gets believed.
+
+### Verify it actually fires
+
+Do not report this as working without checking. Start a fresh session and ask
+for something that should trigger it but does not name it:
+
+> "Add a settings page with a table of API keys."
+
+The response should show the system applied — tokens rather than raw hex,
+`tabular-nums` on figures, a review pass — and should say which rules shaped it.
+If it does not, the trigger is too narrow. Say so to the user rather than
+leaving them to discover it.
+
+## Step 6 — When no pack fits
 
 Common, and not a failure. Install **core only**: roughly eighty domain-neutral
 rules — tokens, typography, layout, motion, accessibility, i18n, charts, review
@@ -185,7 +254,7 @@ Then tell the user their domain has no pack yet, and that
 thesis another domain would reject; if their project has one, it is worth
 writing down whether or not it is ever contributed back.
 
-## Step 6 — Verify, then report
+## Step 7 — Verify, then report
 
 ```bash
 ls .claude/skills/erp-ui-design/           # SKILL.md, core/, pack/, assets/
@@ -201,7 +270,9 @@ Then tell the user, in three lines:
    catalogue.
 2. **The main thing it will change** about output. For `erp`: density goes up
    and the accent stops being decorative.
-3. **How to undo it** — the path to delete.
+3. **What now triggers it**, and **how to undo it** — the paths to delete.
+   If activation is a judgement call rather than a glob, say so plainly: it
+   raises the odds, it does not guarantee them.
 
 Do not present the install as a code change. It changes how future output is
 generated, which the user should be able to reverse in one command.

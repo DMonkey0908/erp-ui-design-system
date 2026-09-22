@@ -30,9 +30,31 @@ https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main/INSTALL.m
 
 [`INSTALL.md`](INSTALL.md) is written for an agent: identify the project type
 first, match against the catalogue's exclusion signals, install exactly one
-pack, and report what changed and how to undo it. There is a machine-readable
-catalogue at [`dist/index.json`](dist/index.json) and an
-[`llms.txt`](llms.txt) index at the root.
+pack, wire it to fire on its own, and report what changed and how to undo it.
+There is a machine-readable catalogue at [`dist/index.json`](dist/index.json)
+and an [`llms.txt`](llms.txt) index at the root.
+
+### It fires without being asked
+
+Installing is meant to be the last time anyone thinks about it. Ask for a
+screen, or for a table to look better, and the system applies itself.
+
+| Tool | Trigger | Deterministic? |
+|---|---|---|
+| Cursor | `.cursor/rules/*.mdc`, attached by file glob | **Yes** |
+| GitHub Copilot | `.github/instructions/*.instructions.md`, `applyTo` globs | **Yes** |
+| Claude Code / Desktop | skill `description`, selected per task | No — a judgement call |
+| Gemini, Codex, Custom GPT | in context on every request | Always loaded, applied by judgement |
+
+Every build opens with an [activation block](core/ACTIVATION.md): when it
+applies, what to do before the first line of code, and what never to do
+whatever the request. That block is what turns a reference document into a
+reflex — without it an assistant has the rules available, writes UI the way it
+always has, and cites them afterwards if challenged.
+
+Being honest about the limit: only the glob-driven tools are deterministic.
+Everywhere else this raises the odds substantially and does not guarantee.
+`INSTALL.md` has a test to confirm it actually fires in your setup.
 
 ## The packs
 

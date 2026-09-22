@@ -7,7 +7,7 @@
   "optimisesFor": "The two-hundredth use by a trained operator, not the first impression.",
   "skill": {
     "name": "erp-ui-design",
-    "description": "Design and build dense, dark-chrome ERP / admin / back-office interfaces — app shells with a sidebar and topbar, data tables, filter rows, forms, KPI tiles, status pills and analytics charts. Use when building or reviewing an internal business tool, admin panel, operations console or dashboard, when asked to make a UI \"look like a real ERP\" (SAP / Oracle / Dynamics) rather than a consumer SaaS, or when a screen must stay readable through a full working day."
+    "description": "Design, build, restyle or review dense dark-chrome ERP / admin / back-office interfaces - app shells with a sidebar and topbar, data tables, filter rows, forms, KPI tiles, status pills and analytics charts. Use it whenever creating or changing how any internal-tool screen looks: spacing, colour, typography, density, states, motion or layout; when adding or restyling a table, form, chart, dialog, menu or empty state; when asked to make an admin panel, operations console, back-office screen or internal dashboard look better, cleaner or more professional; when asked to make a UI \"look like a real ERP\" (SAP / Oracle / Dynamics) rather than a consumer SaaS; or when a screen must stay readable through a full working day. Not for marketing sites, landing pages, consumer mobile apps or content-first reading experiences."
   },
   "when": [
     "an internal business tool, admin panel or operations console",
