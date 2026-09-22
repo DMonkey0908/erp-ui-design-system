@@ -36,9 +36,9 @@ const CORE = join(ROOT, 'core');
 const PACKS = join(ROOT, 'packs');
 const DIST = join(ROOT, 'dist');
 
-// Used in the catalogue and the agent guide. If the repo is ever renamed these
-// change here and nowhere else - raw.githubusercontent.com does not reliably
-// follow a rename, so a stale URL here is a silently broken install.
+// Used in the catalogue and the agent guide. If the repo is renamed, change
+// them here and rebuild - lintUrls() then fails on any doc still carrying the
+// old name.
 const REPO = 'https://github.com/DMonkey0908/ui-design-ecosystem';
 const RAW = 'https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main/';
 
@@ -159,10 +159,15 @@ function loadPack(id) {
  * Every github.com / raw.githubusercontent.com URL in the docs must point at
  * this repo.
  *
- * This guard exists because a rename does NOT reliably redirect
- * raw.githubusercontent.com. The links keep working in a browser, so nothing
- * looks broken, while an agent fetching an install gets a 404 and a
- * half-installed skill. That already happened once here.
+ * After a rename GitHub does redirect the old name, including on
+ * raw.githubusercontent.com - verified against this repo's own rename. But the
+ * redirect is a courtesy, not a guarantee: it lapses the moment anyone claims
+ * the old name, and GitHub explicitly recommends updating links rather than
+ * relying on it.
+ *
+ * So stale links do not fail at the moment you would catch them. They fail
+ * later, for someone else, as a 404 mid-install and a half-fetched skill. This
+ * guard makes them fail at build time instead.
  */
 function lintUrls() {
   const docs = [
