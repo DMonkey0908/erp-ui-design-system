@@ -19,11 +19,27 @@ Repo này đưa cho nó một lập trường. Mỗi **pack** là một hệ thi
 vực cụ thể, mang một luận điểm mà lĩnh vực khác sẽ bác bỏ — kèm token, số đo, và
 lý do để hành động theo.
 
+## Chỉ agent của bạn tới đây
+
+Bảo trợ lý của bạn đọc file này, nó sẽ tự chọn pack phù hợp và cài:
+
+```
+https://raw.githubusercontent.com/DMonkey0908/erp-ui-design-system/main/INSTALL.md
+```
+
+[`INSTALL.md`](../INSTALL.md) viết cho agent đọc: xác định loại dự án trước, đối
+chiếu với tín hiệu loại trừ trong catalogue, cài đúng **một** pack, rồi báo lại
+đã đổi gì và gỡ ra bằng cách nào. Có catalogue máy đọc được ở
+[`dist/index.json`](../dist/index.json) và một [`llms.txt`](../llms.txt) ở gốc
+repo.
+
 ## Các pack
 
+<!-- PACKS:START:vi -->
 | Pack | Lĩnh vực | Trạng thái |
 |---|---|---|
-| [`erp`](../packs/erp/) | **ERP & back-office** — admin panel, console vận hành, dashboard nội bộ. Mật độ cao, chrome tối, content trắng. | `stable` |
+| [`erp`](../packs/erp/) | **ERP & back-office** - Phần mềm vận hành mật độ cao, chrome tối: admin panel, console vận hành, công cụ back-office, dashboard nội bộ. | `stable` |
+<!-- PACKS:END:vi -->
 
 Dự kiến, theo thứ tự tạm: consumer web, SaaS dashboard, mobile app, e-commerce,
 desktop & tiện ích hệ thống, trang tài liệu. Chưa pack nào bắt đầu — em dựng nền

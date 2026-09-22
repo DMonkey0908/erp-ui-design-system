@@ -88,12 +88,12 @@ If they hear the cost and still want it, build it. It is their product.
 ## How to use this skill
 
 Read **`core/`** for the rules that hold for any interface, and **`pack/`**
-for what this domain decided. A pack file never repeats a core rule, so when the
-two are both relevant you need both.
+for what this domain decided. A pack file never repeats a core rule, so when
+the two are both relevant you need both.
 
 Start with `core/01-tokens.md`, `core/03-layout.md`, `core/08-review.md`.
 
-### Core — applies to every interface
+### Core - applies to every interface
 
 | File | Holds |
 |---|---|
@@ -106,7 +106,7 @@ Start with `core/01-tokens.md`, `core/03-layout.md`, `core/08-review.md`.
 | `core/07-charts.md` | Charts |
 | `core/08-review.md` | Review |
 
-### Pack — this domain
+### Pack - this domain
 
 | File | Holds |
 |---|---|

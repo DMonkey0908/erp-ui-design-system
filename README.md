@@ -19,11 +19,28 @@ This repo gives it one. Each **pack** is a design system for a specific domain,
 carrying a thesis another domain would reject — plus the tokens, measurements
 and reasoning to act on it.
 
+## Point your agent at it
+
+Tell your assistant to read this, and it will pick the pack that fits and
+install it:
+
+```
+https://raw.githubusercontent.com/DMonkey0908/erp-ui-design-system/main/INSTALL.md
+```
+
+[`INSTALL.md`](INSTALL.md) is written for an agent: identify the project type
+first, match against the catalogue's exclusion signals, install exactly one
+pack, and report what changed and how to undo it. There is a machine-readable
+catalogue at [`dist/index.json`](dist/index.json) and an
+[`llms.txt`](llms.txt) index at the root.
+
 ## The packs
 
+<!-- PACKS:START:en -->
 | Pack | Domain | Status |
 |---|---|---|
-| [`erp`](packs/erp/) | **ERP & back-office** — admin panels, operations consoles, internal dashboards. Dense, dark chrome, white content. | `stable` |
+| [`erp`](packs/erp/) | **ERP & back-office** - Dense, dark-chrome operational software: admin panels, operations consoles, back-office tools, internal dashboards. | `stable` |
+<!-- PACKS:END:en -->
 
 Planned, in rough order: consumer web, SaaS dashboard, mobile app, e-commerce,
 desktop & system utilities, documentation sites. None are started — the

@@ -3,6 +3,7 @@
   "name": "ERP & back-office",
   "status": "stable",
   "summary": "Dense, dark-chrome operational software: admin panels, operations consoles, back-office tools, internal dashboards.",
+  "summaryVi": "Phần mềm vận hành mật độ cao, chrome tối: admin panel, console vận hành, công cụ back-office, dashboard nội bộ.",
   "optimisesFor": "The two-hundredth use by a trained operator, not the first impression.",
   "skill": {
     "name": "erp-ui-design",
@@ -13,6 +14,24 @@
     "a back-office screen or an operational dashboard",
     "a request to look like a real ERP rather than a consumer SaaS",
     "a screen that must stay readable through a full working day"
+  ],
+  "notFor": [
+    "marketing sites, landing pages or anything optimised for a first impression",
+    "consumer mobile apps - the density assumes a mouse and a large screen",
+    "content-first reading experiences - blogs, documentation, editorial",
+    "storefronts and product pages, where the product image is the subject"
+  ],
+  "keywords": [
+    "erp",
+    "admin panel",
+    "back-office",
+    "operations console",
+    "internal tool",
+    "dashboard",
+    "data table",
+    "dense",
+    "dark chrome",
+    "enterprise"
   ],
   "surfaces": {
     "chrome": "near-black, shadowless, sharp corners (2-4px)",
@@ -25,19 +44,44 @@
   "density": "high - 13px base, 8px/12px table cells",
   "core": {
     "include": "all",
-    "leadWith": ["01-tokens", "03-layout", "08-review"],
+    "leadWith": [
+      "01-tokens",
+      "03-layout",
+      "08-review"
+    ],
     "overrides": []
   },
   "references": [
-    { "file": "01-surfaces.md", "title": "Surfaces, palette and scales" },
-    { "file": "02-shell.md", "title": "The shell - sidebar, topbar, responsive" },
-    { "file": "03-components.md", "title": "Components" },
-    { "file": "04-charts.md", "title": "Charts - the ERP layer" },
-    { "file": "05-checklist.md", "title": "Domain review checklist" }
+    {
+      "file": "01-surfaces.md",
+      "title": "Surfaces, palette and scales"
+    },
+    {
+      "file": "02-shell.md",
+      "title": "The shell - sidebar, topbar, responsive"
+    },
+    {
+      "file": "03-components.md",
+      "title": "Components"
+    },
+    {
+      "file": "04-charts.md",
+      "title": "Charts - the ERP layer"
+    },
+    {
+      "file": "05-checklist.md",
+      "title": "Domain review checklist"
+    }
   ],
   "assets": [
-    { "file": "theme.css", "note": "the token file - drop into a new project" },
-    { "file": "shell-skeleton.html", "note": "page skeleton, including the anti-flash script" }
+    {
+      "file": "theme.css",
+      "note": "the token file - drop into a new project"
+    },
+    {
+      "file": "shell-skeleton.html",
+      "note": "page skeleton, including the anti-flash script"
+    }
   ],
   "customGpt": "custom-gpt-instructions.md"
 }

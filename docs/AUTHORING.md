@@ -39,7 +39,10 @@ packs/<id>/
 | `optimisesFor` | — | The reader or moment this domain optimises for. |
 | `skill.name` | yes | Directory name of the generated Claude skill. |
 | `skill.description` | yes | **The most load-bearing string in the pack.** See below. |
-| `when` | — | Bullets listing when the pack applies; used in the merged builds. |
+| `summaryVi` | — | Vietnamese summary, for the translated README's pack table. |
+| `when` | — | Bullets listing when the pack applies. Feeds the merged builds and the agent selection guide. |
+| `notFor` | **yes** | Bullets listing what the pack is wrong for. The build fails without it — an agent selects largely by exclusion, and a pack nobody can rule out gets chosen for work it ruins. |
+| `keywords` | — | Search terms for the catalogue. |
 | `surfaces` | — | The role table, so packs can be compared. |
 | `density` | — | One line. |
 | `core.include` | — | `"all"` today. Reserved for selective inclusion. |
@@ -86,8 +89,13 @@ node tools/build.mjs             # everything
 node tools/build.mjs --check     # what CI runs
 ```
 
-7. **Add a row to the pack index** in `README.md` and `docs/README.vi.md`.
-8. **Commit `dist/`.** It is checked in so the repo works as a download.
+7. **Commit `dist/`.** It is checked in so the repo works as a download.
+
+The pack tables in `README.md`, `docs/README.vi.md`, `INSTALL.md` and
+`llms.txt` are **generated** from `pack.json` — the build rewrites the regions
+between the `PACKS:START` / `PACKS:END` markers. Do not edit them by hand. A
+hand-maintained catalogue is a second source of truth, and the copy that goes
+stale is the one an agent reads when it picks a pack.
 
 ## What core will reject
 
@@ -133,4 +141,8 @@ reviewing what the assistant did. That shapes the prose:
 - Does `01-surfaces.md` contain real values, or placeholders?
 - Does the checklist defer to `core/08-review.md` first?
 - Does `skill.description` name trigger phrases a user would type?
+- Does `notFor` genuinely exclude, or does it just restate `when` in the negative?
+- Would an agent reading only `when` and `notFor` pick this pack for the right
+  project, and rule it out for the wrong one? That is the whole selection
+  contract — see `INSTALL.md` for how an agent actually uses it.
 - Does `node tools/build.mjs --check` pass?

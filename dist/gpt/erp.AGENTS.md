@@ -1,4 +1,4 @@
-# ERP & back-office — UI design system
+# ERP & back-office - UI design system
 
 Agent instruction file for GPT-based coding agents (OpenAI Codex, Cursor, any
 tool that reads `AGENTS.md`). Place at a repo root, or merge its sections into
@@ -11,9 +11,16 @@ an existing `AGENTS.md` under a "UI" heading.
 - a request to look like a real ERP rather than a consumer SaaS
 - a screen that must stay readable through a full working day
 
+**Do not apply it to:**
+
+- marketing sites, landing pages or anything optimised for a first impression
+- consumer mobile apps - the density assumes a mouse and a large screen
+- content-first reading experiences - blogs, documentation, editorial
+- storefronts and product pages, where the product image is the subject
+
 ---
 
-# Part 1 — Domain
+# Part 1 - Domain
 
 A complete design system for internal business software, extracted from a
 production ERP front end. It is opinionated on purpose: the decisions below were
@@ -97,7 +104,7 @@ If they hear the cost and still want it, build it. It is their product.
 
 ---
 
-# Part 2 — Core (applies to any interface)
+# Part 2 - Core (applies to any interface)
 
 ## Tokens
 
@@ -1043,7 +1050,7 @@ the requested version.
 
 ---
 
-# Part 3 — ERP & back-office specifics
+# Part 3 - ERP & back-office specifics
 
 ## Surfaces, palette and scales
 
