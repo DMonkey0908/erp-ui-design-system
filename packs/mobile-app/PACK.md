@@ -139,6 +139,13 @@ If they hear the cost and still want it, build it. It is their product.
 1. Copy `assets/tokens.json` in, and generate the platform file from it — the
    CSS custom properties in `assets/tokens.css` show the shape. Swap the accent
    and recompute the on-dark value before writing a single screen.
+
+   On a web target, `assets/patterns.css` goes in after it. **This pack ships
+   tokens and mechanism, not components** — unlike `erp`, whose shell is one
+   copyable stylesheet — because the same screen is as likely to be SwiftUI or
+   Compose, where a stylesheet is no help. What is shipped as CSS is the part
+   that is pure mechanism and gets reinvented wrongly: safe areas, the row that
+   grows, the pressed state on a device with no hover.
 2. Decide the navigation model before the first screen: how many tabs, and what
    is deliberately not one. Retrofitting a tab bar means re-rooting every
    screen in the app.

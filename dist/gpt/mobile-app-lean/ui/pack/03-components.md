@@ -50,6 +50,34 @@ The section footer is underused and it is the right place for the sentence
 explaining what a setting does. Better there than as helper text under every
 row, and better than a tooltip, which does not exist here.
 
+## Status markers and badges
+
+A row usually carries three lines already, so the `erp` pack's filled pill is
+too heavy here. The mobile weight is a dot and a word.
+
+```
+marker    an 8pt dot before a 13pt label, both in the state's colour
+live      a filled dot
+pending   a HOLLOW dot - a 2pt ring, nothing inside
+label     always present; the dot is the second signal, never the first
+```
+
+The hollow ring is doing real work: it is the one status difference that
+survives greyscale, a colour-vision deficiency and a screenshot, which core
+`05-accessibility.md` requires and which a set of differently-tinted dots does
+not deliver on its own.
+
+A **badge** — the count on a tab, or on a row — follows one rule that is easy
+to get wrong:
+
+- **`min-height`, never `height`.** A badge is a box with a digit in it, so a
+  fixed box clips its own content at the second text-scale step. This is the
+  Dynamic Type failure in `01-surfaces.md`, in the smallest component in the
+  app, which is why it survives review.
+- **A badge is decoration to a screen reader.** Mark it `aria-hidden` and put
+  the count in the accessible name of the thing it sits on: "Today, 4 stops
+  remaining", not "Today 4".
+
 ## Buttons
 
 Three, and that is the set.
@@ -126,6 +154,16 @@ keyboard.
   the single most common bug in this domain and it does not reproduce on a
   simulator with a hardware keyboard attached — test it with the software
   keyboard, on a small device.
+
+  The mechanism differs on every platform and is obvious on none of them:
+
+  | Target | What actually does it |
+  |---|---|
+  | iOS / SwiftUI | `.ignoresSafeArea(.keyboard)` on what should stay put, and nothing on what should move; `.safeAreaInset(edge: .bottom)` for a pinned bar |
+  | Android / Compose | `WindowInsets.ime` — `imePadding()` on the container, with `adjustResize` on the window |
+  | React Native | `KeyboardAvoidingView` with `behavior="padding"` on iOS and `"height"` on Android; they genuinely differ |
+  | Web / RN Web | `visualViewport`'s `resize` event. The layout viewport does **not** change when the keyboard opens, so a CSS-only solution does not exist |
+
 - **Set the keyboard type per field.** Email, number, phone, URL. A numeric
   field that opens a QWERTY keyboard costs the user two taps and some of their
   goodwill, every time.

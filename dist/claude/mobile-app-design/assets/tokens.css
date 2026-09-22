@@ -2,11 +2,15 @@
    The same tokens as tokens.json, as custom properties, for React Native Web,
    Ionic, Capacitor and mobile web.
 
-   tokens.json is the source. This is a view of it. If the two disagree, this
-   one is wrong.
+   tokens.json is the source. This is a view of it, and nothing else: every
+   declaration below is a custom property. If the two disagree, this one is
+   wrong.
 
-   Load it first, before anything else, so every other file can be written in
-   these and never in a literal.
+   The rules that USE these - safe areas, rows, pressed states - are in
+   patterns.css, because a token file that also styles components cannot claim
+   to be a view of a token file.
+
+   Load this first, then patterns.css, then your screen.
    ========================================================================== */
 
 :root {
@@ -103,71 +107,5 @@
         --warning: #f0b429;
         --danger: #ff6b6b;
         --info: #a1a1aa;
-    }
-}
-
-/* Safe areas. The screen is not the rectangle you were given, and the insets
-   are runtime values that are zero on some devices. A bar with a hardcoded
-   bottom padding sits under the home indicator on one device and floats above
-   nothing on another - and a primary action under the home indicator has
-   every tap intercepted by the system. */
-:root {
-    --safe-top: env(safe-area-inset-top, 0px);
-    --safe-bottom: env(safe-area-inset-bottom, 0px);
-    --safe-left: env(safe-area-inset-left, 0px);
-    --safe-right: env(safe-area-inset-right, 0px);
-}
-
-.screen {
-    padding-inline: max(var(--space-screen), var(--safe-left), var(--safe-right));
-}
-
-.tab-bar {
-    /* Height PLUS the inset, as padding. Not a margin, or the bar's own
-       background stops reaching the bottom of the screen. */
-    height: calc(var(--tab-bar-height) + var(--safe-bottom));
-    padding-bottom: var(--safe-bottom);
-}
-
-.pinned-action {
-    /* A primary action pinned above the keyboard when it is up, and above the
-       home indicator always. */
-    padding-bottom: max(var(--space-screen), var(--safe-bottom));
-}
-
-body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-size: 17px;
-    line-height: 1.4;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
-    /* The page does not bounce or zoom; the content inside it scrolls. */
-    overscroll-behavior-y: contain;
-    -webkit-text-size-adjust: 100%;
-}
-
-/* A row grows. It never has a fixed height - that is the Dynamic Type failure
-   that clips at the second scale step. */
-.row {
-    min-height: var(--row-min-height);
-    padding: var(--space-md) var(--space-screen);
-}
-
-/* There is no hover on this device. Pressed is the state that matters, and it
-   has to appear within about 100ms or the row gets tapped again. */
-.pressable:active {
-    background: var(--pressed-overlay);
-}
-
-@media (prefers-reduced-motion: reduce) {
-
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.001ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.001ms !important;
-        scroll-behavior: auto !important;
     }
 }

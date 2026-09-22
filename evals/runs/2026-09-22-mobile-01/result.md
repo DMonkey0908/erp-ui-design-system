@@ -6,12 +6,21 @@
 | **Task** | [`evals/tasks/mobile-01-deliveries.md`](../../tasks/mobile-01-deliveries.md) |
 | **Build under test** | `dist/claude/mobile-app-design/` (Claude skill layout) |
 | **Administered by** | Claude Opus 5, which had just written the pack |
-| **Output** | `index.html`, `tokens.css`, `app.css`, `app.js` |
+| **Output** | `index.html`, `tokens.css`, `patterns.css`, `app.css`, `app.js` |
 
 The honesty note in [`evals/README.md`](../../README.md) applies with more
 force than it did to run 001: this run was administered by the author of the
 pack, on the same day. It tests whether the pack is *complete enough to build
 from*. It cannot test whether it reads correctly to somebody else.
+
+## Status
+
+Findings 1–5 were fixed in the commit after this one, and the artefact here was
+relinked against the split assets so it still opens. Finding 6 is not a defect
+— it records that the pack's override was never exercised, and it stays open
+until a run ports a desktop screen.
+
+The record below describes what the run found, not what the pack says now.
 
 ## Verdict
 
