@@ -1,9 +1,7 @@
 # ERP UI Design System — skill pack cho Claude, Gemini và GPT
 
-Bộ hướng dẫn thiết kế giao diện ERP, rút ra từ front end đang chạy production
-của **NeuronsAI — INNOVA Requirement 1**
-(`public/theme.css`, `public/erp-shell.css`, `public/hardware/`,
-`public/tsb/`, `public/settings/`).
+Bộ hướng dẫn thiết kế giao diện ERP, rút ra từ front end của **một hệ ERP đang
+chạy production** — file token, file shell, và năm page stylesheet của nó.
 
 Mục tiêu: đưa cho bất kỳ trợ lý AI nào cũng dựng được giao diện ERP nhất quán
 với hệ thiết kế này — không phải mô tả chung chung, mà là token, số đo, và lý do
@@ -31,7 +29,7 @@ Toàn bộ hệ thống tối ưu cho **lần dùng thứ hai trăm**, không ph
 ## Cấu trúc thư mục
 
 ```
-erp-ui-design-skill/
+erp-ui-design-system/
 ├── README.md                     ← file này
 │
 ├── claude/erp-ui-design/         ← SKILL cho Claude (bản gốc, đầy đủ nhất)
@@ -59,14 +57,14 @@ erp-ui-design-skill/
 
 ### Claude Code / Claude Desktop
 
+Chạy từ gốc repo này sau khi clone:
+
 ```powershell
 # Dùng cho mọi dự án
-Copy-Item -Recurse "$HOME\Documents\erp-ui-design-skill\claude\erp-ui-design" `
-                   "$HOME\.claude\skills\erp-ui-design"
+Copy-Item -Recurse ".\claude\erp-ui-design" "$HOME\.claude\skills\erp-ui-design"
 
 # Hoặc chỉ một dự án
-Copy-Item -Recurse "$HOME\Documents\erp-ui-design-skill\claude\erp-ui-design" `
-                   ".\.claude\skills\erp-ui-design"
+Copy-Item -Recurse ".\claude\erp-ui-design" "<đường-dẫn-dự-án>\.claude\skills\erp-ui-design"
 ```
 
 Claude tự gọi skill khi gặp việc liên quan (dựng admin panel, review giao diện
@@ -80,10 +78,10 @@ bản kia mà không tốn context.
 
 ```powershell
 # Toàn cục
-Copy-Item "$HOME\Documents\erp-ui-design-skill\gemini\GEMINI.md" "$HOME\.gemini\GEMINI.md"
+Copy-Item ".\gemini\GEMINI.md" "$HOME\.gemini\GEMINI.md"
 
-# Hoặc đặt ở gốc repo
-Copy-Item "$HOME\Documents\erp-ui-design-skill\gemini\GEMINI.md" ".\GEMINI.md"
+# Hoặc đặt ở gốc dự án của anh
+Copy-Item ".\gemini\GEMINI.md" "<đường-dẫn-dự-án>\GEMINI.md"
 ```
 
 Dùng được cho **Gemini Gem**: dán toàn bộ nội dung vào ô Instructions.
@@ -93,7 +91,7 @@ Dùng được cho **Gemini Gem**: dán toàn bộ nội dung vào ô Instructio
 **Codex / Cursor / công cụ đọc `AGENTS.md`:**
 
 ```powershell
-Copy-Item "$HOME\Documents\erp-ui-design-skill\gpt\AGENTS.md" ".\AGENTS.md"
+Copy-Item ".\gpt\AGENTS.md" "<đường-dẫn-dự-án>\AGENTS.md"
 ```
 
 Nếu repo đã có `AGENTS.md`, gộp các mục vào dưới một heading `## UI`.
@@ -122,7 +120,7 @@ Custom GPT rút gọn thì tách riêng, sửa tay.
 
 ## Đổi màu thương hiệu
 
-Bộ này để sẵn đỏ INNOVA (`#b3121b`). Đổi sang màu khác:
+Bộ này để sẵn một sắc đỏ crimson làm màu mẫu (`#b3121b`). Đổi sang màu khác:
 
 1. Sửa cụm `--brand*` ở đầu `assets/theme.css`.
 2. **Tính lại `--brand-on-dark`** — bước hay bị bỏ qua nhất. Đây là *cùng một
@@ -163,7 +161,7 @@ là một lỗi đã xảy ra thật trong repo hoặc trong lúc làm việc tr
 - **palette drift**: các trang viết trước khi có `theme.css` vẫn còn hex thô
   (`#e0e7ff`, `#3730a3`) — một màu indigo không tồn tại trong bảng màu, trong
   một hệ thống đã tuyên bố "không có màu xanh dương". Đây là cách hệ thiết kế
-  chết dần, và nó đang có thật trong `public/training/styles.css`.
+  chết dần, và nó đang có thật trong một page stylesheet cũ của repo nguồn.
 
 Điểm cuối cùng đáng nói riêng: nó nằm trong bộ skill **vì** nó là lỗi của chính
 repo nguồn. Một bộ hướng dẫn chỉ mô tả phần đẹp sẽ không giúp ai tránh được cái
@@ -171,4 +169,4 @@ bẫy đã sập.
 
 ---
 
-*Rút từ NeuronsAI — INNOVA Requirement 1, 21/09/2026.*
+*Rút từ một hệ ERP đang chạy production, 09/2026.*
