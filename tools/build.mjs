@@ -261,6 +261,40 @@ function lintPacks(packs) {
   }
 }
 
+/**
+ * A pack holds values - but in ONE file. The palette file names the colours;
+ * every other reference spends them through tokens.
+ *
+ * This is the mirror of lintCore and it looks in the opposite place. Core may
+ * show a hex inside an example and must not name one in prose, so lintCore
+ * strips the code blocks. A pack's prose may name a hex freely - the domain
+ * failure modes are full of them, "a page that ships #e0e7ff chips" - while
+ * its CSS specs must not, because a spec gets copied into a project and a
+ * literal copied into a project is where every palette with ninety values
+ * started. So this reads the code blocks and ignores everything else.
+ *
+ * The first entry in `references` is the palette file unless `palette` says
+ * otherwise. Found by the first eval run, which turned up eight literals in
+ * a component spec whose own pack forbids them.
+ */
+function lintPackValues(pack) {
+  const { meta, dir, id } = pack;
+  const palette = meta.palette ?? meta.references?.[0]?.file;
+
+  for (const r of meta.references || []) {
+    if (r.file === palette) continue;
+    const body = read(join(dir, 'references', r.file));
+    const blocks = body.match(/```[\s\S]*?```/g) || [];
+    const hex = blocks.join(NL).match(/#[0-9a-fA-F]{3,8}\b/g);
+    if (hex) {
+      problems.push(
+        `${id}: references/${r.file} has a literal colour in a code block (${[...new Set(hex)].join(', ')}) `
+        + `- values belong in references/${palette} as a token, and this spec spends it`
+      );
+    }
+  }
+}
+
 /** Core says "no concrete values"; this is the one rule core can enforce on itself. */
 function lintCore() {
   for (const { file, path } of coreFiles()) {
@@ -799,6 +833,7 @@ const loaded = [];
 for (const id of ids) {
   const pack = loadPack(id);
   if (!pack) continue;
+  lintPackValues(pack);
   buildClaude(pack, core);
   buildMerged(pack, core, 'gemini');
   buildMerged(pack, core, 'gpt');

@@ -82,7 +82,9 @@ waived by any domain.
 - [ ] Transitions that replace content say what survived — not everything is a
       fade.
 - [ ] Animated figures carry `tabular-nums`.
-- [ ] Only `transform` and `opacity` animate on long lists.
+- [ ] No property other than `transform` and `opacity` animates across many
+      elements at once. One element under the cursor is free; five hundred
+      rows entering is not.
 - [ ] `prefers-reduced-motion` honoured, with end states stated explicitly —
       no `opacity: revert`.
 - [ ] Nothing animates on resize.

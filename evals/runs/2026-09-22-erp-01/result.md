@@ -13,6 +13,12 @@ the score.** A run administered by whoever wrote the rules tests whether the
 answers are in the build. It does not test whether a cold assistant would have
 gone looking for them, which is the more important question and remains open.
 
+## Status
+
+Findings 1–8 were fixed in the commit after this one. The record below is left
+describing the state the run actually found, because a findings list rewritten
+to match the fix stops being evidence. Finding 9 needed no fix.
+
 ## Verdict
 
 The build is **usable end to end**. A complete, dense, accessible screen came

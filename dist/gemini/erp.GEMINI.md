@@ -167,7 +167,8 @@ If they hear the cost and still want it, build it. It is their product.
 
 1. Copy `assets/theme.css` in as the first stylesheet, then swap the accent
    block for the client's colour — and recompute the on-dark value.
-2. Start the page from `assets/shell-skeleton.html`. The inline script in its
+2. Start the page from `assets/page-template.html`, with `assets/erp-shell.css`
+   beside `theme.css`. The inline script in the template's
    `<head>` is not optional; see the shell reference.
 3. Keep the stylesheet order: theme → shell → page.
 
@@ -540,6 +541,8 @@ dimensions. A spinner in a zero-height box guarantees a jump.
 
 ## Motion
 
+## Motion
+
 This file is about movement the interface chooses: what moves, how fast, and
 how it eases. What the interface owes a user *while they wait* — busy states,
 spinners, skeletons, progress — is a different problem with a different clock,
@@ -611,7 +614,9 @@ content, and they are the first thing to cut under `prefers-reduced-motion`.
 ### Animate the cheap properties
 
 `transform` and `opacity` are composited — they do not trigger layout or paint.
-Everything else can, and on a long table or a large list the cost is visible.
+Everything else can, and the cost scales with how many elements are doing it at
+once. One row changing background under the cursor is free; five hundred rows
+staggering in on a paint property is a visibly slow page.
 
 ```css
 /* good */   transition: opacity .16s ease, transform .16s ease;
@@ -1377,6 +1382,8 @@ haptics turned off, taking the useful confirmations with them.
 
 ## Review
 
+## Review
+
 The universal pass. A pack adds its own domain checks on top; nothing here is
 waived by any domain.
 
@@ -1459,7 +1466,9 @@ waived by any domain.
 - [ ] Transitions that replace content say what survived — not everything is a
       fade.
 - [ ] Animated figures carry `tabular-nums`.
-- [ ] Only `transform` and `opacity` animate on long lists.
+- [ ] No property other than `transform` and `opacity` animates across many
+      elements at once. One element under the cursor is free; five hundred
+      rows entering is not.
 - [ ] `prefers-reduced-motion` honoured, with end states stated explicitly —
       no `opacity: revert`.
 - [ ] Nothing animates on resize.
@@ -1772,7 +1781,8 @@ Both are core rules — see `core/03-layout.md`. What this pack pins down:
 - The keys are `app.sidebar.collapsed`, `app.user` (for role-gated nav) and
   `app.preferences` (language). All three affect layout or visibility, so all
   three are applied to `<html>` inline in `<head>`, before the stylesheets.
-  `assets/shell-skeleton.html` ships the script.
+  `assets/page-template.html` ships the script, and `assets/erp-shell.css`
+  ships this whole section as a file.
 - Order is `theme.css` -> `erp-shell.css` -> page `styles.css`. A page
   stylesheet may define tokens in terms of theme tokens, never as literals.
 - Because the class lands on `<html>` while the runtime toggle sets it on the
@@ -1987,6 +1997,8 @@ Core (`core/06-i18n.md`) covers the mechanics. The shell-specific consequences:
 
 ## Components
 
+## Components
+
 Every component here lives on **paper**. Copy the spec, keep the tokens.
 
 ### Card
@@ -2034,7 +2046,7 @@ Three variants, and that is the whole set.
 .btn:disabled             { opacity: 0.55; cursor: default; }
 
 .btn-primary {
-  border-color: var(--brand); background: var(--brand); color: #fff;
+  border-color: var(--brand); background: var(--brand); color: var(--text-on-brand);
 }
 .btn-primary:hover:not(:disabled) { background: var(--brand-hover); border-color: var(--brand-hover); }
 
@@ -2126,7 +2138,7 @@ form submission work for free.
                  font-size: 0.8125rem; font-weight: 600; color: var(--paper-text-2); }
 .segment input:checked + span {
   background: var(--paper); color: var(--paper-text);
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.12);
+  box-shadow: var(--shadow-raised);
 }
 .segment input:focus-visible + span { outline: 2px solid var(--brand-a35); }
 ```
@@ -2175,6 +2187,102 @@ Rules that carry the weight:
 - **`white-space: nowrap` on headers**, so a two-word header never doubles the
   header height.
 
+#### Row actions
+
+Every operational table has one, and the default an assistant reaches for -
+revealing it when the row is hovered - is the thing `core/09-input.md` rules
+out. So it is specified here rather than left to be reinvented.
+
+```css
+.table .col-action { width: 1%; text-align: end; }   /* shrink to content */
+
+.row-action {
+  min-height: 26px;
+  padding: 4px 10px;
+  border: 1px solid var(--paper-border-strong);
+  border-radius: var(--radius-control);
+  background: var(--paper);
+  color: var(--paper-text-2);
+  font: inherit; font-size: 0.72rem; font-weight: 600;
+  white-space: nowrap; cursor: pointer;
+}
+.row-action:hover:not(:disabled) { background: var(--paper-2); color: var(--paper-text); }
+.row-action:active:not(:disabled) { background: var(--paper-3); }
+
+/* Inset, because the action column sits flush against the right edge of a
+   wrapper that clips on the x axis and a positive offset gets cut. */
+.row-action:focus-visible { outline: 2px solid var(--brand); outline-offset: -2px; }
+
+/* A toggle states its own state. The label changes with it. */
+.row-action[aria-pressed='true'] {
+  border-color: var(--brand-border);
+  background: var(--brand-tint);
+  color: var(--brand);
+}
+```
+
+Four rules:
+
+- **Present at all times, for every row.** Not on hover - on a touchscreen a
+  hover-revealed control does not exist, and with a keyboard it appears only
+  once focus has already arrived somewhere invisible.
+- **Quiet by default.** A column of forty buttons at full button weight
+  out-shouts the data they act on, which is why this is one step down from
+  `.btn-sm` in size and uses the muted text colour until hovered.
+- **One per row.** More than one and the column becomes a toolbar; put the
+  rest behind a single overflow menu.
+- **A toggle carries `aria-pressed` and changes its label.** "Hold" becomes
+  "Release". A button whose text never changes cannot tell a screen reader
+  what it just did.
+
+Destructive row actions do not belong here at all. They go in the overflow
+menu, last, after a divider - distance is the cheapest confirmation there is.
+
+### Loading
+
+`core/08-feedback.md` sets which affordance a wait has earned. This is what the
+one that matters here looks like: a table reloading, which in this domain is
+most waits.
+
+```css
+.skeleton-cell {
+  display: block;
+  height: 11px;                                   /* the cap height of a row */
+  border-radius: 3px;
+  background: linear-gradient(90deg,
+              var(--paper-3) 0%, var(--paper-2) 50%, var(--paper-3) 100%);
+  background-size: 200% 100%;
+  animation: skeleton-sweep 1.1s ease-in-out infinite;
+}
+.skeleton-cell.is-short { width: 45%; }
+.skeleton-cell.is-right { margin-inline-start: auto; width: 60%; }
+
+@keyframes skeleton-sweep {
+  from { background-position: 100% 0; }
+  to   { background-position: -100% 0; }
+}
+
+/* The global guard kills the animation and does not supply an end state.
+   Without this the cells inherit whatever frame they stopped on. */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-cell { animation: none; background: var(--paper-3); opacity: 1; }
+}
+```
+
+The rules that make it honest:
+
+- **Render it into the real `<tr>`/`<td>` structure**, one skeleton row per row
+  you expect. A grey block of arbitrary height is a spinner that costs more.
+- **Schedule it, do not render it immediately.** Below a second the answer
+  usually beats it, and a skeleton that appears and vanishes reads as a
+  stutter in an interface that was fast. Set it on a ~300ms timer and clear the
+  timer when the data lands.
+- **`aria-hidden` on the skeleton rows.** They carry no information, and a
+  screen reader announcing eight rows of nothing is worse than silence. Put the
+  word in the live region instead - the same one that carries the match count.
+- **The table header stays.** Only the body is unknown, and keeping the header
+  means the columns do not move when the data arrives.
+
 ### KPI tiles
 
 ```css
@@ -2218,10 +2326,10 @@ Three weights of the same idea. Pick by how loud it needs to be.
 .pill { display: inline-flex; align-items: center; gap: 4px;
         padding: 2px 8px; border-radius: 999px;
         font-size: 0.7rem; font-weight: 600; white-space: nowrap; flex-shrink: 0; }
-.pill-success { background: #d1fae5; color: #065f46; }
-.pill-warning { background: #fef3c7; color: #92400e; }
-.pill-danger  { background: #fee2e2; color: #991b1b; }
-.pill-neutral { background: var(--paper-3); color: var(--paper-text-2); }
+.pill-success { background: var(--pill-success-bg); color: var(--pill-success-text); }
+.pill-warning { background: var(--pill-warning-bg); color: var(--pill-warning-text); }
+.pill-danger  { background: var(--pill-danger-bg);  color: var(--pill-danger-text); }
+.pill-neutral { background: var(--pill-neutral-bg); color: var(--pill-neutral-text); }
 
 /* Quietest of all — coloured text */
 .status.is-ok  { color: var(--state-success); }
@@ -2249,14 +2357,14 @@ See `02-shell.md` for positioning. Item spec:
   cursor: pointer;
   transition: background 0.12s ease, color 0.12s ease;
 }
-.dropdown-item:hover { background: #f1f5f9; }
+.dropdown-item:hover { background: var(--paper-3); }
 .dropdown-item .icon { width: 20px; height: 20px; color: var(--paper-text-3); flex-shrink: 0; }
 .dropdown-item:hover .icon { color: var(--brand); }
 
-.dropdown-item.is-danger { color: #dc2626; }
-.dropdown-item.is-danger:hover { background: #fef2f2; color: #b91c1c; }
+.dropdown-item.is-danger { color: var(--state-danger-dark); }
+.dropdown-item.is-danger:hover { background: var(--danger-tint); }
 
-.dropdown-divider { height: 1px; background: #eef2f6; margin: 4px 6px; }
+.dropdown-divider { height: 1px; background: var(--paper-border); margin: 4px 6px; }
 ```
 
 Menu padding `6px`, item radius `8px` inside a `12px` container — the inset
@@ -2274,7 +2382,7 @@ menu.
   padding: 10px 12px;
   border: 1px solid var(--paper-border); border-radius: 8px;
   background: var(--paper);
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.14);
+  box-shadow: var(--shadow-tooltip);
   font-size: 0.75rem; color: var(--paper-text-2);
   pointer-events: none;
 }
@@ -2497,6 +2605,8 @@ answer; do not leave them behind a disclosure the user has to discover.
 
 ## Domain review checklist
 
+## Domain review checklist
+
 Run **`core/99-review.md` first** — tokens, type, layout, state, accessibility,
 motion, charts, i18n. Nothing there is waived by this domain.
 
@@ -2544,6 +2654,10 @@ This file is what an operational tool needs on top.
 - [ ] Status pills are tinted background with dark text, not saturated fill.
 - [ ] State is in a `data-state` attribute, not only a class.
 - [ ] Filter row has a self-hiding Clear button and a live match count.
+- [ ] Row actions are visible without hovering, one per row, quieter than a
+      button, and a toggle changes its own label.
+- [ ] A reloading table shows skeleton rows in the real row structure, on a
+      ~300ms timer, with the header left in place.
 - [ ] Non-matching rows dim on the chart rather than vanishing.
 
 ### Failure modes specific to this domain

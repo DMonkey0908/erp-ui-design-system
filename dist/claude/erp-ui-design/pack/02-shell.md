@@ -33,7 +33,8 @@ Both are core rules — see `core/03-layout.md`. What this pack pins down:
 - The keys are `app.sidebar.collapsed`, `app.user` (for role-gated nav) and
   `app.preferences` (language). All three affect layout or visibility, so all
   three are applied to `<html>` inline in `<head>`, before the stylesheets.
-  `assets/shell-skeleton.html` ships the script.
+  `assets/page-template.html` ships the script, and `assets/erp-shell.css`
+  ships this whole section as a file.
 - Order is `theme.css` -> `erp-shell.css` -> page `styles.css`. A page
   stylesheet may define tokens in terms of theme tokens, never as literals.
 - Because the class lands on `<html>` while the runtime toggle sets it on the

@@ -567,6 +567,8 @@ dimensions. A spinner in a zero-height box guarantees a jump.
 
 ## Motion
 
+## Motion
+
 This file is about movement the interface chooses: what moves, how fast, and
 how it eases. What the interface owes a user *while they wait* — busy states,
 spinners, skeletons, progress — is a different problem with a different clock,
@@ -638,7 +640,9 @@ content, and they are the first thing to cut under `prefers-reduced-motion`.
 ### Animate the cheap properties
 
 `transform` and `opacity` are composited — they do not trigger layout or paint.
-Everything else can, and on a long table or a large list the cost is visible.
+Everything else can, and the cost scales with how many elements are doing it at
+once. One row changing background under the cursor is free; five hundred rows
+staggering in on a paint property is a visibly slow page.
 
 ```css
 /* good */   transition: opacity .16s ease, transform .16s ease;
@@ -1404,6 +1408,8 @@ haptics turned off, taking the useful confirmations with them.
 
 ## Review
 
+## Review
+
 The universal pass. A pack adds its own domain checks on top; nothing here is
 waived by any domain.
 
@@ -1486,7 +1492,9 @@ waived by any domain.
 - [ ] Transitions that replace content say what survived — not everything is a
       fade.
 - [ ] Animated figures carry `tabular-nums`.
-- [ ] Only `transform` and `opacity` animate on long lists.
+- [ ] No property other than `transform` and `opacity` animates across many
+      elements at once. One element under the cursor is free; five hundred
+      rows entering is not.
 - [ ] `prefers-reduced-motion` honoured, with end states stated explicitly —
       no `opacity: revert`.
 - [ ] Nothing animates on resize.
@@ -1935,6 +1943,8 @@ everyone whose JavaScript did not run.
 
 ## Components
 
+## Components
+
 Fewer components than an operational tool needs, each carrying more weight.
 
 ### Buttons
@@ -1951,7 +1961,7 @@ Fewer components than an operational tool needs, each carrying more weight.
 }
 
 .btn-primary {
-  background: var(--accent); color: #fff; border: 0;
+  background: var(--accent); color: var(--text-on-accent); border: 0;
   box-shadow: var(--shadow-cta);
 }
 .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }

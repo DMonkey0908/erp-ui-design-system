@@ -49,6 +49,7 @@ packs/<id>/
 | `core.leadWith` | — | Core file ids to read first, e.g. `["01-tokens"]`. |
 | `core.overrides` | — | `[{ "rule": "...", "why": "..." }]`. Declare every contradiction. |
 | `references` | yes | Ordered `[{ file, title }]`. Every `.md` in `references/` must be listed — the build fails otherwise, so a file cannot silently go unbuilt. |
+| `palette` | — | Which reference file is allowed to name colours. Defaults to the first entry in `references`. Every other reference that puts a literal colour in a code block fails the build. |
 | `assets` | — | `[{ file, note }]`. |
 | `customGpt` | — | Filename, or `null`. |
 
@@ -125,7 +126,11 @@ under non-negotiables instead.
 ## What core will reject
 
 The build fails if `core/references/` gains a concrete colour outside a code
-block. Beyond that, these belong in a pack, not core:
+block, and if any pack reference other than the palette file puts a literal
+colour **inside** one. The two look in opposite places on purpose: core must
+not name a value anywhere except an illustration, while a pack's prose may name
+values freely and its CSS specs may not — a spec gets copied into a project, and
+a literal copied into a project is where every ninety-value palette began. Beyond that, these belong in a pack, not core:
 
 - Any size, spacing or duration value.
 - Anything a reasonable domain would reverse — density above all.

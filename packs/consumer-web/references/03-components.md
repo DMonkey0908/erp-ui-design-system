@@ -16,7 +16,7 @@ Fewer components than an operational tool needs, each carrying more weight.
 }
 
 .btn-primary {
-  background: var(--accent); color: #fff; border: 0;
+  background: var(--accent); color: var(--text-on-accent); border: 0;
   box-shadow: var(--shadow-cta);
 }
 .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }

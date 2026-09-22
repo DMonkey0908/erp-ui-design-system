@@ -47,6 +47,10 @@ This file is what an operational tool needs on top.
 - [ ] Status pills are tinted background with dark text, not saturated fill.
 - [ ] State is in a `data-state` attribute, not only a class.
 - [ ] Filter row has a self-hiding Clear button and a live match count.
+- [ ] Row actions are visible without hovering, one per row, quieter than a
+      button, and a toggle changes its own label.
+- [ ] A reloading table shows skeleton rows in the real row structure, on a
+      ~300ms timer, with the header left in place.
 - [ ] Non-matching rows dim on the chart rather than vanishing.
 
 ## Failure modes specific to this domain

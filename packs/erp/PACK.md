@@ -74,6 +74,7 @@ If they hear the cost and still want it, build it. It is their product.
 
 1. Copy `assets/theme.css` in as the first stylesheet, then swap the accent
    block for the client's colour — and recompute the on-dark value.
-2. Start the page from `assets/shell-skeleton.html`. The inline script in its
+2. Start the page from `assets/page-template.html`, with `assets/erp-shell.css`
+   beside `theme.css`. The inline script in the template's
    `<head>` is not optional; see the shell reference.
 3. Keep the stylesheet order: theme → shell → page.

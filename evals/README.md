@@ -38,8 +38,9 @@ Not "is the output pretty". Three things, in order of how much they matter:
 ## What a `result.md` records
 
 - **Findings**, each one actionable against a specific file. A finding is not
-  "the docs could be clearer" — it is "`assets/shell-skeleton.html` uses
-  `.sidebar`, `pack/02-shell.md` styles `.erp-sidebar`".
+  "the docs could be clearer" — it is, to quote the first run, "the page
+  template marks up `.sidebar` and `pack/02-shell.md` ships CSS for
+  `.erp-sidebar`, so the documented path produces an unstyled page".
 - **The checklist score**, as items passed over items applicable. Items the
   screen could not exercise are excluded and said so, rather than counted as
   passes.
