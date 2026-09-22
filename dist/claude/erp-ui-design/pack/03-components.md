@@ -174,9 +174,9 @@ The centre of gravity of an ERP. Get the density right and the rest follows.
 
 Rules that carry the weight:
 
-- **`tabular-nums` on every numeric column.** Proportional digits make a column
-  of figures ripple as values update. This is the highest-value one-line fix in
-  the whole system.
+- **`tabular-nums` on every numeric column** (core `02-typography.md`). It
+  matters more here than anywhere: a table is the centre of gravity of this
+  domain, and most of them refresh in place.
 - **Numbers right-aligned, text left-aligned.** Right alignment is what lets
   someone compare magnitudes without reading.
 - **Header is smaller than the body.** 0.72rem grey against 0.8125rem

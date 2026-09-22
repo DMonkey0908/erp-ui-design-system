@@ -51,6 +51,32 @@ task.
 ## Step 2 — Match against the catalogue
 
 <!-- PACKS:START:select -->
+### `consumer-web` - Consumer web *(beta)*
+
+Public-facing sites read by strangers: marketing pages, landing pages, product sites, documentation and editorial.
+
+**Optimises for:** The first five seconds, for a stranger who arrived from a search result and owes you nothing.
+**Density:** low - 16px base, 96-128px section rhythm, 60-75ch measure
+
+**Choose it when the project is:**
+
+- a marketing site, landing page or product page
+- a pricing page, a documentation site or an editorial article
+- anything a stranger arrives at from a search result, an ad or a link
+- a request to look more premium, modern or trustworthy, or less generic
+- work judged on whether the reader keeps scrolling
+
+**Do NOT choose it for:**
+
+- internal tools, admin panels and operations consoles - use the erp pack, which is built for the opposite reader
+- dense data entry or any screen an operator works in all day
+- data tables that must show twenty or more rows at once
+- native mobile app interfaces, which have their own navigation conventions and touch targets
+
+Skill name: `consumer-web-design`
+
+Keywords: `landing page`, `marketing site`, `hero section`, `call to action`, `pricing page`, `documentation site`, `editorial`, `typography`, `responsive`, `web performance`, `conversion`
+
 ### `erp` - ERP & back-office *(stable)*
 
 Dense, dark-chrome operational software: admin panels, operations consoles, back-office tools, internal dashboards.

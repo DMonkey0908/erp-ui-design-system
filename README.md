@@ -98,13 +98,19 @@ never treat a passing build as the user saying they are done.
 <!-- PACKS:START:en -->
 | Pack | Domain | Status |
 |---|---|---|
+| [`consumer-web`](packs/consumer-web/) | **Consumer web** - Public-facing sites read by strangers: marketing pages, landing pages, product sites, documentation and editorial. | `beta` |
 | [`erp`](packs/erp/) | **ERP & back-office** - Dense, dark-chrome operational software: admin panels, operations consoles, back-office tools, internal dashboards. | `stable` |
 <!-- PACKS:END:en -->
 
-Planned, in rough order: consumer web, SaaS dashboard, mobile app, e-commerce,
-desktop & system utilities, documentation sites. None are started — the
-foundation was built first, deliberately, so the second pack costs a fraction of
-the first. See [`docs/AUTHORING.md`](docs/AUTHORING.md) to add one.
+Planned, in rough order: SaaS dashboard, mobile app, e-commerce, desktop &
+system utilities. See [`docs/AUTHORING.md`](docs/AUTHORING.md) to add one.
+
+The two packs here disagree on purpose. `erp` optimises for the two-hundredth
+use by a trained operator; `consumer-web` optimises for the first five seconds
+for a stranger who owes you nothing. Nearly every concrete decision inverts —
+density, whether a card is the default container, whether a border or space
+does the separating. That is what a pack is: a thesis another domain would
+reject. If two packs agree, one of them is core.
 
 ## Install
 

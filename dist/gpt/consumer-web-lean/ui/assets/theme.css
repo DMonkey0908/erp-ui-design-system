@@ -1,0 +1,209 @@
+/* ==========================================================================
+   THEME — Consumer web. The single source of truth for the palette and scales.
+   Load this FIRST, before any other stylesheet.
+
+   The rule that shapes it: the canvas IS the content. There is no permanent
+   chrome, because there is no workspace — there is a page a stranger is
+   deciding whether to keep scrolling. Space does the separating that a border
+   would do in an operational tool.
+
+   TO REBRAND: change the accent block and recompute --accent-on-dark and the
+   alpha steps. Nothing below that needs to move.
+   ========================================================================== */
+
+:root {
+    /* ----- Accent -------------------------------------------------------
+       One saturated colour, reserved for the primary action. Every other use
+       spends the distinction that makes the action findable. */
+    --accent: #0d7a6f;
+    --accent-hover: #0a5f57;
+    --accent-active: #084a44;
+
+    /* The same accent, lifted to read on the ink surface. #0d7a6f on #14100e
+       is muddy. Every accent needs one value per surface it lands on. */
+    --accent-on-dark: #5eead4;
+
+    --accent-tint: #f0faf8;
+    --accent-tint-2: #d5f2ec;
+
+    --accent-a10: rgba(13, 122, 111, 0.10);
+    --accent-a20: rgba(13, 122, 111, 0.20);
+    --accent-a35: rgba(13, 122, 111, 0.35);
+
+    /* ----- Canvas: warm, not grey ---------------------------------------
+       A cool grey reads as an application background. This is not an
+       application. */
+    --canvas: #fbfaf8;
+    --canvas-2: #f4f2ee;
+    --surface: #ffffff;
+
+    /* Never #000 — pure black on an off-white canvas vibrates at the large
+       sizes this pack uses. */
+    --text: #14100e;
+    --text-2: #57514c;
+    --text-3: #8b8279;
+    /* captions and meta ONLY — fails contrast as body copy */
+
+    --line: #e8e3dc;
+    --line-2: #d5cec4;
+
+    /* ----- Ink: the inverted section, this pack's one contrast move ----- */
+    --ink: #14100e;
+    --ink-2: #1f1a17;
+    --ink-text: #faf8f5;
+    --ink-text-2: #b8b0a7;
+    --ink-line: rgba(255, 255, 255, 0.12);
+
+    /* ----- Semantic: forms and system messages only, never decoration --- */
+    --success: #15803d;
+    --warning: #b45309;
+    --danger: #be123c;
+
+    /* ----- Type ---------------------------------------------------------
+       Two families, which overrides core. The cost is paid in
+       04-performance.md: self-hosted, subset, preloaded, metric-matched. */
+    --font-display: 'Fraunces', 'Iowan Old Style', Georgia, serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+    --t-hero: clamp(2.5rem, 6vw, 4.5rem);
+    --t-h2: clamp(2rem, 4vw, 3rem);
+    --t-h3: 1.5rem;
+    --t-lead: 1.25rem;
+    --t-body: 1.0625rem;
+    --t-small: 0.9375rem;
+    --t-caption: 0.8125rem;
+
+    /* ----- Space --------------------------------------------------------
+       --gap-section is the most important value on the page. One rhythm,
+       used everywhere; vary width for emphasis, not spacing. */
+    --gap-section: clamp(4rem, 10vw, 8rem);
+    --gap-block: 2rem;
+    --gap-item: 1rem;
+    --gap-tight: 0.5rem;
+    --pad-section: clamp(1.25rem, 5vw, 2rem);
+    --measure: 65ch;
+    --width-page: 1200px;
+
+    /* ----- Radii: softer than an operational tool, deliberately --------- */
+    --r-input: 8px;
+    --r-btn: 12px;
+    --r-card: 16px;
+    --r-pill: 999px;
+
+    /* ----- Elevation: warm, never neutral-black ------------------------- */
+    --shadow-sm: 0 1px 2px rgba(20, 16, 14, 0.06);
+    --shadow-md: 0 4px 16px -4px rgba(20, 16, 14, 0.10);
+    --shadow-lg: 0 24px 48px -12px rgba(20, 16, 14, 0.18);
+    /* the primary action, and nothing else */
+    --shadow-cta: 0 8px 24px -8px var(--accent-a35);
+
+    /* ----- Motion ------------------------------------------------------- */
+    --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+    --t-fast: 150ms;
+    --t-mid: 250ms;
+    --t-slow: 400ms;
+}
+
+/* 16px base — the browser default, not a shrunk one. A visitor who enlarged
+   their default did it for a reason. */
+html {
+    font-size: 100%;
+}
+
+body {
+    margin: 0;
+    background: var(--canvas);
+    color: var(--text);
+    font: 400 var(--t-body) / 1.7 var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    margin: 0 0 var(--gap-item);
+    text-wrap: balance;
+}
+
+h1 { font-size: var(--t-hero); line-height: 1.05; letter-spacing: -0.02em; }
+h2 { font-size: var(--t-h2);   line-height: 1.15; letter-spacing: -0.01em; }
+h3 { font-size: var(--t-h3);   line-height: 1.25; }
+
+/* The rule most often dropped on a wide layout, and the one that decides
+   whether the copy is read at all. */
+p, li {
+    max-width: var(--measure);
+}
+
+.lead {
+    font-size: var(--t-lead);
+    line-height: 1.6;
+    color: var(--text-2);
+}
+
+.section {
+    padding-block: var(--gap-section);
+}
+
+.section > .inner {
+    max-width: var(--width-page);
+    margin-inline: auto;
+    padding-inline: var(--pad-section);
+}
+
+/* The inverted section. Everything landing on it needs its on-dark value. */
+.on-ink {
+    background: var(--ink);
+    color: var(--ink-text);
+}
+
+.on-ink .lead { color: var(--ink-text-2); }
+.on-ink :focus-visible { outline-color: var(--accent-on-dark); }
+
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+/* Reveals must be opt-in from JS. Writing opacity: 0 here ships a blank page
+   to everyone whose JavaScript did not run. */
+.js .reveal {
+    opacity: 0;
+    transform: translateY(12px);
+}
+
+.js .reveal.is-in {
+    opacity: 1;
+    transform: none;
+    transition: opacity var(--t-slow) var(--ease), transform var(--t-slow) var(--ease);
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    /* State the end value explicitly — `revert` would give 1 here by accident
+       and 0 elsewhere by surprise. */
+    .js .reveal {
+        opacity: 1;
+        transform: none;
+    }
+}

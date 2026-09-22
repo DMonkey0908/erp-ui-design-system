@@ -38,6 +38,68 @@
   ],
   "packs": [
     {
+      "id": "consumer-web",
+      "name": "Consumer web",
+      "status": "beta",
+      "summary": "Public-facing sites read by strangers: marketing pages, landing pages, product sites, documentation and editorial.",
+      "summaryVi": "Trang công khai cho người lạ đọc: trang marketing, landing page, trang sản phẩm, tài liệu và nội dung biên tập.",
+      "optimisesFor": "The first five seconds, for a stranger who arrived from a search result and owes you nothing.",
+      "when": [
+        "a marketing site, landing page or product page",
+        "a pricing page, a documentation site or an editorial article",
+        "anything a stranger arrives at from a search result, an ad or a link",
+        "a request to look more premium, modern or trustworthy, or less generic",
+        "work judged on whether the reader keeps scrolling"
+      ],
+      "notFor": [
+        "internal tools, admin panels and operations consoles - use the erp pack, which is built for the opposite reader",
+        "dense data entry or any screen an operator works in all day",
+        "data tables that must show twenty or more rows at once",
+        "native mobile app interfaces, which have their own navigation conventions and touch targets"
+      ],
+      "keywords": [
+        "landing page",
+        "marketing site",
+        "hero section",
+        "call to action",
+        "pricing page",
+        "documentation site",
+        "editorial",
+        "typography",
+        "responsive",
+        "web performance",
+        "conversion"
+      ],
+      "density": "low - 16px base, 96-128px section rhythm, 60-75ch measure",
+      "surfaces": {
+        "chrome": "minimal - a header that floats over the canvas rather than framing it",
+        "canvas": "warm off-white, or a dark section used deliberately for contrast",
+        "content": "the canvas itself; cards are used sparingly, not as the default container",
+        "floating": "menus and dialogs, generous radius, soft warm shadow",
+        "accent": "one saturated teal, reserved for the primary action",
+        "semantic": "success/warning/danger, used only in forms and system messages"
+      },
+      "overrides": [
+        {
+          "rule": "core/02-typography.md: one family, plus a monospace",
+          "why": "Brand voice is a deliverable here, not a nice-to-have, and a display face is the cheapest way to stop a page reading as a template. The cost core names is real and is paid explicitly: both families are self-hosted, subset, preloaded and declared font-display: swap with metric-matched fallbacks, and the pairing is capped at two families total."
+        }
+      ],
+      "skillName": "consumer-web-design",
+      "install": {
+        "claude": "dist/claude/consumer-web-design/",
+        "gemini": "dist/gemini/consumer-web-lean/",
+        "geminiSingleFile": "dist/gemini/consumer-web.GEMINI.md",
+        "gpt": "dist/gpt/consumer-web-lean/",
+        "gptSingleFile": "dist/gpt/consumer-web.AGENTS.md",
+        "customGpt": null,
+        "cursor": "dist/cursor/consumer-web.mdc",
+        "copilot": "dist/copilot/consumer-web.instructions.md",
+        "projectRules": "dist/snippets/consumer-web.project-rules.md",
+        "lifecycle": "dist/snippets/consumer-web.lifecycle.md"
+      }
+    },
+    {
       "id": "erp",
       "name": "ERP & back-office",
       "status": "stable",

@@ -103,29 +103,60 @@ It also makes the `remove-after-task` lifecycle largely unnecessary. That
 policy existed because 21k tokens sat there between UI tasks; 1.5k does not
 justify tearing down an install and re-fetching it.
 
-### 2. How packs relate to each other
+### 2. Pack inheritance - NOT NEEDED, still resisted
 
-Right now packs are independent overlays on core. Real products are not: an
-e-commerce admin is a back-office tool with a commerce vocabulary, and a SaaS
-dashboard sits between an ERP and a consumer app.
+The question was whether a pack should be able to extend another pack rather
+than only core.
 
-Should a pack be able to extend another pack, rather than only core? It is more
-expressive, and it is also how a two-level system turns into a dependency graph
-nobody can hold in their head. Worth resisting until a second pack actually
-demands it.
+The second pack answered it, in the negative and quite firmly. `consumer-web`
+and `erp` are not neighbours to be factored - they are opposites. One optimises
+for the first five seconds, the other for the two-hundredth use, and almost
+every concrete decision inverts: density, surface assignment, whether a card is
+the default container, whether a border or space does the separating.
 
-### 3. Where component specs live
+There was nothing to inherit. Adding an inheritance mechanism would have bought
+nothing and turned a two-level system into a dependency graph.
 
-Components are currently per-pack, on the argument that a card in a back-office
-tool and a card in a shopping app share a name and nothing else. That is true of
-cards. It is less true of a table, a form field, or a dialog, where the
-structural advice really is universal and only the density differs.
+The case worth re-opening it for is a pack that is genuinely a *variant* - a
+SaaS dashboard sitting between the two, or an e-commerce admin. Wait for that,
+and prefer a shared reference file in core over a parent-child link even then.
 
-There may be a middle layer: universal component *structure* in core, with
-per-pack values. Or that may be over-engineering. Waiting for the second pack to
-tell us.
+### 3. Component specs in core - NO, but the discipline needs watching
 
-### 4. Nothing is tested against a real build
+The second pack also tested whether universal component *structure* belongs in
+core with per-pack values.
+
+It does not. The two component files overlap in vocabulary and in nothing else:
+a card here is a sparing grouping device on a canvas, a card there is the only
+container on the page. A button here is being sold, there it is being operated.
+Factoring those into one spec would have produced something true of neither.
+
+What the exercise did surface is a real problem with the "a pack never repeats
+a core rule" discipline: **it is easy to violate while writing naturally, even
+for whoever wrote the rule.** Two genuine violations shipped into the first
+draft of pack two - core's placeholder-is-not-a-label rationale restated in
+`consumer-web/03-components.md`, and core's tabular-numerals rationale restated
+in `erp/03-components.md`. Both were found by grepping distinctive phrases from
+core against the pack files, and both are now pointers.
+
+There is no build guard for this, because the check is semantic. It is on the
+reviewing checklist in `AUTHORING.md`, and a phrase grep before opening a pull
+request catches most of it. Worth revisiting if pack three drifts the same way.
+
+### 4. Cross-pack integrity - GUARDED
+
+Two failures became possible only once a second pack existed, so the guards
+were written with it:
+
+- **A keyword claimed by two packs** makes them indistinguishable to an agent
+  searching the catalogue, which then picks by ordering rather than by fit.
+- **An override declared in `pack.json` but not defended in `PACK.md`** is a
+  silent contradiction of core - the exact failure this architecture exists to
+  prevent.
+
+Both fail the build. Both were tested by breaking them.
+
+### 5. Nothing is tested against a real build
 
 Every rule here was extracted from shipping code, but the **packaging** has not
 been proven: nobody has yet installed the generated skill and built a screen

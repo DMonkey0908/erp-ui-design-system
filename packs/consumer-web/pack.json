@@ -1,0 +1,68 @@
+{
+  "id": "consumer-web",
+  "name": "Consumer web",
+  "status": "beta",
+  "summary": "Public-facing sites read by strangers: marketing pages, landing pages, product sites, documentation and editorial.",
+  "summaryVi": "Trang công khai cho người lạ đọc: trang marketing, landing page, trang sản phẩm, tài liệu và nội dung biên tập.",
+  "optimisesFor": "The first five seconds, for a stranger who arrived from a search result and owes you nothing.",
+  "skill": {
+    "name": "consumer-web-design",
+    "description": "Design, build, restyle or review public-facing web pages - marketing and landing pages, product sites, pricing pages, documentation and editorial. Use it whenever creating or changing how a page a stranger will read looks: hero sections, section rhythm, type scale, calls to action, cards, navigation, footers, lead-capture forms, pricing tables and FAQs; when asked to make a site look more premium, modern, trustworthy or less generic; when the work is judged on whether someone keeps scrolling rather than on how much fits on screen; or when page weight, font loading, LCP and layout shift are part of the brief. Not for internal tools, admin panels, operations consoles or any dense data-entry screen."
+  },
+  "when": [
+    "a marketing site, landing page or product page",
+    "a pricing page, a documentation site or an editorial article",
+    "anything a stranger arrives at from a search result, an ad or a link",
+    "a request to look more premium, modern or trustworthy, or less generic",
+    "work judged on whether the reader keeps scrolling"
+  ],
+  "notFor": [
+    "internal tools, admin panels and operations consoles - use the erp pack, which is built for the opposite reader",
+    "dense data entry or any screen an operator works in all day",
+    "data tables that must show twenty or more rows at once",
+    "native mobile app interfaces, which have their own navigation conventions and touch targets"
+  ],
+  "keywords": [
+    "landing page",
+    "marketing site",
+    "hero section",
+    "call to action",
+    "pricing page",
+    "documentation site",
+    "editorial",
+    "typography",
+    "responsive",
+    "web performance",
+    "conversion"
+  ],
+  "surfaces": {
+    "chrome": "minimal - a header that floats over the canvas rather than framing it",
+    "canvas": "warm off-white, or a dark section used deliberately for contrast",
+    "content": "the canvas itself; cards are used sparingly, not as the default container",
+    "floating": "menus and dialogs, generous radius, soft warm shadow",
+    "accent": "one saturated teal, reserved for the primary action",
+    "semantic": "success/warning/danger, used only in forms and system messages"
+  },
+  "density": "low - 16px base, 96-128px section rhythm, 60-75ch measure",
+  "core": {
+    "include": "all",
+    "leadWith": ["02-typography", "03-layout", "05-accessibility"],
+    "overrides": [
+      {
+        "rule": "core/02-typography.md: one family, plus a monospace",
+        "why": "Brand voice is a deliverable here, not a nice-to-have, and a display face is the cheapest way to stop a page reading as a template. The cost core names is real and is paid explicitly: both families are self-hosted, subset, preloaded and declared font-display: swap with metric-matched fallbacks, and the pairing is capped at two families total."
+      }
+    ]
+  },
+  "references": [
+    { "file": "01-surfaces.md", "title": "Surfaces, palette and scales" },
+    { "file": "02-page.md", "title": "Page architecture - the fold, rhythm, sections" },
+    { "file": "03-components.md", "title": "Components" },
+    { "file": "04-performance.md", "title": "Performance as a design constraint" },
+    { "file": "05-checklist.md", "title": "Domain review checklist" }
+  ],
+  "assets": [
+    { "file": "theme.css", "note": "the token file - drop into a new project" }
+  ],
+  "customGpt": null
+}

@@ -20,6 +20,7 @@ the selection procedure, and picking the wrong pack is worse than picking none.
 ## Packs
 
 <!-- PACKS:START:llms -->
+- [consumer-web](https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main/dist/gemini/consumer-web.GEMINI.md): Consumer web (beta). Public-facing sites read by strangers: marketing pages, landing pages, product sites, documentation and editorial. NOT for internal tools, admin panels and operations consoles - use the erp pack, which is built for the opposite reader.
 - [erp](https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main/dist/gemini/erp.GEMINI.md): ERP & back-office (stable). Dense, dark-chrome operational software: admin panels, operations consoles, back-office tools, internal dashboards. NOT for marketing sites, landing pages or anything optimised for a first impression.
 <!-- PACKS:END:llms -->
 

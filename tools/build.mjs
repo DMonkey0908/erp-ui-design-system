@@ -223,6 +223,42 @@ function lintUrls() {
   }
 }
 
+/**
+ * Cross-pack checks. None of these can fail with one pack, which is why they
+ * were written when the second arrived.
+ *
+ * - A keyword claimed by two packs makes them indistinguishable to an agent
+ *   searching the catalogue, and it will pick by ordering rather than by fit.
+ * - An override declared in pack.json but not defended in PACK.md is a silent
+ *   contradiction of core, which is the failure this architecture exists to
+ *   prevent.
+ */
+function lintPacks(packs) {
+  const seen = new Map();
+  for (const { meta } of packs) {
+    for (const k of meta.keywords || []) {
+      const key = k.toLowerCase().trim();
+      if (seen.has(key)) {
+        problems.push(`keyword "${k}" is claimed by both ${seen.get(key)} and ${meta.id} - an agent cannot tell them apart`);
+      } else {
+        seen.set(key, meta.id);
+      }
+    }
+  }
+
+  for (const { meta, dir } of packs) {
+    const overrides = meta.core?.overrides ?? [];
+    if (!overrides.length) continue;
+    const body = read(join(dir, 'PACK.md'));
+    if (!/^##\s+Overrides\s*$/m.test(body)) {
+      problems.push(`${meta.id}: pack.json declares ${overrides.length} override(s) but PACK.md has no "## Overrides" section - an override must be defended where a reader will see it`);
+    }
+    for (const o of overrides) {
+      if (!o.rule || !o.why) problems.push(`${meta.id}: every override needs both "rule" and "why"`);
+    }
+  }
+}
+
 /** Core says "no concrete values"; this is the one rule core can enforce on itself. */
 function lintCore() {
   for (const { file, path } of coreFiles()) {
@@ -770,6 +806,9 @@ for (const id of ids) {
   buildGlue(pack);
   loaded.push(pack);
 }
+
+// Cross-pack checks need every pack loaded, so they only run on a full build.
+if (!only.length) lintPacks(loaded);
 
 // The catalogue describes every pack, so it is only correct on a full build.
 // Building one pack would otherwise silently drop the others from the index.

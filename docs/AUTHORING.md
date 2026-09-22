@@ -159,8 +159,20 @@ reviewing what the assistant did. That shapes the prose:
 
 ## Reviewing a pack
 
-- Is the thesis falsifiable?
-- Does any paragraph repeat a core rule instead of pointing at it?
+- Is the thesis falsifiable? Would the other packs reject it?
+- Does any paragraph repeat a core rule instead of pointing at it? This is the
+  easiest rule in the system to break while writing naturally - two violations
+  shipped into the first draft of the second pack, written by the person who
+  wrote the rule. There is no build guard, because the check is semantic. Grep
+  distinctive phrases from `core/` against your reference files before opening
+  a pull request:
+
+```bash
+grep -rn "tabular-nums\|placeholder\|min-width: 0\|focus-visible" packs/<id>/references/
+```
+
+  A code example applying a core rule to a specific component is fine - that is
+  the pack doing its job. Restating the rule's *rationale* is not.
 - Does every rule state a consequence?
 - Are overrides declared in `pack.json`, not just prose?
 - Does `01-surfaces.md` contain real values, or placeholders?

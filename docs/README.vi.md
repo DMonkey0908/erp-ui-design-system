@@ -97,13 +97,19 @@ cài, và không coi build xanh là người dùng đã nói xong.
 <!-- PACKS:START:vi -->
 | Pack | Lĩnh vực | Trạng thái |
 |---|---|---|
+| [`consumer-web`](../packs/consumer-web/) | **Consumer web** - Trang công khai cho người lạ đọc: trang marketing, landing page, trang sản phẩm, tài liệu và nội dung biên tập. | `beta` |
 | [`erp`](../packs/erp/) | **ERP & back-office** - Phần mềm vận hành mật độ cao, chrome tối: admin panel, console vận hành, công cụ back-office, dashboard nội bộ. | `stable` |
 <!-- PACKS:END:vi -->
 
-Dự kiến, theo thứ tự tạm: consumer web, SaaS dashboard, mobile app, e-commerce,
-desktop & tiện ích hệ thống, trang tài liệu. Chưa pack nào bắt đầu — em dựng nền
-trước có chủ đích, để pack thứ hai tốn một phần nhỏ so với pack đầu. Xem
-[`AUTHORING.md`](AUTHORING.md) để thêm pack mới.
+Dự kiến, theo thứ tự tạm: SaaS dashboard, mobile app, e-commerce, desktop &
+tiện ích hệ thống. Xem [`AUTHORING.md`](AUTHORING.md) để thêm pack mới.
+
+Hai pack hiện có **bất đồng với nhau có chủ đích**. `erp` tối ưu cho lần dùng
+thứ hai trăm của một người đã được đào tạo; `consumer-web` tối ưu cho năm giây
+đầu với một người lạ chẳng nợ bạn gì. Gần như mọi quyết định cụ thể đều đảo
+ngược — mật độ, card có phải container mặc định không, dùng viền hay dùng khoảng
+trắng để phân tách. Đó chính là định nghĩa của một pack: một luận điểm mà lĩnh
+vực khác sẽ bác bỏ. Nếu hai pack đồng ý với nhau, một trong hai thuộc về core.
 
 ## Cài đặt
 
