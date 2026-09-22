@@ -169,4 +169,11 @@ bẫy đã sập.
 
 ---
 
+## Giấy phép
+
+MIT — xem [LICENSE](LICENSE). Dùng, sửa, phát hành lại, kể cả cho mục đích thương mại,
+chỉ cần giữ lại dòng bản quyền.
+
+---
+
 *Rút từ một hệ ERP đang chạy production, 09/2026.*
