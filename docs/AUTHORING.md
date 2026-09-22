@@ -13,6 +13,10 @@ If your thesis is not falsifiable, one of three things is true: it belongs in
 `core/`, it is a variant of an existing pack, or the domain is not actually
 different from one already covered.
 
+[`RESEARCH.md`](RESEARCH.md) is where to look for the evidence — which sources
+are worth a pack author's time, which are actively misleading, and four case
+studies with the thesis each one supports.
+
 ## The contract
 
 A pack is a directory under `packs/` containing:
@@ -172,6 +176,7 @@ reviewing what the assistant did. That shapes the prose:
   easiest rule in the system to break while writing naturally - two violations
   shipped into the first draft of the second pack, written by the person who
   wrote the rule. There is no build guard, because the check is semantic. Grep
+  `npm run dupcheck`, which does this automatically, or grepping
   distinctive phrases from `core/` against your reference files before opening
   a pull request:
 

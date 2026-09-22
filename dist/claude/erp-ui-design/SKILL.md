@@ -115,8 +115,9 @@ honest axes. This pack decides the things core deliberately leaves open:
 
 Apply these without being asked.
 
-- **Never write a raw hex outside the token file.** If a colour is needed that
-  no token covers, add a token.
+- **`assets/theme.css` is the only file that names a colour.** Everything else
+  spends it. A new colour is a new token there, and a token that only one page
+  uses is still better than a literal.
 - **Density is the point.** Do not quietly relax it because a screen looks
   tight. Offer a density toggle instead.
 - **`tabular-nums` on every figure.** Tables, tiles, axis labels, tooltips.

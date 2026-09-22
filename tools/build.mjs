@@ -108,7 +108,20 @@ const INPUTS = {
 /** The accessibility floor, in CSS pixels. A pack may raise it, never lower it. */
 const TARGET_FLOOR = 24;
 
-const read = (p) => readFileSync(p, 'utf8');
+/**
+ * Read a source file, normalised to LF.
+ *
+ * .gitattributes pins the whole repo to eol=lf, but an editor on Windows will
+ * still hand you CRLF anyway, and several things here parse by line. The
+ * thesis extraction looks for a newline followed by a level-two heading, and
+ * a stray carriage return makes it miss - which reports that PACK.md has no
+ * thesis section, sending the author to look at headings that are fine.
+ *
+ * Normalise once, here, rather than hardening six regexes.
+ */
+const CRLF = new RegExp(String.fromCharCode(13) + String.fromCharCode(10), "g");
+const read = (p) => readFileSync(p, 'utf8').replace(CRLF, NL);
+
 const rel = (p) => relative(ROOT, p).split('\\').join('/');
 
 /**

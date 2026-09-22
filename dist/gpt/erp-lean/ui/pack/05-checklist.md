@@ -83,12 +83,11 @@ modules by icon and label.
 `objectBoundingBox` rescales to the tallest point, so a run peaking at 40k and
 one peaking at 400k look identical. `userSpaceOnUse`, pinned to the scale.
 
-**Palette drift in older pages.** The most common way this system dies. A page
-written before the token file, or by someone in a hurry, ships `#e0e7ff` chips
-and `#3730a3` text — an indigo that exists nowhere in the palette, in a system
-that explicitly has no blue. It looks fine in isolation and wrong next to
-everything else. Audit page stylesheets for literals periodically; the fix is
-always mechanical.
+**Palette drift in older pages.** Core names this one; the domain-shaped
+version is an indigo. A page written before the token file ships `#e0e7ff`
+chips and `#3730a3` text — in a system that explicitly has no blue at all, so
+the drift is not a shade off, it is a hue that does not exist here. `--state-info`
+borrows the neutral ink precisely so nobody has to invent one.
 
 **Legacy classes kept as `display: none`.** Harmless once, a maze after a year.
 If markup no longer ships, delete the rule and the markup together.

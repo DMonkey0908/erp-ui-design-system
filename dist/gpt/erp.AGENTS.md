@@ -134,8 +134,9 @@ honest axes. This pack decides the things core deliberately leaves open:
 
 Apply these without being asked.
 
-- **Never write a raw hex outside the token file.** If a colour is needed that
-  no token covers, add a token.
+- **`assets/theme.css` is the only file that names a colour.** Everything else
+  spends it. A new colour is a new token there, and a token that only one page
+  uses is still better than a literal.
 - **Density is the point.** Do not quietly relax it because a screen looks
   tight. Offer a density toggle instead.
 - **`tabular-nums` on every figure.** Tables, tiles, axis labels, tooltips.
@@ -538,8 +539,6 @@ mid-click hits the wrong thing.
 
 Reserve with an aspect ratio, a min-height, or a skeleton at the real
 dimensions. A spinner in a zero-height box guarantees a jump.
-
-## Motion
 
 ## Motion
 
@@ -1382,8 +1381,6 @@ haptics turned off, taking the useful confirmations with them.
 
 ## Review
 
-## Review
-
 The universal pass. A pack adds its own domain checks on top; nothing here is
 waived by any domain.
 
@@ -1997,8 +1994,6 @@ Core (`core/06-i18n.md`) covers the mechanics. The shell-specific consequences:
 
 ## Components
 
-## Components
-
 Every component here lives on **paper**. Copy the spec, keep the tokens.
 
 ### Card
@@ -2605,8 +2600,6 @@ answer; do not leave them behind a disclosure the user has to discover.
 
 ## Domain review checklist
 
-## Domain review checklist
-
 Run **`core/99-review.md` first** — tokens, type, layout, state, accessibility,
 motion, charts, i18n. Nothing there is waived by this domain.
 
@@ -2690,12 +2683,11 @@ modules by icon and label.
 `objectBoundingBox` rescales to the tallest point, so a run peaking at 40k and
 one peaking at 400k look identical. `userSpaceOnUse`, pinned to the scale.
 
-**Palette drift in older pages.** The most common way this system dies. A page
-written before the token file, or by someone in a hurry, ships `#e0e7ff` chips
-and `#3730a3` text — an indigo that exists nowhere in the palette, in a system
-that explicitly has no blue. It looks fine in isolation and wrong next to
-everything else. Audit page stylesheets for literals periodically; the fix is
-always mechanical.
+**Palette drift in older pages.** Core names this one; the domain-shaped
+version is an indigo. A page written before the token file ships `#e0e7ff`
+chips and `#3730a3` text — in a system that explicitly has no blue at all, so
+the drift is not a shade off, it is a hue that does not exist here. `--state-info`
+borrows the neutral ink precisely so nobody has to invent one.
 
 **Legacy classes kept as `display: none`.** Harmless once, a maze after a year.
 If markup no longer ships, delete the rule and the markup together.

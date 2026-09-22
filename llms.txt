@@ -39,4 +39,5 @@ the selection procedure, and picking the wrong pack is worse than picking none.
 
 - [docs/ARCHITECTURE.md](https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main/docs/ARCHITECTURE.md): why core and overlay, why dist is generated, and which decisions are still open.
 - [docs/AUTHORING.md](https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main/docs/AUTHORING.md): how to add a pack. A pack needs a thesis another domain would reject.
+- [docs/RESEARCH.md](https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main/docs/RESEARCH.md): where the evidence for a rule comes from - which sources are worth a pack author's time, which mislead, and four case studies.
 - [README.md](https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main/README.md): human-facing overview.
