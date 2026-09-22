@@ -233,6 +233,13 @@ If they hear the cost and still want it, build it. It is their product.
 1. Copy `assets/tokens.json` in, and generate the platform file from it — the
    CSS custom properties in `assets/tokens.css` show the shape. Swap the accent
    and recompute the on-dark value before writing a single screen.
+
+   On a web target, `assets/patterns.css` goes in after it. **This pack ships
+   tokens and mechanism, not components** — unlike `erp`, whose shell is one
+   copyable stylesheet — because the same screen is as likely to be SwiftUI or
+   Compose, where a stylesheet is no help. What is shipped as CSS is the part
+   that is pure mechanism and gets reinvented wrongly: safe areas, the row that
+   grows, the pressed state on a device with no hover.
 2. Decide the navigation model before the first screen: how many tabs, and what
    is deliberately not one. Retrofitting a tab bar means re-rooting every
    screen in the app.
@@ -2214,6 +2221,34 @@ The section footer is underused and it is the right place for the sentence
 explaining what a setting does. Better there than as helper text under every
 row, and better than a tooltip, which does not exist here.
 
+### Status markers and badges
+
+A row usually carries three lines already, so the `erp` pack's filled pill is
+too heavy here. The mobile weight is a dot and a word.
+
+```
+marker    an 8pt dot before a 13pt label, both in the state's colour
+live      a filled dot
+pending   a HOLLOW dot - a 2pt ring, nothing inside
+label     always present; the dot is the second signal, never the first
+```
+
+The hollow ring is doing real work: it is the one status difference that
+survives greyscale, a colour-vision deficiency and a screenshot, which core
+`05-accessibility.md` requires and which a set of differently-tinted dots does
+not deliver on its own.
+
+A **badge** — the count on a tab, or on a row — follows one rule that is easy
+to get wrong:
+
+- **`min-height`, never `height`.** A badge is a box with a digit in it, so a
+  fixed box clips its own content at the second text-scale step. This is the
+  Dynamic Type failure in `01-surfaces.md`, in the smallest component in the
+  app, which is why it survives review.
+- **A badge is decoration to a screen reader.** Mark it `aria-hidden` and put
+  the count in the accessible name of the thing it sits on: "Today, 4 stops
+  remaining", not "Today 4".
+
 ### Buttons
 
 Three, and that is the set.
@@ -2290,6 +2325,16 @@ keyboard.
   the single most common bug in this domain and it does not reproduce on a
   simulator with a hardware keyboard attached — test it with the software
   keyboard, on a small device.
+
+  The mechanism differs on every platform and is obvious on none of them:
+
+  | Target | What actually does it |
+  |---|---|
+  | iOS / SwiftUI | `.ignoresSafeArea(.keyboard)` on what should stay put, and nothing on what should move; `.safeAreaInset(edge: .bottom)` for a pinned bar |
+  | Android / Compose | `WindowInsets.ime` — `imePadding()` on the container, with `adjustResize` on the window |
+  | React Native | `KeyboardAvoidingView` with `behavior="padding"` on iOS and `"height"` on Android; they genuinely differ |
+  | Web / RN Web | `visualViewport`'s `resize` event. The layout viewport does **not** change when the keyboard opens, so a CSS-only solution does not exist |
+
 - **Set the keyboard type per field.** Email, number, phone, URL. A numeric
   field that opens a QWERTY keyboard costs the user two taps and some of their
   goodwill, every time.
@@ -2395,6 +2440,21 @@ exceptional failure.
   pending, and is sent when there is a network. This is core's optimistic
   update, and the three conditions in `08-feedback.md` apply unchanged —
   including that a failure announces itself rather than quietly undoing.
+- **Three outcomes, not two.** Sent, queued, and *rejected after being
+  queued* — the third has no desktop equivalent and it is the one that gets
+  forgotten. Each lands on a different surface:
+
+  | Outcome | Where the user learns it |
+  |---|---|
+  | Sent | The row's own state changes. Nothing else is owed |
+  | Queued | The row shows pending, and the one offline indicator counts it |
+  | Rejected after queueing | The row returns to what it was, and a message says which item and why — not a generic failure, because by now the user has done several other things and cannot infer which one |
+
+  A rejection arrives minutes after the action, so it cannot be shown as an
+  inline error on a screen the user has left. It needs to survive being
+  noticed later: a message they can act on, and a row that is visibly back to
+  its old state rather than silently reverted.
+
 - **One indicator, not one per row.** A single banner saying the app is offline
   and what is queued. Twenty pending badges is noise.
 - **Never a blocking full-screen error** for a request that could be retried in

@@ -97,7 +97,11 @@
     },
     {
       "file": "tokens.css",
-      "note": "the same tokens as custom properties, for React Native Web, Ionic and mobile web"
+      "note": "the same tokens as custom properties, and nothing else - for React Native Web, Ionic and mobile web"
+    },
+    {
+      "file": "patterns.css",
+      "note": "the few rules that use them: safe areas, the growing row, the pressed state"
     }
   ],
   "customGpt": null

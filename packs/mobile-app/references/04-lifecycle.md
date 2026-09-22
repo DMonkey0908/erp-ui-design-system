@@ -54,6 +54,21 @@ exceptional failure.
   pending, and is sent when there is a network. This is core's optimistic
   update, and the three conditions in `08-feedback.md` apply unchanged —
   including that a failure announces itself rather than quietly undoing.
+- **Three outcomes, not two.** Sent, queued, and *rejected after being
+  queued* — the third has no desktop equivalent and it is the one that gets
+  forgotten. Each lands on a different surface:
+
+  | Outcome | Where the user learns it |
+  |---|---|
+  | Sent | The row's own state changes. Nothing else is owed |
+  | Queued | The row shows pending, and the one offline indicator counts it |
+  | Rejected after queueing | The row returns to what it was, and a message says which item and why — not a generic failure, because by now the user has done several other things and cannot infer which one |
+
+  A rejection arrives minutes after the action, so it cannot be shown as an
+  inline error on a screen the user has left. It needs to survive being
+  noticed later: a message they can act on, and a row that is visibly back to
+  its old state rather than silently reverted.
+
 - **One indicator, not one per row.** A single banner saying the app is offline
   and what is queued. Twenty pending badges is noise.
 - **Never a blocking full-screen error** for a request that could be retried in

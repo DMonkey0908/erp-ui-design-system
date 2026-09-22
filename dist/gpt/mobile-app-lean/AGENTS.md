@@ -108,7 +108,8 @@ what this system exists to prevent. Do not answer from this index.
 | File | What it is |
 |---|---|
 | `ui/assets/tokens.json` | the token file, platform-neutral - the source SwiftUI, Compose, React Native and CSS all read from |
-| `ui/assets/tokens.css` | the same tokens as custom properties, for React Native Web, Ionic and mobile web |
+| `ui/assets/tokens.css` | the same tokens as custom properties, and nothing else - for React Native Web, Ionic and mobile web |
+| `ui/assets/patterns.css` | the few rules that use them: safe areas, the growing row, the pressed state |
 
 Finish by running `ui/core/99-review.md` and `ui/pack/05-checklist.md`.
 
