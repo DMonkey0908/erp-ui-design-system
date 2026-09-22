@@ -14,28 +14,28 @@ the selection procedure, and picking the wrong pack is worse than picking none.
 
 ## Start here
 
-- [INSTALL.md](https://raw.githubusercontent.com/DMonkey0908/erp-ui-design-system/main/INSTALL.md): selection and install guide written for AI agents. Step 1 is identifying the project type; do not skip it.
-- [dist/index.json](https://raw.githubusercontent.com/DMonkey0908/erp-ui-design-system/main/dist/index.json): machine-readable catalogue. Every pack with its `when` and `notFor` signals, keywords, and install paths.
+- [INSTALL.md](https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main/INSTALL.md): selection and install guide written for AI agents. Step 1 is identifying the project type; do not skip it.
+- [dist/index.json](https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main/dist/index.json): machine-readable catalogue. Every pack with its `when` and `notFor` signals, keywords, and install paths.
 
 ## Packs
 
 <!-- PACKS:START:llms -->
-- [erp](https://raw.githubusercontent.com/DMonkey0908/erp-ui-design-system/main/dist/gemini/erp.GEMINI.md): ERP & back-office (stable). Dense, dark-chrome operational software: admin panels, operations consoles, back-office tools, internal dashboards. NOT for marketing sites, landing pages or anything optimised for a first impression.
+- [erp](https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main/dist/gemini/erp.GEMINI.md): ERP & back-office (stable). Dense, dark-chrome operational software: admin panels, operations consoles, back-office tools, internal dashboards. NOT for marketing sites, landing pages or anything optimised for a first impression.
 <!-- PACKS:END:llms -->
 
 ## Core — applies whatever you are building
 
-- [01-tokens](https://raw.githubusercontent.com/DMonkey0908/erp-ui-design-system/main/core/references/01-tokens.md): token systems. Every accent needs one value per surface; no raw hex outside the token file.
-- [02-typography](https://raw.githubusercontent.com/DMonkey0908/erp-ui-design-system/main/core/references/02-typography.md): scale construction, rem vs em, measure, tabular numerals.
-- [03-layout](https://raw.githubusercontent.com/DMonkey0908/erp-ui-design-system/main/core/references/03-layout.md): grid and flex traps, responsive method, restoring state before first paint.
-- [04-motion](https://raw.githubusercontent.com/DMonkey0908/erp-ui-design-system/main/core/references/04-motion.md): duration bands by repetition count, and honouring reduced motion correctly.
-- [05-accessibility](https://raw.githubusercontent.com/DMonkey0908/erp-ui-design-system/main/core/references/05-accessibility.md): focus, keyboard, landmarks, contrast, colour-not-alone.
-- [06-i18n](https://raw.githubusercontent.com/DMonkey0908/erp-ui-design-system/main/core/references/06-i18n.md): marking strings, width headroom, locale formatting, RTL readiness.
-- [07-charts](https://raw.githubusercontent.com/DMonkey0908/erp-ui-design-system/main/core/references/07-charts.md): honest axes, degenerate cases, hit testing, the table fallback.
-- [08-review](https://raw.githubusercontent.com/DMonkey0908/erp-ui-design-system/main/core/references/08-review.md): the universal checklist and the failure modes that recur everywhere.
+- [01-tokens](https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main/core/references/01-tokens.md): token systems. Every accent needs one value per surface; no raw hex outside the token file.
+- [02-typography](https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main/core/references/02-typography.md): scale construction, rem vs em, measure, tabular numerals.
+- [03-layout](https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main/core/references/03-layout.md): grid and flex traps, responsive method, restoring state before first paint.
+- [04-motion](https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main/core/references/04-motion.md): duration bands by repetition count, and honouring reduced motion correctly.
+- [05-accessibility](https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main/core/references/05-accessibility.md): focus, keyboard, landmarks, contrast, colour-not-alone.
+- [06-i18n](https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main/core/references/06-i18n.md): marking strings, width headroom, locale formatting, RTL readiness.
+- [07-charts](https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main/core/references/07-charts.md): honest axes, degenerate cases, hit testing, the table fallback.
+- [08-review](https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main/core/references/08-review.md): the universal checklist and the failure modes that recur everywhere.
 
 ## Optional
 
-- [docs/ARCHITECTURE.md](https://raw.githubusercontent.com/DMonkey0908/erp-ui-design-system/main/docs/ARCHITECTURE.md): why core and overlay, why dist is generated, and which decisions are still open.
-- [docs/AUTHORING.md](https://raw.githubusercontent.com/DMonkey0908/erp-ui-design-system/main/docs/AUTHORING.md): how to add a pack. A pack needs a thesis another domain would reject.
-- [README.md](https://raw.githubusercontent.com/DMonkey0908/erp-ui-design-system/main/README.md): human-facing overview.
+- [docs/ARCHITECTURE.md](https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main/docs/ARCHITECTURE.md): why core and overlay, why dist is generated, and which decisions are still open.
+- [docs/AUTHORING.md](https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main/docs/AUTHORING.md): how to add a pack. A pack needs a thesis another domain would reject.
+- [README.md](https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main/README.md): human-facing overview.

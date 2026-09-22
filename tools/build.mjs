@@ -39,8 +39,8 @@ const DIST = join(ROOT, 'dist');
 // Used in the catalogue and the agent guide. If the repo is ever renamed these
 // change here and nowhere else - raw.githubusercontent.com does not reliably
 // follow a rename, so a stale URL here is a silently broken install.
-const REPO = 'https://github.com/DMonkey0908/erp-ui-design-system';
-const RAW = 'https://raw.githubusercontent.com/DMonkey0908/erp-ui-design-system/main/';
+const REPO = 'https://github.com/DMonkey0908/ui-design-ecosystem';
+const RAW = 'https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main/';
 
 const args = process.argv.slice(2);
 const CHECK = args.includes('--check');
@@ -153,6 +153,36 @@ function loadPack(id) {
   }
 
   return { id, dir, meta };
+}
+
+/**
+ * Every github.com / raw.githubusercontent.com URL in the docs must point at
+ * this repo.
+ *
+ * This guard exists because a rename does NOT reliably redirect
+ * raw.githubusercontent.com. The links keep working in a browser, so nothing
+ * looks broken, while an agent fetching an install gets a 404 and a
+ * half-installed skill. That already happened once here.
+ */
+function lintUrls() {
+  const docs = [
+    'README.md', 'INSTALL.md', 'llms.txt',
+    'docs/README.vi.md', 'docs/ARCHITECTURE.md', 'docs/AUTHORING.md',
+    'core/CORE.md',
+  ];
+  const prefixes = [REPO, RAW.replace(/\/$/, '')];
+
+  for (const file of docs) {
+    const path = join(ROOT, file);
+    if (!existsSync(path)) continue;
+    const urls = read(path).match(/https:\/\/(?:raw\.githubusercontent\.com|github\.com)\/\S+/g) || [];
+    for (const raw of urls) {
+      const url = raw.replace(/[)>,.:;`'"\]]+$/, '');   // markdown punctuation, not part of the URL
+      if (!prefixes.some((p) => url.startsWith(p))) {
+        problems.push(`${file}: URL does not point at this repo - ${url}`);
+      }
+    }
+  }
 }
 
 /** Core says "no concrete values"; this is the one rule core can enforce on itself. */
@@ -404,6 +434,7 @@ function injectPackTables(packs) {
 // --- run --------------------------------------------------------------------
 
 lintCore();
+lintUrls();
 const core = coreFiles();
 
 const ids = (only.length ? only : readdirSync(PACKS))

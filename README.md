@@ -25,7 +25,7 @@ Tell your assistant to read this, and it will pick the pack that fits and
 install it:
 
 ```
-https://raw.githubusercontent.com/DMonkey0908/erp-ui-design-system/main/INSTALL.md
+https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main/INSTALL.md
 ```
 
 [`INSTALL.md`](INSTALL.md) is written for an agent: identify the project type

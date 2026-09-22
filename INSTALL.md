@@ -10,13 +10,13 @@ in the [README](README.md).
 Canonical URL of this file:
 
 ```
-https://raw.githubusercontent.com/DMonkey0908/erp-ui-design-system/main/INSTALL.md
+https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main/INSTALL.md
 ```
 
 Machine-readable catalogue, if you would rather parse than read:
 
 ```
-https://raw.githubusercontent.com/DMonkey0908/erp-ui-design-system/main/dist/index.json
+https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main/dist/index.json
 ```
 
 ---
@@ -123,7 +123,7 @@ says so — a global install applies these opinions to every project they open.
 
 ```bash
 git clone --depth 1 --filter=blob:none --sparse \
-  https://github.com/DMonkey0908/erp-ui-design-system.git /tmp/uids
+  https://github.com/DMonkey0908/ui-design-ecosystem.git /tmp/uids
 cd /tmp/uids && git sparse-checkout set dist/claude/erp-ui-design
 mkdir -p "$PROJECT/.claude/skills"
 cp -r dist/claude/erp-ui-design "$PROJECT/.claude/skills/"
@@ -132,7 +132,7 @@ cp -r dist/claude/erp-ui-design "$PROJECT/.claude/skills/"
 ### Option B — fetch single files (no git)
 
 ```bash
-BASE=https://raw.githubusercontent.com/DMonkey0908/erp-ui-design-system/main
+BASE=https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main
 
 # Gemini
 curl -fsSL "$BASE/dist/gemini/erp.GEMINI.md" -o GEMINI.md
@@ -149,7 +149,7 @@ its references fails quietly and confusingly later.
 ### Option C — degit
 
 ```bash
-npx degit DMonkey0908/erp-ui-design-system/dist/claude/erp-ui-design \
+npx degit DMonkey0908/ui-design-ecosystem/dist/claude/erp-ui-design \
   .claude/skills/erp-ui-design
 ```
 
@@ -168,7 +168,7 @@ rules — tokens, typography, layout, motion, accessibility, i18n, charts, revie
 — each with its consequence attached.
 
 ```bash
-BASE=https://raw.githubusercontent.com/DMonkey0908/erp-ui-design-system/main
+BASE=https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main
 mkdir -p .claude/skills/ui-core/core
 for f in 01-tokens 02-typography 03-layout 04-motion \
          05-accessibility 06-i18n 07-charts 08-review; do

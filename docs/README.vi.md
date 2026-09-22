@@ -24,7 +24,7 @@ lý do để hành động theo.
 Bảo trợ lý của bạn đọc file này, nó sẽ tự chọn pack phù hợp và cài:
 
 ```
-https://raw.githubusercontent.com/DMonkey0908/erp-ui-design-system/main/INSTALL.md
+https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main/INSTALL.md
 ```
 
 [`INSTALL.md`](../INSTALL.md) viết cho agent đọc: xác định loại dự án trước, đối
