@@ -107,7 +107,8 @@ what this system exists to prevent. Do not answer from this index.
 | File | What it is |
 |---|---|
 | `ui/assets/theme.css` | the token file - drop into a new project |
-| `ui/assets/shell-skeleton.html` | page skeleton, including the anti-flash script |
+| `ui/assets/erp-shell.css` | the shell - grid, sidebar, topbar, main; written entirely in theme tokens |
+| `ui/assets/page-template.html` | the page template, including the pre-paint script |
 
 Finish by running `ui/core/99-review.md` and `ui/pack/05-checklist.md`.
 

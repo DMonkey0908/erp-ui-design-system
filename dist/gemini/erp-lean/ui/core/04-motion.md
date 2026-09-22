@@ -71,7 +71,9 @@ content, and they are the first thing to cut under `prefers-reduced-motion`.
 ## Animate the cheap properties
 
 `transform` and `opacity` are composited — they do not trigger layout or paint.
-Everything else can, and on a long table or a large list the cost is visible.
+Everything else can, and the cost scales with how many elements are doing it at
+once. One row changing background under the cursor is free; five hundred rows
+staggering in on a paint property is a visibly slow page.
 
 ```css
 /* good */   transition: opacity .16s ease, transform .16s ease;

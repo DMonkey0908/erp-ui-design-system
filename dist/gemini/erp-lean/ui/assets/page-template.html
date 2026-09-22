@@ -47,9 +47,9 @@
     </style>
 
     <!-- Order matters: palette, then shell (written in palette tokens),
-         then this page (written in both). -->
+         then this page (written in both). Both files ship in assets/. -->
     <link rel="stylesheet" href="/theme.css">
-    <link rel="stylesheet" href="/shell.css">
+    <link rel="stylesheet" href="/erp-shell.css">
     <link rel="stylesheet" href="styles.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -59,10 +59,10 @@
 </head>
 
 <body class="app-body">
-    <div class="shell">
+    <div class="erp-shell">
 
         <!-- ══ SIDEBAR ═══════════════════════════════════════════════════ -->
-        <aside class="sidebar" aria-label="Primary navigation">
+        <aside class="erp-sidebar" aria-label="Primary navigation">
             <div class="sidebar-brand">
                 <img src="/assets/logo.svg" alt="Acme" class="brand-logo">
                 <!-- Shown only when collapsed, when the wordmark no longer fits -->
@@ -140,22 +140,23 @@
                     <span class="badge-dot" aria-hidden="true">3</span>
                 </button>
 
-                <div class="user-menu" role="button" tabindex="0" aria-haspopup="menu" aria-expanded="false"
-                    aria-label="Account menu" data-i18n-attr="aria-label:topbar.account_menu">
+                <button class="user-menu" type="button" aria-haspopup="menu" aria-expanded="false"
+                    aria-controls="userMenu" aria-label="Account menu"
+                    data-i18n-attr="aria-label:topbar.account_menu">
                     <span class="user-avatar" aria-hidden="true">AN</span>
                     <span class="user-info">
                         <span class="user-name">A. Nguyen</span>
                         <span class="user-role" data-i18n="role.admin">Administrator</span>
                     </span>
                     <span class="user-caret" aria-hidden="true">&#9662;</span>
-                </div>
+                </button>
             </div>
         </header>
 
         <!-- ══ MAIN ══════════════════════════════════════════════════════
              min-width: 0 on .main is what stops one wide table from
              stretching the grid column and pushing the sidebar off screen. -->
-        <main class="main" id="main" tabindex="-1">
+        <main class="erp-main" id="main" tabindex="-1">
             <div class="container">
 
                 <div class="page-title">
@@ -218,7 +219,7 @@
         </main>
     </div>
 
-    <script src="/shell.js"></script>
+    <script src="/erp-shell.js"></script>
     <script src="app.js"></script>
 </body>
 

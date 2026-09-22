@@ -148,7 +148,8 @@ If they hear the cost and still want it, build it. It is their product.
 
 1. Copy `assets/theme.css` in as the first stylesheet, then swap the accent
    block for the client's colour — and recompute the on-dark value.
-2. Start the page from `assets/shell-skeleton.html`. The inline script in its
+2. Start the page from `assets/page-template.html`, with `assets/erp-shell.css`
+   beside `theme.css`. The inline script in the template's
    `<head>` is not optional; see the shell reference.
 3. Keep the stylesheet order: theme → shell → page.
 
@@ -190,7 +191,8 @@ Start with `core/01-tokens.md`, `core/03-layout.md`, `core/99-review.md`.
 | File | What it is |
 |---|---|
 | `assets/theme.css` | the token file - drop into a new project |
-| `assets/shell-skeleton.html` | page skeleton, including the anti-flash script |
+| `assets/erp-shell.css` | the shell - grid, sidebar, topbar, main; written entirely in theme tokens |
+| `assets/page-template.html` | the page template, including the pre-paint script |
 
 Before calling any work done, run `core/99-review.md` and then
 `pack/05-checklist.md`.

@@ -23,6 +23,9 @@
        is muddy. Every accent needs one value per surface it lands on. */
     --accent-on-dark: #5eead4;
 
+    /* Text that sits ON the accent fill — the primary call to action. */
+    --text-on-accent: #ffffff;
+
     --accent-tint: #f0faf8;
     --accent-tint-2: #d5f2ec;
 

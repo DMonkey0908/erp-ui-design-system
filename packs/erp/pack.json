@@ -79,8 +79,12 @@
       "note": "the token file - drop into a new project"
     },
     {
-      "file": "shell-skeleton.html",
-      "note": "page skeleton, including the anti-flash script"
+      "file": "erp-shell.css",
+      "note": "the shell - grid, sidebar, topbar, main; written entirely in theme tokens"
+    },
+    {
+      "file": "page-template.html",
+      "note": "the page template, including the pre-paint script"
     }
   ],
   "customGpt": "custom-gpt-instructions.md"
