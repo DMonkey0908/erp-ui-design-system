@@ -1,179 +1,215 @@
-# ERP UI Design System — skill pack cho Claude, Gemini và GPT
+# ERP UI Design System
 
-Bộ hướng dẫn thiết kế giao diện ERP, rút ra từ front end của **một hệ ERP đang
-chạy production** — file token, file shell, và năm page stylesheet của nó.
+**A design system for dense, dark-chrome business software — packaged as a skill for Claude, Gemini and GPT.**
 
-Mục tiêu: đưa cho bất kỳ trợ lý AI nào cũng dựng được giao diện ERP nhất quán
-với hệ thiết kế này — không phải mô tả chung chung, mà là token, số đo, và lý do
-đằng sau từng quyết định.
+[![License: MIT](https://img.shields.io/badge/License-MIT-b3121b.svg)](LICENSE)
+[![Claude Skill](https://img.shields.io/badge/Claude-Skill-b3121b.svg)](claude/erp-ui-design/SKILL.md)
+[![GEMINI.md](https://img.shields.io/badge/Gemini-GEMINI.md-b3121b.svg)](gemini/GEMINI.md)
+[![AGENTS.md](https://img.shields.io/badge/GPT-AGENTS.md-b3121b.svg)](gpt/AGENTS.md)
 
----
-
-## Ý tưởng cốt lõi được rút ra
-
-> **Chrome tối, content trắng, màu nhấn chỉ để báo trạng thái và hành động.**
-
-Sidebar và topbar gần đen, lùi ra sau. Mọi bề mặt chứa thứ người dùng đọc, so
-sánh hoặc sửa — card, table, dropdown, form — đều trắng. Một màu nhấn duy nhất
-đánh dấu tab đang chọn, nút chính, và series trên biểu đồ. Hết.
-
-Đây là điểm phân biệt ERP với dashboard tiêu dùng. Dashboard dùng màu để tạo
-cảm xúc; ERP dùng màu như **tín hiệu** — để khi có gì đó đỏ lên thì nó thật sự
-có nghĩa. Tiêu màu nhấn vào trang trí là tiêu mất công cụ duy nhất để nói
-"nhìn chỗ này".
-
-Toàn bộ hệ thống tối ưu cho **lần dùng thứ hai trăm**, không phải ấn tượng đầu.
+🌐 **[English](README.md)** · [Tiếng Việt](docs/README.vi.md)
 
 ---
 
-## Cấu trúc thư mục
+Ask an AI assistant for an admin panel and you usually get a consumer SaaS
+dashboard: airy spacing, pastel cards, a colour for every module. It looks
+pleasant in a screenshot and it is wrong for the job. Internal tools are used
+for eight hours a day by people who were trained on them.
+
+This repo gives an assistant the other thing — the tokens, measurements and
+reasoning of a real ERP front end — so it produces operational software instead.
+Extracted from a production system, not invented for a demo.
+
+## The one idea
+
+> **Chrome is dark. Content is white. The accent only marks state and action.**
+
+The sidebar and topbar are near-black and recede. Every surface holding
+something a person reads, compares or edits — cards, tables, dropdowns, form
+fields — stays white. One accent marks the selected nav item, the primary
+button and the chart series. Nothing else.
+
+A consumer dashboard uses colour for delight. An ERP uses colour as a *signal*,
+so when something is red it means something. Spend the accent on decoration and
+you have spent the only tool you had for saying "look here".
+
+Everything here optimises for the **two-hundredth use**, not the first
+impression.
+
+## Quick start
+
+Clone, then run the line for your assistant from the repo root.
+
+<details open>
+<summary><b>Claude Code / Claude Desktop</b> — the most complete build</summary>
+
+```bash
+# All projects
+cp -r ./claude/erp-ui-design ~/.claude/skills/erp-ui-design
+
+# Or one project
+cp -r ./claude/erp-ui-design <your-project>/.claude/skills/erp-ui-design
+```
+
+```powershell
+# Windows
+Copy-Item -Recurse ".\claude\erp-ui-design" "$HOME\.claude\skills\erp-ui-design"
+```
+
+Claude invokes it on its own for relevant work — building an admin panel,
+reviewing an internal UI, designing an operations dashboard. Invoke it by hand
+with `/erp-ui-design`.
+
+This build carries the most detail. Claude reads `SKILL.md` first and loads only
+the reference file the current task needs, so the references can afford depth a
+single flat file could not.
+</details>
+
+<details>
+<summary><b>Gemini</b> (CLI, Code Assist, Gems)</summary>
+
+```bash
+cp ./gemini/GEMINI.md ~/.gemini/GEMINI.md          # global
+cp ./gemini/GEMINI.md <your-project>/GEMINI.md     # per project
+```
+
+For a **Gem**, paste the whole file into the Instructions field.
+</details>
+
+<details>
+<summary><b>GPT</b> (Codex, Cursor, Custom GPT)</summary>
+
+```bash
+cp ./gpt/AGENTS.md <your-project>/AGENTS.md
+```
+
+If the project already has an `AGENTS.md`, merge these sections under a `## UI`
+heading.
+
+For a **Custom GPT**: paste the fenced block from
+[`gpt/custom-gpt-instructions.md`](gpt/custom-gpt-instructions.md) into the
+**Instructions** field, and upload [`gpt/AGENTS.md`](gpt/AGENTS.md) as a
+**Knowledge** file.
+
+That split is deliberate. The 8000-character Instructions field holds the
+*judgement* — what the system is for, what it refuses, and the rules a model
+misremembers. The Knowledge file holds the *exact values*. A model paraphrasing
+a spacing scale from memory produces something almost right, which is worse than
+obviously wrong, so the instructions tell it to quote rather than recall.
+</details>
+
+## What is inside
 
 ```
 erp-ui-design-system/
-├── README.md                     ← file này
-│
-├── claude/erp-ui-design/         ← SKILL cho Claude (bản gốc, đầy đủ nhất)
-│   ├── SKILL.md                  frontmatter + nguyên tắc + bảng điều hướng
+├── claude/erp-ui-design/            ← canonical, most detailed
+│   ├── SKILL.md                     principles + which reference to open
 │   ├── references/
-│   │   ├── 01-foundations.md     token, typography, spacing, radius, motion
-│   │   ├── 02-shell.md           grid layout, sidebar, topbar, responsive, i18n
-│   │   ├── 03-components.md      card, button, form, table, tile, pill, tooltip
-│   │   ├── 04-charts.md          SVG chart, gradient theo thang giá trị, a11y
-│   │   └── 05-checklist.md       checklist review + các lỗi đã gặp thật
+│   │   ├── 01-foundations.md        tokens, type scale, spacing, radii, motion
+│   │   ├── 02-shell.md              grid layout, sidebar, topbar, responsive, i18n
+│   │   ├── 03-components.md         card, button, form, table, tile, pill, tooltip
+│   │   ├── 04-charts.md             SVG charts, value-mapped gradients, a11y
+│   │   └── 05-checklist.md          review checklist + real failure modes
 │   └── assets/
-│       ├── theme.css             file token, copy thẳng vào dự án mới
-│       └── shell-skeleton.html   khung trang, kèm script chống nhấp nháy
-│
-├── gemini/GEMINI.md              bản gộp một file cho Gemini
-│
+│       ├── theme.css                the token file — drop into a new project
+│       └── shell-skeleton.html      page skeleton, including the anti-flash script
+├── gemini/GEMINI.md                 single-file build
 └── gpt/
-    ├── AGENTS.md                 bản gộp một file cho Codex/Cursor
-    └── custom-gpt-instructions.md  bản rút gọn 7997 ký tự cho Custom GPT
+    ├── AGENTS.md                    single-file build
+    └── custom-gpt-instructions.md   7997-character build for a Custom GPT
 ```
 
----
+`claude/erp-ui-design/references/` is the **source of truth**. `GEMINI.md` and
+`AGENTS.md` are identical in substance — one design system, two filenames,
+because the two tools look for different names. Edit the references first, then
+sync the merged files; the Custom GPT build is condensed and maintained by hand.
 
-## Cài đặt
+## A sample of what it enforces
 
-### Claude Code / Claude Desktop
+Roughly thirty rules, each with the reason attached. A few that change output
+immediately:
 
-Chạy từ gốc repo này sau khi clone:
+- **Every accent needs two values, one per surface.** A brand colour chosen to
+  read on white disappears on near-black. The commonest bug in a dark-chrome ERP
+  is an active sidebar item painted in the paper accent — technically on brand,
+  completely invisible.
+- **`font-variant-numeric: tabular-nums` on every figure.** Proportional digits
+  make a column of numbers ripple as it refreshes. The highest-value one-liner
+  in the system.
+- **Reserve the active-state border on every row.** A left border added only to
+  the selected nav item shifts every label sideways as the selection moves.
+- **`min-width: 0` on grid items.** A grid child defaults to `min-width: auto`,
+  so one wide table stretches its column and pushes the sidebar off screen.
+- **Restore state before first paint.** A collapsed sidebar or a translated
+  label applied after paint means the user watches the layout correct itself on
+  every navigation.
+- **Danger is not the brand.** When the brand is red, an error in brand red is
+  indistinguishable from a primary button.
 
-```powershell
-# Dùng cho mọi dự án
-Copy-Item -Recurse ".\claude\erp-ui-design" "$HOME\.claude\skills\erp-ui-design"
+## Built for multilingual products
 
-# Hoặc chỉ một dự án
-Copy-Item -Recurse ".\claude\erp-ui-design" "<đường-dẫn-dự-án>\.claude\skills\erp-ui-design"
-```
+The shell reference treats internationalisation as structure, not an
+afterthought: marked nodes rather than templated strings, the source language
+left in the HTML so a page stays reviewable without the translation layer
+running, a pre-paint guard so a translated page never flashes English first, and
+roughly 35% width headroom for languages that run longer than English.
 
-Claude tự gọi skill khi gặp việc liên quan (dựng admin panel, review giao diện
-nội bộ, làm dashboard vận hành). Gọi tay bằng `/erp-ui-design`.
+## Rebranding
 
-Đây là bản **đầy đủ nhất**. Claude đọc `SKILL.md` trước, rồi chỉ nạp file
-reference nào cần cho việc đang làm — nên nó mang được nhiều chi tiết hơn hai
-bản kia mà không tốn context.
+The pack ships a crimson (`#b3121b`) as its reference accent.
 
-### Gemini
+1. Change the `--brand*` block at the top of `assets/theme.css`.
+2. **Recompute `--brand-on-dark`** — the step most often skipped. It is the
+   *same* brand colour lifted until it reads on near-black. `#b3121b` on
+   `#0a0a0c` is unreadable. Every accent needs both values.
+3. Recompute the `--brand-a08` … `--brand-a35` alpha steps from the new RGB.
+4. If the new brand is **blue**, invert the "info is not blue" rule and make the
+   info state a neutral grey instead.
 
-```powershell
-# Toàn cục
-Copy-Item ".\gemini\GEMINI.md" "$HOME\.gemini\GEMINI.md"
+Nothing else needs to move.
 
-# Hoặc đặt ở gốc dự án của anh
-Copy-Item ".\gemini\GEMINI.md" "<đường-dẫn-dự-án>\GEMINI.md"
-```
+## What this is not
 
-Dùng được cho **Gemini Gem**: dán toàn bộ nội dung vào ô Instructions.
+It is not a component library. No React files, nothing to `npm install`, no
+Tailwind config. It is a **specification** — tokens, measurements and reasoning
+— so an assistant can generate matching code in whatever framework you use.
 
-### GPT
+The trade: it never drifts out of sync with a runtime, and it works for plain
+HTML as readily as for React.
 
-**Codex / Cursor / công cụ đọc `AGENTS.md`:**
+## On the content
 
-```powershell
-Copy-Item ".\gpt\AGENTS.md" "<đường-dẫn-dự-án>\AGENTS.md"
-```
+Every token, measurement and snippet was read out of shipping code, not
+invented. The failure modes in `05-checklist.md` are equally real — each one
+happened, including:
 
-Nếu repo đã có `AGENTS.md`, gộp các mục vào dưới một heading `## UI`.
+- the accent used on the wrong surface (an invisible active tab on a dark sidebar)
+- a border added only when active, shifting every label by 3px
+- `opacity: revert` under `prefers-reduced-motion` silently becoming `1`
+- an area gradient left on the default `objectBoundingBox`, making two charts of
+  wildly different magnitude look identical
+- **palette drift** — pages written before the token file still shipping raw hex
+  (`#e0e7ff`, `#3730a3`): an indigo that exists nowhere in a palette which
+  explicitly has no blue
 
-**Custom GPT:** mở `gpt/custom-gpt-instructions.md`, dán khối trong dấu ```` ``` ````
-vào ô **Instructions**, rồi **upload `gpt/AGENTS.md` làm Knowledge file**.
+That last one is in the pack **because** it is a flaw in the source system. A
+guide that documents only the polished parts will not help anyone avoid the trap
+that already sprang.
 
-Việc tách đôi này là cố ý. Ô Instructions (giới hạn 8000 ký tự) giữ phần
-**phán đoán** — hệ thống phục vụ mục đích gì, từ chối gì, và những luật mà model
-hay nhớ sai. Knowledge file giữ phần **số đo chính xác**. Một model đọc thang
-spacing từ trí nhớ sẽ cho ra thứ *gần đúng*, mà gần đúng thì tệ hơn sai hẳn —
-nên Instructions bắt nó trích từ Knowledge thay vì diễn giải lại.
+## Contributing
 
----
+Issues and pull requests are welcome, in English or Vietnamese.
 
-## Bản nào là gốc
+The bar for a new rule is a **reason**, not a preference. If you can describe
+what breaks without it — ideally something you watched break — it belongs here.
+Changes go into `claude/erp-ui-design/references/` first, then get synced to the
+merged builds.
 
-`claude/erp-ui-design/references/` là **bản gốc**. `gemini/GEMINI.md` và
-`gpt/AGENTS.md` giống hệt nhau về nội dung — cùng một hệ thiết kế, hai tên file
-khác nhau vì hai công cụ đọc hai tên khác nhau.
+## License
 
-Khi cần sửa: sửa ở `references/` trước, rồi đồng bộ xuống hai file gộp. Bản
-Custom GPT rút gọn thì tách riêng, sửa tay.
-
----
-
-## Đổi màu thương hiệu
-
-Bộ này để sẵn một sắc đỏ crimson làm màu mẫu (`#b3121b`). Đổi sang màu khác:
-
-1. Sửa cụm `--brand*` ở đầu `assets/theme.css`.
-2. **Tính lại `--brand-on-dark`** — bước hay bị bỏ qua nhất. Đây là *cùng một
-   màu thương hiệu* nhưng đã được đẩy sáng lên để đọc được trên nền gần đen.
-   `#b3121b` đặt trên `#0a0a0c` là không đọc được. Mọi màu nhấn đều cần hai giá
-   trị, một cho nền trắng và một cho nền tối.
-3. Tính lại các bậc alpha `--brand-a08` … `--brand-a35` từ RGB mới.
-4. Nếu màu thương hiệu mới là **xanh dương**, đảo luật "info không dùng xanh" —
-   lúc đó info chuyển sang xám trung tính.
-
-Không file nào khác cần đụng tới.
-
----
-
-## Bộ này KHÔNG làm gì
-
-Nói rõ để khỏi mất thời gian: đây không phải component library. Không có file
-React, không có package để `npm install`, không có Tailwind config. Nó là
-**đặc tả** — token, số đo, và lý do — để trợ lý AI sinh ra code khớp với hệ
-thiết kế, bằng bất kỳ framework nào.
-
-Đổi lại thì nó không bao giờ lệch phiên bản với runtime, và dùng được cho cả
-HTML thuần lẫn React.
+MIT — see [LICENSE](LICENSE). Use it, change it, redistribute it, including
+commercially; keep the copyright line.
 
 ---
 
-## Độ tin cậy của nội dung
-
-Mọi token, số đo và đoạn CSS trong bộ này được đọc ra từ code thật đang chạy,
-không phải bịa. Phần "failure modes" trong `05-checklist.md` cũng vậy — mỗi mục
-là một lỗi đã xảy ra thật trong repo hoặc trong lúc làm việc trên nó, kể cả:
-
-- màu nhấn dùng sai bề mặt (tab active tàng hình trên sidebar đen),
-- viền chỉ thêm khi active làm chữ nhảy 3px,
-- `opacity: revert` dưới `prefers-reduced-motion` âm thầm thành `1`,
-- gradient để mặc định `objectBoundingBox` khiến hai biểu đồ khác hẳn độ lớn
-  trông y như nhau,
-- **palette drift**: các trang viết trước khi có `theme.css` vẫn còn hex thô
-  (`#e0e7ff`, `#3730a3`) — một màu indigo không tồn tại trong bảng màu, trong
-  một hệ thống đã tuyên bố "không có màu xanh dương". Đây là cách hệ thiết kế
-  chết dần, và nó đang có thật trong một page stylesheet cũ của repo nguồn.
-
-Điểm cuối cùng đáng nói riêng: nó nằm trong bộ skill **vì** nó là lỗi của chính
-repo nguồn. Một bộ hướng dẫn chỉ mô tả phần đẹp sẽ không giúp ai tránh được cái
-bẫy đã sập.
-
----
-
-## Giấy phép
-
-MIT — xem [LICENSE](LICENSE). Dùng, sửa, phát hành lại, kể cả cho mục đích thương mại,
-chỉ cần giữ lại dòng bản quyền.
-
----
-
-*Rút từ một hệ ERP đang chạy production, 09/2026.*
+*Extracted from a production ERP front end, September 2026.*
