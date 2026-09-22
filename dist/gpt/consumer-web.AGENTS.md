@@ -567,8 +567,6 @@ dimensions. A spinner in a zero-height box guarantees a jump.
 
 ## Motion
 
-## Motion
-
 This file is about movement the interface chooses: what moves, how fast, and
 how it eases. What the interface owes a user *while they wait* — busy states,
 spinners, skeletons, progress — is a different problem with a different clock,
@@ -1408,8 +1406,6 @@ haptics turned off, taking the useful confirmations with them.
 
 ## Review
 
-## Review
-
 The universal pass. A pack adds its own domain checks on top; nothing here is
 waived by any domain.
 
@@ -1940,8 +1936,6 @@ the only way to reach content.
 
 Writing `opacity: 0` in the base stylesheet is how a page ships blank to
 everyone whose JavaScript did not run.
-
-## Components
 
 ## Components
 

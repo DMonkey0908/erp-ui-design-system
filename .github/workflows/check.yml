@@ -17,3 +17,8 @@ jobs:
         with:
           node-version: '20'
       - run: node tools/build.mjs --check
+
+      # Prints where a pack restates a core rule instead of pointing at it.
+      # Always exits 0: the check is lexical and the rule is semantic, so the
+      # output is for a reviewer to read, not for CI to judge.
+      - run: node tools/dupcheck.mjs

@@ -139,9 +139,21 @@ draft of pack two - core's placeholder-is-not-a-label rationale restated in
 in `erp/03-components.md`. Both were found by grepping distinctive phrases from
 core against the pack files, and both are now pointers.
 
-There is no build guard for this, because the check is semantic. It is on the
-reviewing checklist in `AUTHORING.md`, and a phrase grep before opening a pull
-request catches most of it. Worth revisiting if pack three drifts the same way.
+There is no build *guard* for this, because the check is semantic - a pack has
+to name the same concepts core does in order to point at them, and telling a
+pointer from a restatement needs a reader.
+
+There is now a build *report*. `tools/dupcheck.mjs` is the phrase grep that
+found those two violations, automated: it compares every seven-word window of
+running prose in a pack against core, ignoring code blocks and windows that are
+mostly stopwords, and prints both sides with line numbers. It runs inside
+`npm run check` and always exits 0.
+
+It paid for itself on the first run, on the pack that had already been audited
+by hand: `erp/05-checklist.md` was restating core's palette-drift rationale
+almost verbatim, and `erp/PACK.md` was restating core's add-a-token rule. Both
+are now pointers carrying only the domain part - which for the indigo is a good
+one, because this palette has no blue at all.
 
 ### 4. Cross-pack integrity - GUARDED
 
