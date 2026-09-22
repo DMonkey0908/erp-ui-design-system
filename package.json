@@ -1,0 +1,13 @@
+{
+  "name": "ui-design-ecosystem",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Domain-specific UI design systems, packaged as skills for Claude, Gemini and GPT.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "check": "node tools/build.mjs --check"
+  },
+  "engines": { "node": ">=18" }
+}

@@ -1,0 +1,43 @@
+{
+  "id": "erp",
+  "name": "ERP & back-office",
+  "status": "stable",
+  "summary": "Dense, dark-chrome operational software: admin panels, operations consoles, back-office tools, internal dashboards.",
+  "optimisesFor": "The two-hundredth use by a trained operator, not the first impression.",
+  "skill": {
+    "name": "erp-ui-design",
+    "description": "Design and build dense, dark-chrome ERP / admin / back-office interfaces — app shells with a sidebar and topbar, data tables, filter rows, forms, KPI tiles, status pills and analytics charts. Use when building or reviewing an internal business tool, admin panel, operations console or dashboard, when asked to make a UI \"look like a real ERP\" (SAP / Oracle / Dynamics) rather than a consumer SaaS, or when a screen must stay readable through a full working day."
+  },
+  "when": [
+    "an internal business tool, admin panel or operations console",
+    "a back-office screen or an operational dashboard",
+    "a request to look like a real ERP rather than a consumer SaaS",
+    "a screen that must stay readable through a full working day"
+  ],
+  "surfaces": {
+    "chrome": "near-black, shadowless, sharp corners (2-4px)",
+    "canvas": "light grey",
+    "content": "white, soft corners (6-12px)",
+    "floating": "white, 12px, slate two-layer shadow",
+    "accent": "deep crimson #b3121b on light, #f2555e on dark",
+    "semantic": "success/warning/danger/info, danger pushed off the accent hue"
+  },
+  "density": "high - 13px base, 8px/12px table cells",
+  "core": {
+    "include": "all",
+    "leadWith": ["01-tokens", "03-layout", "08-review"],
+    "overrides": []
+  },
+  "references": [
+    { "file": "01-surfaces.md", "title": "Surfaces, palette and scales" },
+    { "file": "02-shell.md", "title": "The shell - sidebar, topbar, responsive" },
+    { "file": "03-components.md", "title": "Components" },
+    { "file": "04-charts.md", "title": "Charts - the ERP layer" },
+    { "file": "05-checklist.md", "title": "Domain review checklist" }
+  ],
+  "assets": [
+    { "file": "theme.css", "note": "the token file - drop into a new project" },
+    { "file": "shell-skeleton.html", "note": "page skeleton, including the anti-flash script" }
+  ],
+  "customGpt": "custom-gpt-instructions.md"
+}

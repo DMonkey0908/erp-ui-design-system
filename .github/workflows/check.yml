@@ -1,0 +1,19 @@
+name: check
+
+# dist/ is committed so the repo works as a plain download. That only stays
+# true if every source edit is rebuilt, so the build runs in --check mode and
+# fails on any file that would come out different.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: node tools/build.mjs --check

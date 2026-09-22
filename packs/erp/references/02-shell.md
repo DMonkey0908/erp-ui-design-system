@@ -26,69 +26,23 @@ out of flow and the grid stops doing the work for you.
 
 Dimensions: sidebar `240px` open / `72px` collapsed, topbar `64px`.
 
-## Anti-flash: the inline head script
+## State restored before paint, and stylesheet order
 
-**This is the part people skip, and it is the difference between a tool that
-feels native and one that feels like a web page.**
+Both are core rules — see `core/03-layout.md`. What this pack pins down:
 
-Any state that changes layout or visibility and is restored from storage must
-be applied to `<html>` *before the first paint* — inline, in `<head>`, before
-the stylesheets. Otherwise the user watches the menu open and then snap shut on
-every single navigation.
-
-```html
-<script>
-  // Sidebar width, restored before paint.
-  try {
-    if (localStorage.getItem('app.sidebar.collapsed') === '1')
-      document.documentElement.classList.add('sb-collapsed');
-  } catch (_e) { /* storage unavailable */ }
-
-  // Role-gated nav items, hidden from the cached role so a non-admin never
-  // sees them appear and vanish. Re-applied when the session request answers.
-  try {
-    var u = JSON.parse(localStorage.getItem('app.user') || 'null');
-    if (u && u.role && u.role !== 'Administrator')
-      document.documentElement.classList.add('role-user');
-  } catch (_e) {}
-
-  // Language, so a translated page never flashes the source language.
-  try {
-    var p = JSON.parse(localStorage.getItem('app.preferences') || '{}');
-    var lang = p.language || 'en';
-    document.documentElement.lang = lang;
-    if (lang !== 'en') document.documentElement.classList.add('i18n-pending');
-  } catch (_e) {}
-</script>
-<style>
-  html.i18n-pending [data-i18n], html.i18n-pending [data-i18n-html] { visibility: hidden; }
-</style>
-```
-
-Every `try/catch` is load-bearing: `localStorage` throws outright in some
-privacy modes, and one uncaught error here blanks the page before any stylesheet
-has loaded.
-
-Because the class lands on `<html>`, every collapsed-state rule needs both
-selectors — the pre-paint one and the runtime one the toggle button sets:
+- The keys are `app.sidebar.collapsed`, `app.user` (for role-gated nav) and
+  `app.preferences` (language). All three affect layout or visibility, so all
+  three are applied to `<html>` inline in `<head>`, before the stylesheets.
+  `assets/shell-skeleton.html` ships the script.
+- Order is `theme.css` -> `erp-shell.css` -> page `styles.css`. A page
+  stylesheet may define tokens in terms of theme tokens, never as literals.
+- Because the class lands on `<html>` while the runtime toggle sets it on the
+  shell container, every collapsed rule needs both selectors:
 
 ```css
 .erp-shell.is-collapsed .nav-label,
 html.sb-collapsed .erp-shell .nav-label { display: none; }
 ```
-
-## Stylesheet order
-
-Non-negotiable, because each layer defines tokens the next one consumes:
-
-```html
-<link rel="stylesheet" href="/theme.css">      <!-- 1. palette, nothing else -->
-<link rel="stylesheet" href="/erp-shell.css">  <!-- 2. shell, in theme tokens -->
-<link rel="stylesheet" href="styles.css">      <!-- 3. this page only         -->
-```
-
-A page stylesheet may define its own tokens in terms of theme tokens
-(`--chart-series: var(--brand)`). It may never define a raw colour.
 
 ## Sidebar
 
@@ -248,9 +202,9 @@ viewport with `left: 8px; right: 8px; width: auto; max-width: 380px`.
 .erp-main > .container { max-width: 1600px; margin: 0 auto; }
 ```
 
-`min-width: 0` is the fix for the single most common ERP layout bug: a grid item
-defaults to `min-width: auto`, so one wide table stretches the column and pushes
-the sidebar off screen.
+`min-width: 0` is load-bearing here for the reason core gives in `03-layout.md`:
+without it one wide table stretches the grid track and pushes the sidebar off
+screen. In this shell that is the single most common layout bug.
 
 Page title block, not a hero banner:
 
@@ -278,29 +232,16 @@ expands it. Navigation must stay reachable without a hamburger.
   the announcement.
 - Suppress reload when the already-active tab is clicked. A full navigation to
   the current URL re-runs every page script and throws away unsaved state.
-- An `.sr-only` utility for labels that must exist but not show:
-
-```css
-.sr-only {
-  position: absolute; width: 1px; height: 1px;
-  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
-}
-```
+- The `.sr-only` utility from core ships in `assets/theme.css`; the collapsed
+  sidebar depends on it, since at 72px the visible label is gone.
 
 ## Internationalisation
 
-Mark nodes rather than templating strings:
+Core (`core/06-i18n.md`) covers the mechanics. The shell-specific consequences:
 
-```html
-<span data-i18n="nav.settings">Settings</span>
-<input data-i18n-attr="placeholder:filter.file_ph" placeholder="Search file name">
-<p data-i18n-html="help.body">Text with <b>markup</b></p>
-```
-
-The source language stays in the HTML so the page is readable and reviewable
-without the translation layer running. `html.i18n-pending` hides marked nodes
-until the dictionary is applied, so a Vietnamese user never sees English flash
-first.
-
-Budget roughly 35% extra width for German and Vietnamese labels. Truncate with
-an ellipsis and never let a nav label wrap to a second line.
+- Nav labels never wrap. A two-line nav item changes the row height and the
+  whole sidebar reflows, so they truncate with an ellipsis instead.
+- Budget ~35% width headroom on nav labels and the topbar title. The collapsed
+  72px sidebar is the safety valve: at that width the label is gone and only the
+  icon carries meaning, which is why icons are mandatory and not decorative.
+- The topbar title truncates rather than wrapping - the bar is a fixed 64px.

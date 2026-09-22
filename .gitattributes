@@ -1,0 +1,9 @@
+# The build compares generated files byte for byte, and CI runs on Linux while
+# most authoring happens on Windows. Without this, `--check` fails on line
+# endings alone and the failure looks like a stale dist/.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.webp binary
+*.ico binary

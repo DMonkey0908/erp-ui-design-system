@@ -1,0 +1,35 @@
+{
+  "id": "REPLACE-ME",
+  "name": "Human-readable domain name",
+  "status": "draft",
+  "summary": "One sentence: what kind of product this pack is for.",
+  "optimisesFor": "The single reader or moment this domain optimises for. Be specific enough that it excludes something.",
+  "skill": {
+    "name": "REPLACE-ME-ui-design",
+    "description": "What to build, plus WHEN to use this pack. An assistant selects a skill from this string alone, so name the artefacts (screens, components) and the trigger phrases a user would actually type."
+  },
+  "when": [
+    "the kind of screen this pack covers",
+    "a phrasing a user would type that should select it",
+    "a domain signal - the product type, the audience, the constraint"
+  ],
+  "surfaces": {
+    "chrome": "",
+    "canvas": "",
+    "content": "",
+    "floating": "",
+    "accent": "",
+    "semantic": ""
+  },
+  "density": "",
+  "core": {
+    "include": "all",
+    "leadWith": ["01-tokens", "08-review"],
+    "overrides": []
+  },
+  "references": [
+    { "file": "01-surfaces.md", "title": "Surfaces, palette and scales" }
+  ],
+  "assets": [],
+  "customGpt": null
+}
