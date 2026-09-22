@@ -203,6 +203,7 @@ Start with `core/02-typography.md`, `core/03-layout.md`, `core/05-accessibility.
 | `core/07-charts.md` | Charts |
 | `core/08-feedback.md` | Feedback |
 | `core/09-input.md` | Input |
+| `core/10-visual-language.md` | Visual language |
 | `core/99-review.md` | Review |
 
 ### Pack - this domain
