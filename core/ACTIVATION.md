@@ -51,6 +51,10 @@ them.
 - Leave a figure without `font-variant-numeric: tabular-nums`.
 - Remove a focus outline without replacing it.
 - Use colour as the only signal for a state.
+- Put information or an action behind hover alone. On a touchscreen it is not
+  awkward, it is absent.
+- Show a spinner for work that finishes in under 300ms, or leave one spinning
+  past a second where a skeleton at the real dimensions belongs.
 - Animate without honouring `prefers-reduced-motion`, including the end state.
 - Start a value axis anywhere but zero when magnitude is being compared.
 

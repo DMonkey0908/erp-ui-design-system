@@ -45,6 +45,10 @@ them.
 - Leave a figure without `font-variant-numeric: tabular-nums`.
 - Remove a focus outline without replacing it.
 - Use colour as the only signal for a state.
+- Put information or an action behind hover alone. On a touchscreen it is not
+  awkward, it is absent.
+- Show a spinner for work that finishes in under 300ms, or leave one spinning
+  past a second where a skeleton at the real dimensions belongs.
 - Animate without honouring `prefers-reduced-motion`, including the end state.
 - Start a value axis anywhere but zero when magnitude is being compared.
 
@@ -84,7 +88,9 @@ what this system exists to prevent. Do not answer from this index.
 | `ui/core/05-accessibility.md` | Accessibility |
 | `ui/core/06-i18n.md` | Internationalisation |
 | `ui/core/07-charts.md` | Charts |
-| `ui/core/08-review.md` | Review |
+| `ui/core/08-feedback.md` | Feedback |
+| `ui/core/09-input.md` | Input |
+| `ui/core/99-review.md` | Review |
 
 ### Pack - this domain
 
@@ -102,7 +108,7 @@ what this system exists to prevent. Do not answer from this index.
 |---|---|
 | `ui/assets/theme.css` | the token file - drop into a new project |
 
-Finish by running `ui/core/08-review.md` and `ui/pack/05-checklist.md`.
+Finish by running `ui/core/99-review.md` and `ui/pack/05-checklist.md`.
 
 ---
 
@@ -132,6 +138,8 @@ wrong pack.**
 - `font-variant-numeric: tabular-nums` on every figure - tables, tiles, axis labels, tooltips.
 - Never remove a focus outline without replacing it. Always `:focus-visible`, never `:focus`.
 - Colour is never the only signal for a state. Pair it with an icon, a label or a position.
+- Never put information or an action behind hover alone - a touchscreen has no hover, so it is absent rather than awkward.
+- Match the waiting affordance to the wait: nothing under 300ms, a skeleton at real dimensions past a second, cancellable progress past five.
 - `min-width: 0` on grid and flex children that can hold wide content; `minmax(0, 1fr)` on tracks.
 - Honour `prefers-reduced-motion`, and state the end value explicitly - `opacity: revert` yields 1, not your value.
 - Start a value axis at zero whenever magnitude is compared.
