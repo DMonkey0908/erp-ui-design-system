@@ -20,6 +20,10 @@ relinked against the split assets so it still opens. Finding 6 is not a defect
 — it records that the pack's override was never exercised, and it stays open
 until a run ports a desktop screen.
 
+**Finding 7 was added afterwards, during a review pass, and it corrects this
+document's own score.** The accessibility contrast item below was marked passed
+without the ratios being computed. Three of them did not pass.
+
 The record below describes what the run found, not what the pack says now.
 
 ## Verdict
@@ -116,6 +120,39 @@ tokens only and the components are prose everywhere.
 
 **Fix:** decide, and write the decision into `PACK.md`.
 
+### 7 — Three contrast pairs failed, and the run scored them as passing
+
+Found during a review pass after this run was written, by computing every pair
+in the palette instead of looking at it.
+
+| Pair | Ratio | Needed |
+|---|---|---|
+| `text-tertiary` on the light surface | 3.24 | 4.5 |
+| `text-tertiary` on the light grouped background | 2.90 | 4.5 |
+| `text-tertiary` on the dark raised surface | 4.01 | 4.5 |
+
+These are exactly the failure `core/05-accessibility.md` names — *"'subtle'
+grey-on-grey metadata is where this fails most often"* — and the reason they
+got scored as a pass is the reason the rule exists: a tertiary grey at 2.9:1
+looks the way metadata is supposed to look.
+
+A fourth, separate problem came out of the same pass. The run's row action and
+its form fields drew their boundary in `separator`, at **1.42:1**. A separator
+is structural and may be a hairline; a border that is the only thing
+identifying a tappable control is an interactive boundary, which core holds to
+3:1. The two look like the same grey and had the same token.
+
+**Fixed:** `text-tertiary` recomputed to clear 4.5 against the lightest and
+darkest surface it lands on, a `border-control` token added at 3:1, and
+`01-surfaces.md` now says which line is which and why. The pack checklist gains
+the rule that the pairs are computed rather than eyeballed, and so does the
+reviewing checklist in `AUTHORING.md`.
+
+**What this says about the method:** a self-administered run scored its own
+output against a checklist and passed an item it had not tested. That is the
+single strongest argument in either run for why a cold reviewer is worth more
+than a careful author.
+
 ### 6 — The override never came up
 
 `PACK.md` overrides core's "never remove functionality at a smaller size" with
@@ -143,16 +180,23 @@ for this pack than another native screen.
 | Feedback (6) | 6 | 0 | 0 |
 | Input (5) | 5 | 0 | 0 |
 | Visual language (4) | 0 | 0 | 4 |
-| Accessibility (10) | 9 | 0 | 1 |
+| Accessibility (10) | 8 | 1 | 1 |
 | Motion (6) | 5 | 0 | 1 |
 | Charts (5) | 0 | 0 | 5 |
 | Internationalisation (5) | 4 | 1 | 0 |
-| **Total** | **51** | **1** | **13** |
+| **Total** | **50** | **2** | **13** |
 
-**51 of 52 applicable.** The failure is the same one run 001 had: strings are
-not marked for translation. Two runs, two packs, the same miss — which says
-something about the rule rather than about the runs, and is worth watching
-when a third run lands.
+**50 of 52 applicable**, corrected from 51 after finding 7.
+
+Two failures. The first is the same one run 001 had: strings are not marked for
+translation. Two runs, two packs, the same miss — which says something about
+the rule rather than about the runs, and is worth watching when a third run
+lands.
+
+The second is the contrast item, which this document originally recorded as a
+pass. It is left as a failure rather than quietly upgraded now that the palette
+is fixed, because the run is evidence and a score edited to match a later fix
+stops being evidence.
 
 The type exclusion is the 72ch measure: this screen has no running prose.
 
@@ -176,7 +220,9 @@ system gesture regions, neither of which a single-page web artefact can
 exercise honestly.
 
 One item passed only after self-review caught it failing: the tab badge's
-fixed height, which is finding 2.
+fixed height, which is finding 2. One more — the control-boundary contrast —
+failed and was not noticed until the review pass; it is part of finding 7 and
+the checklist gained a line for it.
 
 ## What the build did not say, and this run invented
 
@@ -187,6 +233,7 @@ fixed height, which is finding 2.
 | Keyboard inset mechanism | `pack/03-components.md` (finding 3) |
 | What a rejected queued write looks like | `pack/04-lifecycle.md` (finding 4) |
 | The snackbar's position above the tab bar | `pack/03-components.md` — it specs the snackbar's behaviour, not where it sits |
+| A border colour for a control on a matching surface | `pack/01-surfaces.md` — there was one grey for two jobs (finding 7) |
 
 ## Reproducing
 

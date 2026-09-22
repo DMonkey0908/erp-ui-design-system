@@ -1,11 +1,22 @@
 /* ==========================================================================
-   SHELL — written entirely in theme tokens, never in literals.
-   Load after theme.css and before the page stylesheet.
+   SHELL — the application frame: grid, sidebar, topbar, main.
 
-   Built from pack/02-shell.md. Class names follow that file
-   (.erp-shell / .erp-sidebar / .topbar / .erp-main), not
-   assets/shell-skeleton.html, which names them .shell / .sidebar / .main.
-   See result.md, finding 1.
+   Load SECOND, after theme.css and before the page stylesheet. Every value
+   here is a theme token; there is not one literal in this file, and adding
+   one is how the palette starts leaking.
+
+   This is 02-shell.md made copyable. The reference explains why each rule is
+   what it is; this is the result. Two things in it are load-bearing and look
+   like details:
+
+     - the 3px transparent border reserved on EVERY nav row, so the label does
+       not shift sideways when the selection moves
+     - `min-width: 0` on .erp-main, without which one wide table stretches the
+       grid track and pushes the sidebar off screen
+
+   The collapsed rules are written twice on purpose - once for the class the
+   runtime toggle sets on the shell, once for the class the pre-paint script
+   sets on <html>. Drop either and the sidebar flashes on every navigation.
    ========================================================================== */
 
 .erp-shell {

@@ -356,6 +356,62 @@ function lintPackValues(pack) {
   }
 }
 
+/**
+ * Every custom property a pack's references name must actually exist.
+ *
+ * An undefined custom property fails silently - no error, no warning, the
+ * declaration is simply dropped and the element keeps whatever it had. So a
+ * reference that documents a token the asset does not ship produces a build
+ * that looks fine and is missing a colour, and nobody finds out from the code.
+ *
+ * Two eval findings were exactly this: the lit nav variant driven by three
+ * `--glow-*` tokens the theme never defined, and a whole palette documented as
+ * `--brand-red-*` while the shipped file defined `--brand-*`. Both had been
+ * read by people. Neither is visible without cross-checking two files, which
+ * is what this does.
+ *
+ * A token counts as defined if an asset defines it, or if the same reference
+ * defines or sets it - a local token driven from JavaScript is legitimate, and
+ * it is local on purpose.
+ */
+function lintTokenNames(pack) {
+  const { meta, dir, id } = pack;
+  const assetDir = join(dir, 'assets');
+  const defined = new Set();
+
+  for (const a of meta.assets || []) {
+    const path = join(assetDir, a.file);
+    if (!existsSync(path)) continue;
+    const body = read(path);
+    if (a.file.endsWith('.json')) {
+      // tokens.json: a camelCase key is the kebab-case property.
+      for (const k of body.match(/"([a-zA-Z][a-zA-Z0-9]*)"\s*:/g) || []) {
+        const name = k.replace(/[":\s]/g, '');
+        defined.add('--' + name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase());
+      }
+    } else {
+      for (const m of body.match(/(--[a-z0-9-]+)\s*:/g) || []) defined.add(m.replace(/\s*:$/, ''));
+    }
+  }
+
+  for (const r of meta.references || []) {
+    const body = read(join(dir, 'references', r.file));
+    const local = new Set([
+      ...(body.match(/(--[a-z0-9-]+)\s*:/g) || []).map((m) => m.replace(/\s*:$/, '')),
+      ...(body.match(/setProperty\(\s*'(--[a-z0-9-]+)'/g) || []).map((m) => m.replace(/.*'(--[^']+)'/, '$1')),
+    ]);
+    const unknown = [...new Set(body.match(/var\(\s*(--[a-z0-9-]+)/g) || [])]
+      .map((m) => m.replace(/var\(\s*/, ''))
+      .filter((t) => !defined.has(t) && !local.has(t));
+    if (unknown.length) {
+      problems.push(
+        `${id}: references/${r.file} uses ${unknown.join(', ')}, which no asset defines `
+        + `- an undefined custom property is dropped silently, so this ships as a missing colour`
+      );
+    }
+  }
+}
+
 /** Core says "no concrete values"; this is the one rule core can enforce on itself. */
 function lintCore() {
   for (const { file, path } of coreFiles()) {
@@ -1019,6 +1075,7 @@ for (const id of ids) {
   const pack = loadPack(id);
   if (!pack) continue;
   lintPackValues(pack);
+  lintTokenNames(pack);
   buildClaude(pack, core);
   buildMerged(pack, core, 'gemini');
   buildMerged(pack, core, 'gpt');

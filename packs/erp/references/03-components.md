@@ -333,8 +333,8 @@ Three weights of the same idea. Pick by how loud it needs to be.
 .pill-neutral { background: var(--pill-neutral-bg); color: var(--pill-neutral-text); }
 
 /* Quietest of all — coloured text */
-.status.is-ok  { color: var(--state-success); }
-.status.is-bad { color: var(--state-danger); }
+.status.is-ok  { color: var(--state-success-text); }
+.status.is-bad { color: var(--state-danger-text); }
 ```
 
 **The state goes in a data attribute, the styling reads it.** `data-state="ok"`

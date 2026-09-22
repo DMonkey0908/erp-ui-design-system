@@ -1772,55 +1772,66 @@ A dropdown or tooltip hanging off the dark topbar is still **paper**: white,
 ### The token file
 
 Ships as `assets/theme.css`. The accent's two values are the part to get right —
-`#b3121b` on `#0a0a0c` is unreadable, which is why `--brand-red-on-dark` exists.
+`#b3121b` on `#0a0a0c` is unreadable, which is why `--brand-on-dark` exists.
 
 ```css
 :root {
   /* ----- Brand (swap to rebrand) ----- */
-  --brand-red:         #b3121b;   /* on paper */
-  --brand-red-hover:   #8d0d15;
-  --brand-red-dark:    #6e0a10;
-  --brand-red-light:   #e11d2e;
-  --brand-red-on-dark: #f2555e;   /* the same brand, legible on ink */
+  --brand:         #b3121b;   /* on paper */
+  --brand-hover:   #8d0d15;
+  --brand-dark:    #6e0a10;
+  --brand-light:   #e11d2e;
+  --brand-on-dark: #f2555e;   /* the same brand, legible on ink */
 
-  --brand-red-tint:   #fdf2f3;
-  --brand-red-tint-2: #fbdfe1;
-  --brand-red-tint-3: #f6c9cd;
-  --brand-red-border: #efc4c7;
+  --brand-tint:   #fdf2f3;
+  --brand-tint-2: #fbdfe1;
+  --brand-tint-3: #f6c9cd;
+  --brand-border: #efc4c7;
 
-  --brand-red-a08: rgba(179, 18, 27, 0.08);
-  --brand-red-a12: rgba(179, 18, 27, 0.12);
-  --brand-red-a18: rgba(179, 18, 27, 0.18);
-  --brand-red-a25: rgba(179, 18, 27, 0.25);
-  --brand-red-a35: rgba(179, 18, 27, 0.35);
+  --brand-a08: rgba(179, 18, 27, 0.08);
+  --brand-a12: rgba(179, 18, 27, 0.12);
+  --brand-a18: rgba(179, 18, 27, 0.18);
+  --brand-a25: rgba(179, 18, 27, 0.25);
+  --brand-a35: rgba(179, 18, 27, 0.35);
 
-  --brand-red-gradient:      linear-gradient(135deg, #7d0d13 0%, #b3121b 45%, #d81f2a 130%);
-  --brand-red-gradient-soft: linear-gradient(135deg, #b3121b 0%, #e11d2e 100%);
+  --brand-gradient:      linear-gradient(135deg, #7d0d13 0%, #b3121b 45%, #d81f2a 130%);
+  --brand-gradient-soft: linear-gradient(135deg, #b3121b 0%, #e11d2e 100%);
 
   /* ----- Ink (chrome) ----- */
   --ink-950: #0a0a0c;  --ink-900: #101013;  --ink-850: #16161a;
   --ink-800: #1c1c21;  --ink-700: #26262d;
   --ink-border: #2a2a32;  --ink-border-soft: #1f1f26;
-  --ink-text: #f1f1f4;  --ink-text-dim: #b9b9c2;  --ink-text-muted: #7f7f8a;
+  --ink-text: #f1f1f4;  --ink-text-dim: #b9b9c2;  --ink-text-muted: #83838e;
   --ink-hover: rgba(255, 255, 255, 0.06);
   --ink-active: rgba(255, 255, 255, 0.10);
   --ink-tile: linear-gradient(160deg, #16161a 0%, #0c0c0f 100%);
 
   /* ----- Paper (content) ----- */
   --paper: #ffffff;  --paper-2: #f7f8fa;  --paper-3: #f1f3f5;  --paper-bg: #f6f7f9;
-  --paper-text: #0f172a;  --paper-text-2: #475569;  --paper-text-3: #94a3b8;
+  --paper-text: #0f172a;  --paper-text-2: #475569;  --paper-text-3: #617085;
   --paper-border: #e2e8f0;  --paper-border-strong: #cbd5e1;
 
   /* ----- Semantic ----- */
-  --state-success: #16a34a;
-  --state-warning: #ca8a04;
+  --state-success: #16a34a;        /* marks: dots, bars, pill fills */
+  --state-warning: #c38300;
   --state-danger:  #ef3b3b;   /* brighter and more orange than the brand */
   --state-danger-dark: #c81e1e;
+
+  --state-success-text: #008128;   /* the same states AS TEXT, at 4.5:1 */
+  --state-warning-text: #a06000;
+  --state-danger-text:  #d72323;
   --state-info:    #3f3f46;   /* neutral ink, not blue */
 }
 ```
 
-Two choices worth keeping when rebranding:
+**Each state has two values, and they are not interchangeable.** The bare
+`--state-*` are **marks**: dots, bars, chart series, pill fills. They are
+graphical objects, so they answer to 3:1. The `--state-*-text` values are the
+same states **as text**, where 4.5:1 applies and the mark values do not reach
+it. A status word painted in the mark colour is the commonest way this palette
+fails a contrast check, and it passes a visual review every time.
+
+Three choices worth keeping when rebranding:
 
 **`--state-danger` is not the brand.** In a red-accent palette an error painted
 in brand red is indistinguishable from a primary button, so danger is pushed
@@ -1913,13 +1924,13 @@ Within core's bands, this domain runs at the fast end:
 
 ```css
 /* On ink — inset, so the ring is not clipped by a flush cell */
-:focus-visible { outline: 2px solid var(--brand-red); outline-offset: -2px; }
+:focus-visible { outline: 2px solid var(--brand); outline-offset: -2px; }
 
 /* On paper — outset, softer, paired with a border shift on inputs */
 input:focus-visible {
-  outline: 2px solid var(--brand-red-a35);
+  outline: 2px solid var(--brand-a35);
   outline-offset: 1px;
-  border-color: var(--brand-red);
+  border-color: var(--brand);
 }
 ```
 
@@ -2507,8 +2518,8 @@ Three weights of the same idea. Pick by how loud it needs to be.
 .pill-neutral { background: var(--pill-neutral-bg); color: var(--pill-neutral-text); }
 
 /* Quietest of all — coloured text */
-.status.is-ok  { color: var(--state-success); }
-.status.is-bad { color: var(--state-danger); }
+.status.is-ok  { color: var(--state-success-text); }
+.status.is-bad { color: var(--state-danger-text); }
 ```
 
 **The state goes in a data attribute, the styling reads it.** `data-state="ok"`
@@ -2653,10 +2664,10 @@ const every = Math.max(1, Math.ceil(n / Math.max(2, Math.floor(iw / 48))));
 .hw-axis-label { fill: var(--paper-text-3); font-size: 11px; font-variant-numeric: tabular-nums; }
 .hw-axis-title { fill: var(--paper-text-2); font-size: 11px; font-weight: 600; }
 
-.hw-line { fill: none; stroke: var(--brand-red); stroke-width: 2;
+.hw-line { fill: none; stroke: var(--brand); stroke-width: 2;
            stroke-linejoin: round; stroke-linecap: round; }
 
-.hw-dot  { fill: var(--brand-red); stroke: var(--paper); stroke-width: 2; }
+.hw-dot  { fill: var(--brand); stroke: var(--paper); stroke-width: 2; }
 .hw-dot.is-dim { opacity: 0.18; }
 
 .hw-crosshair { stroke: var(--paper-text-3); stroke-width: 1; shape-rendering: crispEdges; }
@@ -2667,7 +2678,7 @@ const every = Math.max(1, Math.ceil(n / Math.max(2, Math.floor(iw / 48))));
 marks, not content, and at this density a 13px axis crowds the plot.
 
 Charts live on **paper**: the plot sits inside a white card, so the series is
-the on-paper accent (`--brand-red`), never the on-dark one.
+the on-paper accent (`--brand`), never the on-dark one.
 
 ### The gradient fill, as configured here
 
@@ -2676,7 +2687,7 @@ Core explains why it is anchored to the value scale. The stops this domain uses:
 ```css
 .hw-area { fill: url(#hwAreaGradient); }
 
-.hw-area-grad stop { stop-color: var(--brand-red); }
+.hw-area-grad stop { stop-color: var(--brand); }
 .hw-area-grad stop:nth-child(1) { stop-opacity: 0.34; }
 .hw-area-grad stop:nth-child(2) { stop-opacity: 0.13; }
 .hw-area-grad stop:nth-child(3) { stop-opacity: 0.015; }
@@ -2750,7 +2761,7 @@ explicitly. `opacity: revert` here yields `1`, not your stylesheet value — cor
   font-size: 0.75rem; color: var(--paper-text-2);
   pointer-events: none;
 }
-.hw-tip-key  { width: 14px; height: 2px; border-radius: 1px; background: var(--brand-red); }
+.hw-tip-key  { width: 14px; height: 2px; border-radius: 1px; background: var(--brand); }
 .hw-tip-rows { display: grid; grid-template-columns: auto auto; gap: 2px 14px; margin: 0; }
 .hw-tip-rows dt { color: var(--paper-text-3); }
 .hw-tip-rows dd { margin: 0; text-align: right; color: var(--paper-text);
@@ -2838,7 +2849,7 @@ This file is what an operational tool needs on top.
 Core covers the universal ones. These are the ERP-shaped versions.
 
 **The accent on the wrong surface.** The domain-specific instance: an active
-sidebar item painted in `--brand-red` instead of `--brand-red-on-dark`. It
+sidebar item painted in `--brand` instead of `--brand-on-dark`. It
 passes a brand review and is invisible against `#0a0a0c`. Check this first on
 any dark-chrome build.
 

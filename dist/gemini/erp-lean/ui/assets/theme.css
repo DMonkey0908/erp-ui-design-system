@@ -68,7 +68,7 @@
     /* Text on ink */
     --ink-text: #f1f1f4;
     --ink-text-dim: #b9b9c2;
-    --ink-text-muted: #7f7f8a;
+    --ink-text-muted: #83838e;
 
     /* Hover / active washes on ink */
     --ink-hover: rgba(255, 255, 255, 0.06);
@@ -86,15 +86,17 @@
 
     --paper-text: #0f172a;
     --paper-text-2: #475569;
-    --paper-text-3: #94a3b8;
+    --paper-text-3: #617085;
 
     --paper-border: #e2e8f0;
     --paper-border-strong: #cbd5e1;
 
     /* ----- Semantic ----------------------------------------------------
        Kept deliberately distinct from the brand. */
+    /* These three are MARKS - dots, bars, chart series, pill fills. They
+       clear 3:1 against paper as graphical objects and they are not text. */
     --state-success: #16a34a;
-    --state-warning: #ca8a04;
+    --state-warning: #c38300;
     /* Brighter and more orange than --brand, so an error never reads as
        just another primary action. */
     --state-danger: #ef3b3b;
@@ -102,6 +104,13 @@
     /* No blue anywhere in this palette — "info" borrows the neutral ink.
        If the brand IS blue, make info a neutral grey instead. */
     --state-info: #3f3f46;
+
+    /* And these are the same three states AS TEXT, where 4.5:1 applies and
+       the mark values do not reach it. A status word painted in the mark
+       colour is the commonest way this palette fails a contrast check. */
+    --state-success-text: #008128;
+    --state-warning-text: #a06000;
+    --state-danger-text: #d72323;
 
     /* The wash behind a destructive item on paper — a menu row, a confirm
        strip. Pale enough that the text stays the loud part. */

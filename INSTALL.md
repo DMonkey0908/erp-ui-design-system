@@ -169,7 +169,7 @@ the activation block, the thesis, the hard rules, and an index. The assistant
 opens the one reference its task needs, the way the Claude skill already does.
 
 <!-- COST:START:install-note -->
-That is **~2,200 tokens instead of ~30,350 tokens**, on every request, including every
+That is **~2,200 tokens instead of ~30,700 tokens**, on every request, including every
 request with nothing to do with UI.
 <!-- COST:END:install-note -->
 
@@ -409,8 +409,8 @@ attached.
 ```bash
 BASE=https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main
 mkdir -p .claude/skills/ui-core/core
-for f in 01-tokens 02-typography 03-layout 04-motion 05-accessibility \
-         06-i18n 07-charts 08-feedback 09-input 99-review; do
+for f in 01-tokens 02-typography 03-layout 04-motion 05-accessibility 06-i18n \
+         07-charts 08-feedback 09-input 10-visual-language 99-review; do
   curl -fsSL "$BASE/core/references/$f.md" -o ".claude/skills/ui-core/core/$f.md"
 done
 curl -fsSL "$BASE/core/CORE.md" -o .claude/skills/ui-core/core/CORE.md

@@ -189,6 +189,10 @@ grep -rn "tabular-nums\|placeholder\|min-width: 0\|focus-visible" packs/<id>/ref
 - Does every rule state a consequence?
 - Are overrides declared in `pack.json`, not just prose?
 - Does `01-surfaces.md` contain real values, or placeholders?
+- Were the palette's contrast pairs **computed**? Every text colour against
+  every surface it lands on, and every control boundary at 3:1. Eyeballing a
+  grey ramp is how a tertiary text token ships at 2.9:1 - it looks like
+  metadata is supposed to look, which is the problem.
 - Does the checklist defer to `core/99-review.md` first?
 - Does `skill.description` name trigger phrases a user would type?
 - Does `notFor` genuinely exclude, or does it just restate `when` in the negative?

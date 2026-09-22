@@ -19,6 +19,13 @@ Findings 1–8 were fixed in the commit after this one. The record below is left
 describing the state the run actually found, because a findings list rewritten
 to match the fix stops being evidence. Finding 9 needed no fix.
 
+The artefact here was later relinked against the pack's real `theme.css` and
+`erp-shell.css`, both of which now ship what this run had to invent — so it
+demonstrates the fixed pack rather than the state it was built against. A
+review pass after run 002 also corrected the palette itself: see finding 7 of
+[run 002](../2026-09-22-mobile-01/result.md), which turned out to apply to all
+three packs.
+
 ## Verdict
 
 The build is **usable end to end**. A complete, dense, accessible screen came

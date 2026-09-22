@@ -33,10 +33,14 @@
     /* ----- Text -------------------------------------------------------- */
     --text: #0b0b0f;
     --text-secondary: #5b5b66;
-    --text-tertiary: #8e8e99;
+    --text-tertiary: #6e6e79;
 
-    /* ----- Lines and fills --------------------------------------------- */
+    /* ----- Lines and fills ---------------------------------------------
+       Two different jobs, two different requirements. --separator is
+       structural and may be a hairline; --border-control is the only thing
+       identifying a bordered control, so it clears 3:1. */
     --separator: #d8d8de;
+    --border-control: #8b8b96;
     --fill-quiet: #f2f2f7;
     --pressed-overlay: rgba(0, 0, 0, 0.06);
     --scrim: rgba(0, 0, 0, 0.30);
@@ -96,9 +100,10 @@
 
         --text: #f2f2f7;
         --text-secondary: #a1a1aa;
-        --text-tertiary: #7a7a85;
+        --text-tertiary: #92929d;
 
         --separator: #38383c;
+        --border-control: #74747f;
         --fill-quiet: #2c2c2e;
         --pressed-overlay: rgba(255, 255, 255, 0.10);
         --scrim: rgba(0, 0, 0, 0.50);
