@@ -3,7 +3,9 @@
 **Domain-specific UI design systems, packaged as skills for Claude, Gemini and GPT.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-b3121b.svg)](LICENSE)
-[![Packs](https://img.shields.io/badge/packs-1%20stable-b3121b.svg)](#the-packs)
+<!-- PACKS:START:badge-en -->
+[![Packs](https://img.shields.io/badge/3%20packs%2C%201%20stable-b3121b.svg)](#the-packs)
+<!-- PACKS:END:badge-en -->
 [![Build](https://img.shields.io/badge/dist-generated-b3121b.svg)](docs/ARCHITECTURE.md)
 
 🌐 **[English](README.md)** · [Tiếng Việt](docs/README.vi.md)
@@ -45,10 +47,10 @@ assistant opens the one reference its task needs.
 | Install | Always in context |
 |---|---|
 | Claude skill | ~200 tokens (the description, for routing) |
-| Lean `GEMINI.md` / `AGENTS.md` | ~1,800 tokens |
+| Lean `GEMINI.md` / `AGENTS.md` | ~2,150 tokens |
 | Single merged file (Gems, Custom GPT) | ~30,000 tokens |
 
-Roughly a 94% reduction against pasting the whole system into a context
+Roughly a 93% reduction against pasting the whole system into a context
 file, on every request, including the ones with nothing to do with UI.
 <!-- COST:END:en -->
 
@@ -102,17 +104,21 @@ never treat a passing build as the user saying they are done.
 |---|---|---|
 | [`consumer-web`](packs/consumer-web/) | **Consumer web** - Public-facing sites read by strangers: marketing pages, landing pages, product sites, documentation and editorial. | `beta` |
 | [`erp`](packs/erp/) | **ERP & back-office** - Dense, dark-chrome operational software: admin panels, operations consoles, back-office tools, internal dashboards. | `stable` |
+| [`mobile-app`](packs/mobile-app/) | **Mobile app** - Installed apps held in one hand: iOS and Android, native or cross-platform, used in short interrupted sessions. | `beta` |
 <!-- PACKS:END:en -->
 
-Planned, in rough order: SaaS dashboard, mobile app, e-commerce, desktop &
-system utilities. See [`docs/AUTHORING.md`](docs/AUTHORING.md) to add one.
+Planned, in rough order: AI product surfaces, fintech, e-commerce, SaaS
+dashboard. See [`docs/AUTHORING.md`](docs/AUTHORING.md) to add one, and
+[`docs/RESEARCH.md`](docs/RESEARCH.md) for where the evidence comes from.
 
-The two packs here disagree on purpose. `erp` optimises for the two-hundredth
-use by a trained operator; `consumer-web` optimises for the first five seconds
-for a stranger who owes you nothing. Nearly every concrete decision inverts —
-density, whether a card is the default container, whether a border or space
-does the separating. That is what a pack is: a thesis another domain would
-reject. If two packs agree, one of them is core.
+These disagree on purpose. `erp` optimises for the two-hundredth use by a
+trained operator; `consumer-web` optimises for the first five seconds for a
+stranger who owes you nothing; `mobile-app` optimises for one thumb on a screen
+that will be interrupted. Nearly every concrete decision inverts — density,
+whether a card is the default container, whether a border or space does the
+separating, whether the primary action belongs at the top of the screen or the
+bottom. That is what a pack is: a thesis another domain would reject. If two
+packs agree, one of them is core.
 
 ## Install
 

@@ -1,0 +1,173 @@
+/* ==========================================================================
+   The same tokens as tokens.json, as custom properties, for React Native Web,
+   Ionic, Capacitor and mobile web.
+
+   tokens.json is the source. This is a view of it. If the two disagree, this
+   one is wrong.
+
+   Load it first, before anything else, so every other file can be written in
+   these and never in a literal.
+   ========================================================================== */
+
+:root {
+    color-scheme: light dark;
+
+    /* ----- Accent ------------------------------------------------------
+       Two values, always. A brand colour picked against white disappears
+       against the dark theme's near-black, and dark mode is not optional on
+       a device people hold in bed. */
+    --accent: #0a58d0;
+    --accent-pressed: #0846a6;
+    --on-accent: #ffffff;
+
+    /* ----- Surfaces ---------------------------------------------------- */
+    --bg: #ffffff;
+    --bg-grouped: #f2f2f7;
+    --surface: #ffffff;
+    --surface-raised: #ffffff;
+
+    /* ----- Text -------------------------------------------------------- */
+    --text: #0b0b0f;
+    --text-secondary: #5b5b66;
+    --text-tertiary: #8e8e99;
+
+    /* ----- Lines and fills --------------------------------------------- */
+    --separator: #d8d8de;
+    --fill-quiet: #f2f2f7;
+    --pressed-overlay: rgba(0, 0, 0, 0.06);
+    --scrim: rgba(0, 0, 0, 0.30);
+
+    /* ----- Semantic ---------------------------------------------------- */
+    --success: #1a7f45;
+    --warning: #9a6600;
+    --danger: #c7212f;
+    --info: #5b5b66;
+
+    /* ----- Space — 4pt base. A value not here is the start of drift. ---- */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 12px;
+    --space-screen: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+
+    /* ----- Corners ----------------------------------------------------- */
+    --radius-control: 10px;
+    --radius-card: 14px;
+    --radius-sheet: 16px;
+    --radius-pill: 999px;
+
+    /* ----- Targets — core/09-input.md sets 24; this pack raises it. ----- */
+    --target-min: 44px;
+    --target-gap: 8px;
+    --row-min-height: 44px;
+    --primary-height: 50px;
+
+    /* ----- Chrome. Add the runtime inset to these; never hardcode it. --- */
+    --nav-bar-height: 44px;
+    --tab-bar-height: 49px;
+
+    /* ----- Motion — core's bands, at the fast end. ---------------------- */
+    --press-ms: 80ms;
+    --state-ms: 150ms;
+    --sheet-ms: 250ms;
+    --push-ms: 300ms;
+}
+
+/* Pure black is right for the dark base here, against the general rule in
+   core/01-tokens.md: an OLED panel switches those pixels off, which is
+   battery the user notices, and the halation that makes pure black wrong on a
+   desktop monitor is far weaker on a small panel at arm's length. The
+   surfaces ABOVE the base are not black - elevation is still luminance. */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --accent: #7aa7ff;
+        --accent-pressed: #a3c2ff;
+        --on-accent: #0b0b0f;
+
+        --bg: #000000;
+        --bg-grouped: #0d0d0f;
+        --surface: #1c1c1e;
+        --surface-raised: #2c2c2e;
+
+        --text: #f2f2f7;
+        --text-secondary: #a1a1aa;
+        --text-tertiary: #7a7a85;
+
+        --separator: #38383c;
+        --fill-quiet: #2c2c2e;
+        --pressed-overlay: rgba(255, 255, 255, 0.10);
+        --scrim: rgba(0, 0, 0, 0.50);
+
+        --success: #48d17e;
+        --warning: #f0b429;
+        --danger: #ff6b6b;
+        --info: #a1a1aa;
+    }
+}
+
+/* Safe areas. The screen is not the rectangle you were given, and the insets
+   are runtime values that are zero on some devices. A bar with a hardcoded
+   bottom padding sits under the home indicator on one device and floats above
+   nothing on another - and a primary action under the home indicator has
+   every tap intercepted by the system. */
+:root {
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+}
+
+.screen {
+    padding-inline: max(var(--space-screen), var(--safe-left), var(--safe-right));
+}
+
+.tab-bar {
+    /* Height PLUS the inset, as padding. Not a margin, or the bar's own
+       background stops reaching the bottom of the screen. */
+    height: calc(var(--tab-bar-height) + var(--safe-bottom));
+    padding-bottom: var(--safe-bottom);
+}
+
+.pinned-action {
+    /* A primary action pinned above the keyboard when it is up, and above the
+       home indicator always. */
+    padding-bottom: max(var(--space-screen), var(--safe-bottom));
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 17px;
+    line-height: 1.4;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
+    /* The page does not bounce or zoom; the content inside it scrolls. */
+    overscroll-behavior-y: contain;
+    -webkit-text-size-adjust: 100%;
+}
+
+/* A row grows. It never has a fixed height - that is the Dynamic Type failure
+   that clips at the second scale step. */
+.row {
+    min-height: var(--row-min-height);
+    padding: var(--space-md) var(--space-screen);
+}
+
+/* There is no hover on this device. Pressed is the state that matters, and it
+   has to appear within about 100ms or the row gets tapped again. */
+.pressable:active {
+    background: var(--pressed-overlay);
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+}

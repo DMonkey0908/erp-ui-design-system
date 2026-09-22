@@ -1,0 +1,661 @@
+/* ==========================================================================
+   Deliveries — screen styles.
+   Loads after tokens.css. Not one literal colour or size in this file.
+   ========================================================================== */
+
+/* ── Phone frame, for looking at this on a desktop ─────────────────────── */
+/* Not part of the pack. It exists so the screen can be judged at phone width
+   in a desktop browser, and so a non-zero bottom inset can be simulated. */
+.viewport {
+    position: relative;
+    width: min(100vw, 400px);
+    height: min(100vh, 860px);
+    margin: 0 auto;
+    overflow: hidden;
+    background: var(--bg);
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    isolation: isolate;
+}
+
+@media (min-width: 440px) and (min-height: 880px) {
+    body {
+        background: var(--fill-quiet);
+        padding: 20px 0;
+    }
+
+    .viewport {
+        border-radius: 32px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+        /* Simulate a device with a home indicator. */
+        --safe-bottom: 24px;
+        --safe-top: 12px;
+    }
+}
+
+/* ── Navigation bar ────────────────────────────────────────────────────── */
+
+.nav-bar {
+    padding-top: var(--safe-top);
+    background: var(--bg);
+    border-bottom: 1px solid var(--separator);
+}
+
+.nav-bar-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    min-height: var(--nav-bar-height);
+    padding-inline: var(--space-screen);
+}
+
+.nav-title-small {
+    font-size: 17px;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* The large title: identity on arrival, space back to content on scroll. */
+.nav-large-title {
+    margin: 0;
+    padding: var(--space-xs) var(--space-screen) var(--space-md);
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+/* One contextual action, never the primary one. */
+.nav-action {
+    margin-inline-start: auto;
+    min-width: var(--target-min);
+    min-height: var(--target-min);
+    display: grid;
+    place-items: center;
+    border: 0;
+    background: none;
+    color: var(--accent);
+    font: inherit;
+    font-size: 17px;
+    cursor: pointer;
+    border-radius: var(--radius-control);
+}
+
+.nav-action:active {
+    background: var(--pressed-overlay);
+}
+
+.nav-action:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+}
+
+/* ── Offline banner ────────────────────────────────────────────────────── */
+/* One indicator, not one per row. States what is queued. */
+
+.offline-banner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-screen);
+    background: var(--fill-quiet);
+    border-bottom: 1px solid var(--separator);
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.offline-banner[hidden] {
+    display: none;
+}
+
+.offline-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-pill);
+    background: var(--warning);
+    flex-shrink: 0;
+}
+
+/* ── Scrolling content ─────────────────────────────────────────────────── */
+
+.content {
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+}
+
+.section-header {
+    padding: var(--space-lg) var(--space-screen) var(--space-sm);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.section-footer {
+    padding: var(--space-sm) var(--space-screen) var(--space-lg);
+    font-size: 13px;
+    color: var(--text-tertiary);
+}
+
+/* ── The list row ──────────────────────────────────────────────────────── */
+/* min-height and grow. A fixed height clips at the second text-scale step. */
+
+.list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.row {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-md);
+    min-height: var(--row-min-height);
+    padding: var(--space-md) var(--space-screen);
+    position: relative;
+}
+
+/* Inset divider: aligned under the text, so the leading column reads as one. */
+.row+.row::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: calc(var(--space-screen) + 36px + var(--space-md));
+    inset-inline-end: 0;
+    top: 0;
+    height: 1px;
+    background: var(--separator);
+}
+
+.row-stop {
+    width: 36px;
+    min-height: 36px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border-radius: var(--radius-control);
+    background: var(--fill-quiet);
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.row-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.row-headline {
+    font-size: 17px;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.row-subhead {
+    margin-top: 2px;
+    font-size: 15px;
+    color: var(--text-secondary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.row-meta {
+    margin-top: var(--space-xs);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+}
+
+.row-time {
+    font-size: 13px;
+    color: var(--text-tertiary);
+    font-variant-numeric: tabular-nums;
+}
+
+/* Status: a word and a shape, never a colour on its own. */
+.status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.status::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-pill);
+    background: currentColor;
+    flex-shrink: 0;
+}
+
+.status[data-state='done'] {
+    color: var(--success);
+}
+
+.status[data-state='next'] {
+    color: var(--accent);
+}
+
+.status[data-state='late'] {
+    color: var(--danger);
+}
+
+/* Queued is the only hollow marker: it survives greyscale and a colour-blind
+   reader without depending on the tint. */
+.status[data-state='queued'] {
+    color: var(--text-secondary);
+}
+
+.status[data-state='queued']::before {
+    background: transparent;
+    box-shadow: inset 0 0 0 2px currentColor;
+}
+
+/* The row action. Visible for every row, always - a swipe is a shortcut for
+   people who already know it, never the only route. */
+.row-action {
+    align-self: center;
+    min-height: var(--target-min);
+    min-width: var(--target-min);
+    padding-inline: var(--space-md);
+    border: 1px solid var(--separator);
+    border-radius: var(--radius-control);
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.row-action:active {
+    background: var(--pressed-overlay);
+}
+
+.row-action:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+}
+
+.row-action:disabled {
+    opacity: 0.5;
+}
+
+/* ── Skeleton rows ─────────────────────────────────────────────────────── */
+
+.skeleton-line {
+    display: block;
+    height: 12px;
+    border-radius: var(--space-xs);
+    background: var(--fill-quiet);
+    animation: pulse 1.2s ease-in-out infinite;
+}
+
+.skeleton-line.is-short {
+    width: 45%;
+    margin-top: var(--space-sm);
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* The guard kills the animation and does not supply an end state. */
+@media (prefers-reduced-motion: reduce) {
+    .skeleton-line {
+        animation: none;
+        opacity: 1;
+    }
+}
+
+/* ── Empty state: carries its own action ───────────────────────────────── */
+
+.empty {
+    padding: var(--space-xl) var(--space-screen);
+    text-align: center;
+}
+
+.empty-title {
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.empty-body {
+    margin: var(--space-sm) 0 var(--space-lg);
+    font-size: 15px;
+    color: var(--text-secondary);
+}
+
+/* ── Buttons ───────────────────────────────────────────────────────────── */
+
+.btn-primary {
+    display: block;
+    width: 100%;
+    min-height: var(--primary-height);
+    border: 0;
+    border-radius: var(--radius-control);
+    background: var(--accent);
+    color: var(--on-accent);
+    font: inherit;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-primary:active:not(:disabled) {
+    background: var(--accent-pressed);
+}
+
+.btn-primary:disabled {
+    opacity: 0.5;
+}
+
+.btn-primary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.btn-text {
+    min-height: var(--target-min);
+    padding-inline: var(--space-md);
+    border: 0;
+    background: none;
+    color: var(--accent);
+    font: inherit;
+    font-size: 17px;
+    cursor: pointer;
+    border-radius: var(--radius-control);
+}
+
+.btn-text:active {
+    background: var(--pressed-overlay);
+}
+
+.btn-text:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+}
+
+/* ── Pinned primary action ─────────────────────────────────────────────── */
+/* In the reachable arc, above the home indicator, and it keeps its width
+   while busy so the thumb already travelling does not miss. */
+
+.pinned {
+    padding: var(--space-md) var(--space-screen);
+    padding-bottom: max(var(--space-md), var(--safe-bottom));
+    background: var(--bg);
+    border-top: 1px solid var(--separator);
+}
+
+/* ── Tab bar ───────────────────────────────────────────────────────────── */
+
+.tab-bar {
+    display: flex;
+    background: var(--bg);
+    border-top: 1px solid var(--separator);
+    /* Height PLUS the inset, as padding - so the bar's own background still
+       reaches the bottom edge of the screen. */
+    padding-bottom: var(--safe-bottom);
+}
+
+.tab {
+    flex: 1;
+    min-height: var(--tab-bar-height);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    position: relative;
+    border: 0;
+    background: none;
+    color: var(--text-secondary);
+    font: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.tab:active {
+    background: var(--pressed-overlay);
+}
+
+.tab:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+}
+
+/* Selected is not colour alone: the icon fills as well as tints. */
+.tab[aria-current='page'] {
+    color: var(--accent);
+}
+
+.tab svg {
+    width: 24px;
+    height: 24px;
+}
+
+.tab[aria-current='page'] svg {
+    fill: currentColor;
+}
+
+/* min-height, not height: it carries a digit, and a fixed box clips it at
+   the second text-scale step. */
+.tab-badge {
+    position: absolute;
+    top: 6px;
+    inset-inline-start: 58%;
+    min-width: 16px;
+    min-height: 16px;
+    padding: 1px 4px;
+    border-radius: var(--radius-pill);
+    background: var(--danger);
+    color: var(--on-accent);
+    font-size: 11px;
+    line-height: 1.2;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ── Sheet ─────────────────────────────────────────────────────────────── */
+/* Rises from the edge the thumb is at. Confirm at the bottom, inside it. */
+
+.scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: var(--scrim);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--sheet-ms) ease;
+}
+
+.scrim.is-open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.sheet {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 3;
+    max-height: 88%;
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border-radius: var(--radius-sheet) var(--radius-sheet) 0 0;
+    transform: translateY(100%);
+    transition: transform var(--sheet-ms) cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.sheet.is-open {
+    transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .sheet.is-open,
+    .scrim.is-open {
+        transform: none;
+        opacity: 1;
+    }
+
+    .sheet:not(.is-open) {
+        transform: translateY(100%);
+    }
+}
+
+.grabber {
+    width: 36px;
+    height: 5px;
+    margin: var(--space-sm) auto var(--space-xs);
+    border-radius: var(--radius-pill);
+    background: var(--separator);
+    flex-shrink: 0;
+}
+
+.sheet-head {
+    display: flex;
+    align-items: center;
+    padding: var(--space-xs) var(--space-sm) var(--space-sm);
+    gap: var(--space-sm);
+}
+
+.sheet-title {
+    flex: 1;
+    margin: 0;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 600;
+}
+
+/* Cancel exists as a control, because drag-to-dismiss is a shortcut. */
+.sheet-body {
+    overflow-y: auto;
+    padding: 0 var(--space-screen) var(--space-md);
+}
+
+/* ── Form ──────────────────────────────────────────────────────────────── */
+/* Label above the field: a side-by-side label eats the width the value needs
+   and breaks at the second text-scale step. */
+
+.field {
+    display: block;
+    margin-bottom: var(--space-md);
+}
+
+.field-label {
+    display: block;
+    margin-bottom: var(--space-xs);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.field input,
+.field select,
+.field textarea {
+    width: 100%;
+    box-sizing: border-box;
+    min-height: var(--target-min);
+    padding: var(--space-md);
+    border: 1px solid var(--separator);
+    border-radius: var(--radius-control);
+    background: var(--bg);
+    color: var(--text);
+    font: inherit;
+    font-size: 17px;
+}
+
+.field textarea {
+    min-height: calc(var(--target-min) * 2);
+    resize: vertical;
+}
+
+.field :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+    border-color: var(--accent);
+}
+
+.field-error {
+    margin-top: var(--space-xs);
+    font-size: 13px;
+    color: var(--danger);
+}
+
+.field-error[hidden] {
+    display: none;
+}
+
+/* ── Snackbar: something already done, carrying an undo ────────────────── */
+
+.snackbar {
+    position: absolute;
+    inset-inline: var(--space-screen);
+    z-index: 4;
+    bottom: calc(var(--tab-bar-height) + var(--safe-bottom) + var(--space-md));
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    border-radius: var(--radius-control);
+    background: var(--text);
+    color: var(--bg);
+    font-size: 15px;
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+    transition: opacity var(--state-ms) ease, transform var(--state-ms) ease;
+}
+
+.snackbar.is-open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .snackbar.is-open {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.snackbar-undo {
+    margin-inline-start: auto;
+    min-height: var(--target-min);
+    padding-inline: var(--space-sm);
+    border: 0;
+    border-radius: var(--radius-control);
+    background: none;
+    color: var(--accent);
+    font: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}

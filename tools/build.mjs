@@ -840,6 +840,13 @@ function buildIndex(packs) {
   emit(join(DIST, 'index.json'), JSON.stringify(index, null, 2) + NL);
 }
 
+/** The shields.io pack-count badge, so the number is measured rather than typed. */
+function badge(packs, anchor) {
+  const stable = packs.filter(({ meta }) => meta.status === 'stable').length;
+  const label = `${packs.length} packs, ${stable} stable`.replace(/ /g, '%20').replace(/,/g, '%2C');
+  return `[![Packs](https://img.shields.io/badge/${label}-b3121b.svg)](${anchor})`;
+}
+
 /**
  * Replace the region between `<!-- PACKS:START:<kind> -->` and its END marker.
  * Files without markers are left alone, so adding a doc does not mean touching
@@ -879,6 +886,10 @@ function injectPackTables(packs) {
       '',
       `Keywords: ${(meta.keywords || []).map((k) => `\`${k}\``).join(', ')}`,
     ].filter((l) => l !== null).join(NL)).join(NL + NL),
+
+    // The count badge, which went stale the moment a third pack landed.
+    'badge-en': () => badge(packs, '#the-packs'),
+    'badge-vi': () => badge(packs, '#các-pack'),
 
     llms: () => packs.map(({ meta }) =>
       `- [${meta.id}](${RAW}dist/gemini/${meta.id}.GEMINI.md): ${meta.name} (${meta.status}). ${meta.summary} NOT for ${(meta.notFor || [])[0] ?? 'n/a'}.`
