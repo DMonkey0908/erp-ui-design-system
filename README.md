@@ -34,6 +34,22 @@ pack, wire it to fire on its own, and report what changed and how to undo it.
 There is a machine-readable catalogue at [`dist/index.json`](dist/index.json)
 and an [`llms.txt`](llms.txt) index at the root.
 
+### Small in context, full on disk
+
+A repository install is a **lean layout**: a short entry file - `GEMINI.md`,
+`AGENTS.md` or a Claude `SKILL.md` - with the references beside it. The entry
+holds the activation block, the thesis, the hard rules and an index; the
+assistant opens the one reference its task needs.
+
+| Install | Always in context |
+|---|---|
+| Claude skill | ~200 tokens (the description, for routing) |
+| Lean `GEMINI.md` / `AGENTS.md` | ~1,550 tokens |
+| Single merged file (Gems, Custom GPT) | ~21,000 tokens |
+
+Roughly a 93% reduction against pasting the whole system into a context file,
+on every request, including the ones with nothing to do with UI.
+
 ### It fires without being asked
 
 Installing is meant to be the last time anyone thinks about it. Ask for a
@@ -69,12 +85,13 @@ Worth knowing what it saves before turning it on. Idle cost per request:
 |---|---|---|
 | Claude skill | ~200 tokens (only the `description`, for routing) | No — a rounding error, and you lose automatic activation |
 | Cursor / Copilot rule | 0 until a matching file is opened | No — already conditional |
-| `GEMINI.md` / `AGENTS.md` | **~21,000 tokens, every request** | **Yes** — this is the one that matters |
+| Lean `GEMINI.md` / `AGENTS.md` | ~1,550 tokens | Rarely |
+| Merged single file | ~21,000 tokens, every request | Yes — but prefer the lean layout instead |
 
-So it is a real optimisation on a merged build and close to pointless on a
-skill. [`INSTALL.md`](INSTALL.md) step 6 has the manifest format and the rules
-for removing safely — chiefly: never remove what you did not install, and never
-treat a passing build as the user saying they are done.
+Mostly this is now moot, because the lean layout removed the cost it was
+solving. [`INSTALL.md`](INSTALL.md) step 6 has the manifest format and the
+rules for removing safely — chiefly: never remove what you did not install, and
+never treat a passing build as the user saying they are done.
 
 ## The packs
 

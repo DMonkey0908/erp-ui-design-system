@@ -99,19 +99,31 @@ Keywords: `erp`, `admin panel`, `back-office`, `operations console`, `internal t
 Match the **consuming** assistant, which is not always the one running now. If a
 human will use this with a different tool than you, install that tool's format.
 
-| Assistant | Install | Notes |
+| Assistant | Install | Always in context |
 |---|---|---|
-| Claude Code, Claude Desktop | `dist/claude/<skill-name>/` → `.claude/skills/<skill-name>/` | Richest build. Loads a reference only when needed. |
-| Gemini CLI / Code Assist | `dist/gemini/<id>.GEMINI.md` → `GEMINI.md` | One merged file, always in context. |
-| Gemini Gem | same file | Paste into the Gem's Instructions field. |
-| Codex, Cursor, any `AGENTS.md` tool | `dist/gpt/<id>.AGENTS.md` → `AGENTS.md` | Merge under a `## UI` heading if one exists. |
-| Custom GPT | `dist/gpt/<id>.custom-gpt-instructions.md` | Fenced block → Instructions; `AGENTS.md` → Knowledge. |
+| Claude Code, Claude Desktop | `dist/claude/<skill-name>/` -> `.claude/skills/<skill-name>/` | ~200 tokens (the description only) |
+| Gemini CLI / Code Assist | `dist/gemini/<id>-lean/` -> repo root | **~1,550 tokens** |
+| Codex, Cursor, any `AGENTS.md` tool | `dist/gpt/<id>-lean/` -> repo root | **~1,550 tokens** |
+| Gemini Gem | `dist/gemini/<id>.GEMINI.md` | whole file - paste-in only |
+| Custom GPT | `dist/gpt/<id>.custom-gpt-instructions.md` | Fenced block -> Instructions; `<id>.AGENTS.md` -> Knowledge |
 
-**A caution for the merged builds.** `GEMINI.md` and `AGENTS.md` sit in context
-on *every* request and currently run around 80KB. That is a real cost. If the
-project's assistant supports on-demand loading, prefer that format. If you
-install a merged file into a repo that already has one, **merge, do not
-overwrite** — you will silently delete project instructions that had nothing to
+### Use the lean layout in a repository
+
+`<id>-lean/` is a small entry file - `GEMINI.md` or `AGENTS.md` - with the
+references beside it under `ui/`. The entry carries what must always be true:
+the activation block, the thesis, the hard rules, and an index. The assistant
+opens the one reference its task needs, the way the Claude skill already does.
+
+That is **~1,550 tokens instead of ~21,000**, on every request, including every
+request with nothing to do with UI.
+
+The single merged `<id>.GEMINI.md` and `<id>.AGENTS.md` still exist, because a
+Gem's Instructions field and a Custom GPT take text and not a directory. Use
+them only where you cannot put files on disk.
+
+**If a repo already has a `GEMINI.md` or `AGENTS.md`, merge - never overwrite.**
+Copy the `ui/` directory, then append the entry file's content under a `## UI`
+heading. Overwriting silently deletes project instructions that had nothing to
 do with UI.
 
 ## Step 4 — Fetch and install
@@ -124,9 +136,16 @@ says so — a global install applies these opinions to every project they open.
 ```bash
 git clone --depth 1 --filter=blob:none --sparse \
   https://github.com/DMonkey0908/ui-design-ecosystem.git /tmp/uids
-cd /tmp/uids && git sparse-checkout set dist/claude/erp-ui-design
+cd /tmp/uids
+git sparse-checkout set dist/claude/erp-ui-design dist/gpt/erp-lean
+
+# Claude
 mkdir -p "$PROJECT/.claude/skills"
 cp -r dist/claude/erp-ui-design "$PROJECT/.claude/skills/"
+
+# Codex / Cursor / any AGENTS.md tool - lean layout
+cp -r dist/gpt/erp-lean/ui "$PROJECT/"
+cp dist/gpt/erp-lean/AGENTS.md "$PROJECT/AGENTS.md"   # or append, if one exists
 ```
 
 ### Option B — fetch single files (no git)
@@ -134,17 +153,19 @@ cp -r dist/claude/erp-ui-design "$PROJECT/.claude/skills/"
 ```bash
 BASE=https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main
 
-# Gemini
-curl -fsSL "$BASE/dist/gemini/erp.GEMINI.md" -o GEMINI.md
+# Lean entry file (preferred). Fetch ui/ alongside it - see below.
+curl -fsSL "$BASE/dist/gemini/erp-lean/GEMINI.md" -o GEMINI.md
+curl -fsSL "$BASE/dist/gpt/erp-lean/AGENTS.md"   -o AGENTS.md
 
-# Codex / Cursor
-curl -fsSL "$BASE/dist/gpt/erp.AGENTS.md" -o AGENTS.md
+# Single merged file - only where you cannot put files on disk
+curl -fsSL "$BASE/dist/gemini/erp.GEMINI.md" -o GEMINI.md
 ```
 
-For a Claude skill, read `dist/index.json` for the skill name, then fetch
-`SKILL.md`, every file listed under `core` and `pack`, and the assets. Use
-`-f` (or your client's equivalent) so a 404 fails loudly — a skill missing half
-its references fails quietly and confusingly later.
+For a Claude skill or a lean layout, read `dist/index.json` for the file list,
+then fetch the entry file plus every file under `core` and `pack` and the
+assets. Use `-f` (or your client's equivalent) so a 404 fails loudly - an
+install missing half its references fails quietly and confusingly later, at the
+moment the assistant tries to open a file that is not there.
 
 ### Option C — degit
 

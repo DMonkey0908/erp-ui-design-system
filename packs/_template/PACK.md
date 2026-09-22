@@ -16,6 +16,10 @@ the same five screens for eight hours"; yours should be equally concrete.
 
 ## The domain thesis
 
+<!-- Keep this heading verbatim. The lean build extracts the section under it
+     as the thesis for the always-in-context entry file, and the build fails if
+     it cannot find it. -->
+
 > One sentence, in bold, that a reader could apply without reading further.
 
 Then two or three paragraphs defending it. The thesis must be **falsifiable** —

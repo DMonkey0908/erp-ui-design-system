@@ -78,27 +78,30 @@ bash block is not a heading, and demoting it corrupts the snippet.
 These are deliberately unresolved. They are the first things worth arguing
 about.
 
-### 1. The merged files are large
+### 1. Merged file size - RESOLVED
 
-Adding core pushed `erp.GEMINI.md` from ~20KB to ~80KB, roughly 20k tokens, and
-a `GEMINI.md` or `AGENTS.md` is in context on **every** request. Claude's build
-is unaffected, because it only loads the reference it needs.
+Adding core pushed the merged `GEMINI.md` and `AGENTS.md` to ~21,000 tokens,
+and those files sit in context on **every** request, including every request
+with nothing to do with UI. Claude's build was unaffected, because it only
+loads the reference it needs.
 
-That is a real regression for Gemini and Codex users, and it gets worse as core
-grows. Options:
+Resolved by giving the merged targets the same treatment: a **lean layout**,
+`dist/<kind>/<id>-lean/`, with a small entry file beside the references on
+disk. The entry carries only what must always be true - the activation block,
+the domain thesis, the hard rules, and an index of what to open. The assistant
+opens the one reference its task needs.
 
-- **Accept it.** Modern context windows absorb it; the cost is tokens, not
-  correctness.
-- **Generate a condensed merge.** Mark sections as essential vs. elaboration in
-  the source, and merge only the essential ones. Costs the reasoning, which is
-  the part that makes these rules stick.
-- **Ship the rules and link the reasoning.** A compact merged file that points
-  at the repo for the "why". Works only for readers who will follow a link, and
-  an assistant will not.
-- **Per-pack choice** via a `mergedProfile` field, so a dense pack can be terse
-  and a subtle one can be complete.
+**~1,550 tokens instead of ~21,000.** The merged single file stays, because a
+Gem's Instructions field and a Custom GPT take text rather than a directory.
 
-No option is obviously right, which is why it is not decided.
+What this trades: an agent can answer from the index without opening anything.
+The entry file is written to make that feel like the shortcut it is, and the
+hard rules are in it so that even a lazy pass is not a wrong one. Whether that
+holds up is worth watching once someone uses it in anger.
+
+It also makes the `remove-after-task` lifecycle largely unnecessary. That
+policy existed because 21k tokens sat there between UI tasks; 1.5k does not
+justify tearing down an install and re-fetching it.
 
 ### 2. How packs relate to each other
 

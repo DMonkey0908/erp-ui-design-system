@@ -73,8 +73,11 @@ cp -r packs/_template packs/<your-id>
 ```
 
 1. **Fill in `pack.json`.** Leave `references` listing only what you will write.
-2. **Write `PACK.md`.** Thesis first. The template's comments are prompts —
-   delete a section rather than leaving it generic.
+2. **Write `PACK.md`.** Thesis first, under a heading spelled exactly
+   `## The domain thesis` - the lean build extracts that section for the
+   always-in-context entry file, and the build fails if it cannot find it. The
+   template's comments are prompts; delete a section rather than leaving it
+   generic.
 3. **Write `references/01-surfaces.md`.** Concrete values. This is the file that
    makes the pack usable rather than aspirational.
 4. **Add the domain's own references.** Split by what a reader needs at one

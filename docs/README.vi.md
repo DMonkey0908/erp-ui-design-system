@@ -33,6 +33,22 @@ tự kích hoạt, rồi báo lại đã đổi gì và gỡ ra bằng cách nà
 được ở [`dist/index.json`](../dist/index.json) và một [`llms.txt`](../llms.txt)
 ở gốc repo.
 
+### Nhẹ trong context, đầy đủ trên đĩa
+
+Cài vào một repo là dùng **bản lean**: một file entry ngắn — `GEMINI.md`,
+`AGENTS.md`, hay `SKILL.md` của Claude — với bộ reference nằm cạnh. File entry
+giữ khối kích hoạt, luận điểm, luật cứng và mục lục; trợ lý tự mở đúng file
+reference mà tác vụ cần.
+
+| Bản cài | Thường trực trong context |
+|---|---|
+| Claude skill | ~200 token (chỉ `description`, để định tuyến) |
+| Lean `GEMINI.md` / `AGENTS.md` | ~1.550 token |
+| Bản merged một file (Gems, Custom GPT) | ~21.000 token |
+
+Giảm khoảng 93% so với dán cả hệ thống vào file context, tính trên **mọi**
+request — kể cả những request chẳng liên quan gì tới UI.
+
 ### Nó tự chạy, không cần gọi tên
 
 Cài xong là lần cuối phải nghĩ tới nó. Yêu cầu dựng một màn hình, hay bảo "làm
@@ -68,12 +84,13 @@ Nên biết nó tiết kiệm được gì trước khi bật. Chi phí thườn
 |---|---|---|
 | Claude skill | ~200 token (chỉ `description`, dùng để định tuyến) | Không — không đáng kể, mà mất luôn tự kích hoạt |
 | Rule của Cursor / Copilot | 0 cho tới khi mở file khớp glob | Không — vốn đã có điều kiện |
-| `GEMINI.md` / `AGENTS.md` | **~21.000 token, mọi request** | **Có** — đây mới là chỗ đáng |
+| Lean `GEMINI.md` / `AGENTS.md` | ~1.550 token | Hiếm khi |
+| Bản merged một file | ~21.000 token, mọi request | Có — nhưng nên dùng bản lean thay thế |
 
-Tức là với bản merged thì đây là tối ưu thật, còn với skill thì gần như vô
-nghĩa. [`INSTALL.md`](../INSTALL.md) bước 6 có định dạng manifest và luật gỡ an
-toàn — quan trọng nhất: không gỡ thứ mình không cài, và không coi build xanh là
-người dùng đã nói xong.
+Phần lớn giờ đã thành không cần thiết, vì bản lean đã xử lý đúng cái chi phí mà
+quy tắc này sinh ra để giải quyết. [`INSTALL.md`](../INSTALL.md) bước 6 có định
+dạng manifest và luật gỡ an toàn — quan trọng nhất: không gỡ thứ mình không
+cài, và không coi build xanh là người dùng đã nói xong.
 
 ## Các pack
 

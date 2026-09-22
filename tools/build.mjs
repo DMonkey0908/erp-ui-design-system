@@ -14,9 +14,17 @@
  *
  * Outputs, per pack:
  *   dist/claude/<skill>/SKILL.md + core/ + pack/ + assets/   progressive disclosure
- *   dist/gemini/<id>.GEMINI.md                               one merged file
- *   dist/gpt/<id>.AGENTS.md                                  one merged file
+ *   dist/gemini/<id>-lean/GEMINI.md + ui/                    small entry, refs on disk
+ *   dist/gpt/<id>-lean/AGENTS.md + ui/                       same, for AGENTS.md tools
+ *   dist/gemini/<id>.GEMINI.md                               one merged file (paste-in)
+ *   dist/gpt/<id>.AGENTS.md                                  one merged file (paste-in)
  *   dist/gpt/<id>.custom-gpt-instructions.md                 copied, if present
+ *   dist/cursor/<id>.mdc, dist/copilot/...                   glob-driven rules
+ *   dist/snippets/<id>.{project-rules,lifecycle}.md          append to a rules file
+ *
+ * Lean is the default for a repo; merged exists because a Gem's Instructions
+ * field and a Custom GPT take text, not a directory. The difference is ~1.5k
+ * tokens against ~21k, on every request.
  *
  * And once, for the catalogue:
  *   dist/index.json                                          machine-readable pack list
@@ -51,6 +59,31 @@ const written = [];
 const stale = [];
 
 const NL = String.fromCharCode(10);
+
+// Files whose contents are, or produce, an interface. Used by the glob-driven
+// rule formats, which are the only ones that fire deterministically.
+const GLOBS = [
+  '**/*.css', '**/*.scss', '**/*.less',
+  '**/*.jsx', '**/*.tsx', '**/*.vue', '**/*.svelte',
+  '**/*.html', '**/*.astro',
+  '**/tailwind.config.*', '**/theme.*', '**/tokens.*',
+];
+
+// The rules that go everywhere, including into files small enough that nothing
+// else fits. Each one is cheap to obey and expensive to retrofit, and each has
+// shipped from an assistant that had the full system available and did not open
+// it.
+const HARD_RULES = [
+  'Use the project token file. Never write a raw colour outside it; if there is no token file, create one first.',
+  'An accent needs one value per surface. A colour chosen to read on a light surface disappears on a dark one.',
+  '`font-variant-numeric: tabular-nums` on every figure - tables, tiles, axis labels, tooltips.',
+  'Never remove a focus outline without replacing it. Always `:focus-visible`, never `:focus`.',
+  'Colour is never the only signal for a state. Pair it with an icon, a label or a position.',
+  '`min-width: 0` on grid and flex children that can hold wide content; `minmax(0, 1fr)` on tracks.',
+  'Honour `prefers-reduced-motion`, and state the end value explicitly - `opacity: revert` yields 1, not your value.',
+  'Start a value axis at zero whenever magnitude is compared.',
+  'Say which rules shaped the result when you are done.',
+];
 
 const read = (p) => readFileSync(p, 'utf8');
 const rel = (p) => relative(ROOT, p).split('\\').join('/');
@@ -363,6 +396,105 @@ function buildCustomGpt(pack) {
 }
 
 /**
+ * The lean layout: a small always-loaded entry file next to the references on
+ * disk, for tools that read a single context file but can also open files.
+ *
+ * The merged build puts ~21k tokens in context on every request, including
+ * every request that has nothing to do with UI. This gets that down to roughly
+ * 800 by keeping only what must always be true - the activation block, the
+ * domain thesis in brief, the hard rules - and having the agent open the one
+ * reference its task needs, the way the Claude skill already does.
+ *
+ * The merged single file stays, because a Gem's Instructions field and a Custom
+ * GPT take text, not a directory.
+ *
+ * The risk this trades for is real: an agent can answer from the index without
+ * opening anything. The entry file is written to make that feel like the
+ * shortcut it is, and the hard rules are there so even a lazy pass is not a
+ * wrong one.
+ */
+function buildLean(pack, core, kind) {
+  const { meta, dir } = pack;
+  const entry = kind === 'gemini' ? 'GEMINI.md' : 'AGENTS.md';
+  const root = join(DIST, kind, `${meta.id}-lean`);
+
+  const coreRows = core.map((c) => `| \`ui/core/${c.file}\` | ${title(read(c.path), c.id)} |`).join(NL);
+  const packRows = (meta.references || []).map((r) => `| \`ui/pack/${r.file}\` | ${r.title} |`).join(NL);
+  const assetRows = (meta.assets || []).map((a) => `| \`ui/assets/${a.file}\` | ${a.note} |`).join(NL);
+  const lastRef = (meta.references || []).slice(-1)[0]?.file ?? '05-checklist.md';
+
+  // The thesis only - not the whole PACK.md, which is what this build exists to
+  // stop loading on every request.
+  //
+  // Extraction is by heading, so a pack that names the section differently would
+  // otherwise silently ship a lean build with no thesis in it - an index with no
+  // statement of what it is indexing. Fail instead.
+  const thesis = (read(join(dir, 'PACK.md')).match(/## The domain thesis\n+([\s\S]*?)\n## /) || [, ''])[1].trim();
+  if (!thesis && kind === 'gemini') {
+    problems.push(`${meta.id}: PACK.md needs a "## The domain thesis" section followed by another "## " heading - the lean build extracts it`);
+  }
+
+  const body = [
+    `# ${meta.name} - UI design system`,
+    '',
+    `This project uses the \`${meta.id}\` UI design system. The rules are on disk`,
+    `next to this file, under \`ui/\`. **This file is the index, not the system.**`,
+    '',
+    activationBlock(),
+    '',
+    '---',
+    '',
+    '## Read the file before you write the code',
+    '',
+    'Opening one reference costs a single tool call. Working from a',
+    'half-remembered spacing scale produces something *almost* right, which is',
+    'harder for a reviewer to catch than something obviously wrong - and it is',
+    'what this system exists to prevent. Do not answer from this index.',
+    '',
+    '### Core - true for any interface',
+    '',
+    '| File | Holds |',
+    '|---|---|',
+    coreRows,
+    '',
+    '### Pack - this domain',
+    '',
+    '| File | Holds |',
+    '|---|---|',
+    packRows,
+    '',
+    assetRows ? ['### Assets', '', '| File | What it is |', '|---|---|', assetRows, ''].join(NL) : '',
+    `Finish by running \`ui/core/08-review.md\` and \`ui/pack/${lastRef}\`.`,
+    '',
+    '---',
+    '',
+    '## The thesis, so you know what you are applying',
+    '',
+    thesis,
+    '',
+    '## Hard rules - apply even before you open anything',
+    '',
+    HARD_RULES.map((r) => `- ${r}`).join(NL),
+    '',
+    '## Not for',
+    '',
+    (meta.notFor || []).map((n) => `- ${n}`).join(NL),
+    '',
+    `<!-- Generated by tools/build.mjs from core/ and packs/${meta.id}/. Do not edit. -->`,
+    '',
+  ].join(NL);
+
+  emit(join(root, entry), body);
+  for (const c of core) emit(join(root, 'ui', 'core', c.file), read(c.path));
+  for (const r of meta.references || []) {
+    emit(join(root, 'ui', 'pack', r.file), read(join(dir, 'references', r.file)));
+  }
+  for (const a of meta.assets || []) {
+    emit(join(root, 'ui', 'assets', a.file), read(join(dir, 'assets', a.file)));
+  }
+}
+
+/**
  * Glue files for tools that fire a rule automatically from a file glob.
  *
  * These are the only targets where activation is deterministic rather than a
@@ -378,27 +510,8 @@ function buildCustomGpt(pack) {
 function buildGlue(pack) {
   const { meta } = pack;
 
-  // Files whose contents are, or produce, an interface.
-  const globs = [
-    '**/*.css', '**/*.scss', '**/*.less',
-    '**/*.jsx', '**/*.tsx', '**/*.vue', '**/*.svelte',
-    '**/*.html', '**/*.astro',
-    '**/tailwind.config.*', '**/theme.*', '**/tokens.*',
-  ];
-
-  const hardRules = [
-    'Use the project token file. Never write a raw colour outside it; if there is no token file, create one first.',
-    'An accent needs one value per surface. A colour chosen to read on a light surface disappears on a dark one.',
-    '`font-variant-numeric: tabular-nums` on every figure - tables, tiles, axis labels, tooltips.',
-    'Never remove a focus outline without replacing it. Always `:focus-visible`, never `:focus`.',
-    'Colour is never the only signal for a state. Pair it with an icon, a label or a position.',
-    '`min-width: 0` on grid and flex children that can hold wide content; `minmax(0, 1fr)` on tracks.',
-    'Honour `prefers-reduced-motion`, and state the end value explicitly - `opacity: revert` yields 1, not your value.',
-    'Start a value axis at zero whenever magnitude is compared.',
-    'Say which rules shaped the result when you are done.',
-  ];
-
-  const rulesMd = hardRules.map((r) => `- ${r}`).join(NL);
+  const globs = GLOBS;
+  const rulesMd = HARD_RULES.map((r) => `- ${r}`).join(NL);
   const full = `${RAW}dist/gpt/${meta.id}.AGENTS.md`;
 
   // Cursor: .mdc front matter drives attachment. `globs` attaches the rule when
@@ -555,8 +668,10 @@ function buildIndex(packs) {
       skillName: meta.skill.name,
       install: {
         claude: `dist/claude/${meta.skill.name}/`,
-        gemini: `dist/gemini/${meta.id}.GEMINI.md`,
-        gpt: `dist/gpt/${meta.id}.AGENTS.md`,
+        gemini: `dist/gemini/${meta.id}-lean/`,
+        geminiSingleFile: `dist/gemini/${meta.id}.GEMINI.md`,
+        gpt: `dist/gpt/${meta.id}-lean/`,
+        gptSingleFile: `dist/gpt/${meta.id}.AGENTS.md`,
         customGpt: meta.customGpt ? `dist/gpt/${meta.id}.${meta.customGpt}` : null,
         cursor: `dist/cursor/${meta.id}.mdc`,
         copilot: `dist/copilot/${meta.id}.instructions.md`,
@@ -649,6 +764,8 @@ for (const id of ids) {
   buildClaude(pack, core);
   buildMerged(pack, core, 'gemini');
   buildMerged(pack, core, 'gpt');
+  buildLean(pack, core, 'gemini');
+  buildLean(pack, core, 'gpt');
   buildCustomGpt(pack);
   buildGlue(pack);
   loaded.push(pack);
