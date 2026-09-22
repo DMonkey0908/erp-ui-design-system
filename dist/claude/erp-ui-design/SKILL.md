@@ -153,6 +153,10 @@ If they hear the cost and still want it, build it. It is their product.
    `<head>` is not optional; see the shell reference.
 3. Keep the stylesheet order: theme → shell → page.
 
+## What this domain assumes about the input
+
+**Designed for a mouse or trackpad at desk distance.** The method is in `09-input.md`; this is what this domain assumes.
+
 ## How to use this skill
 
 Read **`core/`** for the rules that hold for any interface, and **`pack/`**

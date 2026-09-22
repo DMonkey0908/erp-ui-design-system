@@ -43,6 +43,14 @@
     "accent": "one saturated teal, reserved for the primary action",
     "semantic": "success/warning/danger, used only in forms and system messages"
   },
+  "platform": {
+    "input": [
+      "touch",
+      "fine-pointer"
+    ],
+    "minTarget": "44px",
+    "note": "Touch first: most strangers arrive on a phone. A pointer is the refinement, never the assumption."
+  },
   "density": "low - 16px base, 96-128px section rhythm, 60-75ch measure",
   "core": {
     "include": "all",

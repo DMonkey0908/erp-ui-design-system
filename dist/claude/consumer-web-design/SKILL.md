@@ -178,6 +178,10 @@ If they hear the cost and still want it, build it. It is their product.
 4. Budget the page before building it: see `04-performance.md`. A budget agreed
    after the hero image is chosen is not a budget.
 
+## What this domain assumes about the input
+
+**Designed for a finger on a held device.** Also reached with a mouse or trackpad at desk distance. Interactive targets are at least 44px. The method is in `09-input.md`; this is what this domain assumes.
+
 ## How to use this skill
 
 Read **`core/`** for the rules that hold for any interface, and **`pack/`**

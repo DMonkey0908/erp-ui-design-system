@@ -21,6 +21,13 @@
     "accent": "",
     "semantic": ""
   },
+  "platform": {
+    "input": [
+      "fine-pointer"
+    ],
+    "minTarget": null,
+    "note": "What the user is pointing with. One or more of fine-pointer, touch, glance, remote, gaze - the first is what the domain is designed around. Anything other than fine-pointer requires minTarget, and it may not go below 24px."
+  },
   "density": "",
   "core": {
     "include": "all",

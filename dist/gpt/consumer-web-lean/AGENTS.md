@@ -131,6 +131,8 @@ loses a third of their working set to whitespace.
 **If you are building something a trained user returns to daily, you are in the
 wrong pack.**
 
+**Designed for a finger on a held device.** Also reached with a mouse or trackpad at desk distance. Interactive targets are at least 44px. The method is in `09-input.md`; this is what this domain assumes.
+
 ## Hard rules - apply even before you open anything
 
 - Use the project token file. Never write a raw colour outside it; if there is no token file, create one first.

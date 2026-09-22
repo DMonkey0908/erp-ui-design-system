@@ -100,7 +100,7 @@ hard rules are in it so that even a lazy pass is not a wrong one. Whether that
 holds up is worth watching once someone uses it in anger.
 
 It also makes the `remove-after-task` lifecycle largely unnecessary. That
-policy existed because 21k tokens sat there between UI tasks; 1.5k does not
+policy existed because 26k tokens sat there between UI tasks; 1.7k does not
 justify tearing down an install and re-fetching it.
 
 ### 2. Pack inheritance - NOT NEEDED, still resisted
@@ -180,6 +180,57 @@ this repo can verify it.
 
 `evals/README.md` has the method. A run against `consumer-web`, and a cold run
 against either pack, are the two that would close this.
+
+### 6. Device is a second axis, and it is NOT a second pack
+
+Decision 2 retired pack inheritance on the grounds that `erp` and
+`consumer-web` are opposites with nothing to factor. That argument holds for
+domains and does not touch this one, because **device is not a domain — it cuts
+across every domain.**
+
+A fintech app and a warehouse console are different domains. Either can be
+built for a finger or for a mouse, and the choice changes target size, reach,
+whether hover exists at all and what focus has to look like. "Mobile fintech"
+needs the fintech thesis *and* the touch ergonomics, which is a composition
+problem, and `INSTALL.md` installs exactly one pack.
+
+Three ways out. The one taken is the third:
+
+1. **Composable packs** — a domain pack plus a device pack. Turns a two-level
+   system into a dependency graph, and every pair has to be checked for
+   contradictions. This is the thing decision 2 refused, and it is no more
+   attractive for arriving on a different axis.
+2. **A pack per cell** — `mobile-fintech`, `desktop-fintech`. The combinatorial
+   explosion the repo exists to avoid, one row at a time.
+3. **Method in core, assumption in metadata.** `core/09-input.md` holds what is
+   true of every input: target size follows pointer precision, hover is a
+   capability rather than a given, reach is not uniform, focus is the cursor
+   when nothing can point. A pack then *declares* what it assumes:
+
+```json
+"platform": {
+  "input": ["touch", "fine-pointer"],
+  "minTarget": "44px",
+  "note": "Touch first: most strangers arrive on a phone."
+}
+```
+
+The build validates it — an unknown input, a missing `minTarget` for anything
+coarser than a mouse, or a `minTarget` under the 24px accessibility floor all
+fail — and prints it into every generated build next to the thesis, because it
+is the assumption that silently decides half a layout and the only one nothing
+else in the output states.
+
+What this buys: the device axis is covered for **every** pack, present and
+future, at the cost of one metadata field. What it does not buy: two packs
+cannot be installed together, so a genuine mobile-fintech project installs the
+fintech pack and gets its touch ergonomics from core plus the declaration.
+
+**Re-open it when** a pack has to declare two `platform` blocks because the same
+domain ships a console and a handheld with genuinely different theses — a
+warehouse with both a desk and a scanner gun is the realistic case. Until one
+exists, a declaration is doing the work a mechanism would, for about 1% of the
+complexity.
 
 ## Adding a pack
 
