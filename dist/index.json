@@ -32,7 +32,15 @@
       "title": "Charts"
     },
     {
-      "file": "core/references/08-review.md",
+      "file": "core/references/08-feedback.md",
+      "title": "Feedback"
+    },
+    {
+      "file": "core/references/09-input.md",
+      "title": "Input"
+    },
+    {
+      "file": "core/references/99-review.md",
       "title": "Review"
     }
   ],

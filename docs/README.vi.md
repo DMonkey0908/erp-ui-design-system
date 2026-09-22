@@ -43,8 +43,8 @@ reference mà tác vụ cần.
 | Bản cài | Thường trực trong context |
 |---|---|
 | Claude skill | ~200 token (chỉ `description`, để định tuyến) |
-| Lean `GEMINI.md` / `AGENTS.md` | ~1.550 token |
-| Bản merged một file (Gems, Custom GPT) | ~21.000 token |
+| Lean `GEMINI.md` / `AGENTS.md` | ~1.700 token |
+| Bản merged một file (Gems, Custom GPT) | ~26.000 token |
 
 Giảm khoảng 93% so với dán cả hệ thống vào file context, tính trên **mọi**
 request — kể cả những request chẳng liên quan gì tới UI.
@@ -84,8 +84,8 @@ Nên biết nó tiết kiệm được gì trước khi bật. Chi phí thườn
 |---|---|---|
 | Claude skill | ~200 token (chỉ `description`, dùng để định tuyến) | Không — không đáng kể, mà mất luôn tự kích hoạt |
 | Rule của Cursor / Copilot | 0 cho tới khi mở file khớp glob | Không — vốn đã có điều kiện |
-| Lean `GEMINI.md` / `AGENTS.md` | ~1.550 token | Hiếm khi |
-| Bản merged một file | ~21.000 token, mọi request | Có — nhưng nên dùng bản lean thay thế |
+| Lean `GEMINI.md` / `AGENTS.md` | ~1.700 token | Hiếm khi |
+| Bản merged một file | ~26.000 token, mọi request | Có — nhưng nên dùng bản lean thay thế |
 
 Phần lớn giờ đã thành không cần thiết, vì bản lean đã xử lý đúng cái chi phí mà
 quy tắc này sinh ra để giải quyết. [`INSTALL.md`](../INSTALL.md) bước 6 có định
@@ -196,8 +196,8 @@ Lý do đầy đủ, và các quyết định còn bỏ ngỏ, nằm trong
 
 ## Core ép tuân thủ gì, dù bạn đang dựng cái gì
 
-Khoảng tám mươi luật trải trên token, typography, layout, motion, accessibility,
-i18n, charts và review — mỗi luật kèm hệ quả. Vài ví dụ:
+Khoảng một trăm luật trải trên token, typography, layout, motion, feedback,
+input, accessibility, i18n, charts và review — mỗi luật kèm hệ quả. Vài ví dụ:
 
 - **Mỗi màu nhấn cần một giá trị cho mỗi bề mặt.** Màu thương hiệu chọn để đọc
   trên nền trắng sẽ tàng hình trên nền gần đen. Lỗi phổ biến nhất của giao diện
@@ -213,6 +213,13 @@ i18n, charts và review — mỗi luật kèm hệ quả. Vài ví dụ:
   bạn.** Nó lùi về mặc định của trình duyệt là `1`.
 - **Trục giá trị bắt đầu từ 0 khi so sánh độ lớn.** Một trục bị cắt sẽ sống lâu
   hơn cuộc trò chuyện lẽ ra đã giải thích cho nó.
+- **Đồng hồ quyết định hình thức chờ.** Spinner hiện rồi tắt trong vòng 300ms
+  biến một giao diện vốn nhanh thành một cú giật; spinner còn quay sau một giây
+  lẽ ra phải là skeleton.
+- **Không thứ gì chỉ nằm sau hover.** Trên màn hình cảm ứng, nút hành động chỉ
+  hiện khi hover không phải là khó với — nó không tồn tại.
+- **Trong theme tối, chiều sâu là độ sáng.** Bóng đổ không còn gì để làm tối,
+  nên mọi tầng sụp xuống cùng một mặt phẳng.
 
 ## Bộ này KHÔNG phải gì
 

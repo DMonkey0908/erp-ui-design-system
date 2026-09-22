@@ -1,5 +1,10 @@
 # Motion
 
+This file is about movement the interface chooses: what moves, how fast, and
+how it eases. What the interface owes a user *while they wait* — busy states,
+spinners, skeletons, progress — is a different problem with a different clock,
+and it lives in `08-feedback.md`.
+
 ## Duration comes from repetition count, not from taste
 
 The right question is never "does this feel nice once". It is "how many times a
@@ -28,6 +33,40 @@ interactions are always the fastest thing on the screen.
   moves at a constant speed.
 - **Never `ease-in`** alone for something arriving. It starts slow, which reads
   as lag before it reads as motion.
+
+## Pick the movement that explains the change
+
+Left to default, everything fades. A fade is the one transition that carries no
+information: it says something replaced something else and nothing about how the
+two are related. The result is an interface where the user re-reads the screen
+after every state change, because nothing told them what survived it.
+
+Choose from a small vocabulary instead. Each entry answers a different question
+the user is about to ask.
+
+| Movement | What it tells the user | Use it when |
+|---|---|---|
+| **Transformation** | This is still the same object, doing a different job. | A submit button becoming a progress state, then a result. |
+| **Parenting** | These two things are bound — one drives the other. | A header shrinking as its content scrolls; a panel tracking a drag. |
+| **Masking** | The thing you selected is the thing that opened. | A summary expanding into its detail view. |
+| **Offset and delay** | These arrived as a sequence, and this is its order. | A list or grid populating — a small stagger, not a per-item show. |
+| **Obscuration** | This layer is now on top; what is behind it is out of play. | Dialogs, sheets, a global search overlay. |
+| **Value change** | The number moved, and by roughly this much. | A total updating after an action the user just took. |
+
+Two notes that are easy to get wrong:
+
+- **Value change requires `tabular-nums`.** An animated figure without it
+  reflows on every frame, which is the digit-jitter failure in `02-typography.md`
+  at sixty frames a second. And animate it only where the *change* is the
+  message — a dashboard whose every tile counts up on load has turned reading
+  into waiting.
+- **Masking is a promise about identity.** If the panel that opens is not the
+  thing that was clicked, the transition has lied, and the user hunts for what
+  they actually selected.
+
+The rest — parallax, depth-of-field, cards flipping to reveal a back face — are
+legitimate and are decoration. They earn a place when the movement *is* the
+content, and they are the first thing to cut under `prefers-reduced-motion`.
 
 ## Animate the cheap properties
 

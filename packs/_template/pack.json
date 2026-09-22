@@ -24,7 +24,7 @@
   "density": "",
   "core": {
     "include": "all",
-    "leadWith": ["01-tokens", "08-review"],
+    "leadWith": ["01-tokens", "99-review"],
     "overrides": []
   },
   "references": [

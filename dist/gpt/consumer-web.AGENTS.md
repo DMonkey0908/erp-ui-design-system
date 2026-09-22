@@ -65,6 +65,10 @@ them.
 - Leave a figure without `font-variant-numeric: tabular-nums`.
 - Remove a focus outline without replacing it.
 - Use colour as the only signal for a state.
+- Put information or an action behind hover alone. On a touchscreen it is not
+  awkward, it is absent.
+- Show a spinner for work that finishes in under 300ms, or leave one spinning
+  past a second where a skeleton at the real dimensions belongs.
 - Animate without honouring `prefers-reduced-motion`, including the end state.
 - Start a value axis anywhere but zero when magnitude is being compared.
 
@@ -237,6 +241,42 @@ has both a light and a dark surface — and most do somewhere, even if only in a
 menu — it needs both values.
 
 Same logic applies to semantic colours the moment they appear on two surfaces.
+
+### In a dark theme, depth is luminance
+
+A shadow is a darker area. On a light surface that reads as height; on a dark
+surface there is nothing left to darken, so the shadow is invisible and every
+layer collapses into the same plane — a menu that looks painted onto the panel
+behind it, a dialog with no edge.
+
+The mechanism that replaces it: **the higher a surface sits, the lighter it
+gets.** Define the steps as tokens, in one place, so elevation is a scale rather
+than a per-component guess.
+
+```css
+--surface-0: …;   /* the base — the page or workspace  */
+--surface-1: …;   /* raised: cards, panels             */
+--surface-2: …;   /* floating: menus, popovers, sheets */
+--surface-3: …;   /* transient: dialogs, toasts        */
+```
+
+Derive each step by mixing a small, increasing amount of white into the base
+rather than picking four unrelated greys. Picked by hand, the steps drift out
+of order the first time someone adds a fifth, and a floating layer ends up
+darker than the panel under it.
+
+Two rules that come with it:
+
+- **Not pure black for a large surface.** Maximum contrast against white text
+  makes the text bloom and smear at the edges, which is why long sessions on it
+  are tiring. Start from a very dark grey and let the scale climb from there.
+- **Keep the shadows anyway, and make them do the second job.** A shadow on a
+  dark surface still separates a floating layer from what it covers, even where
+  it cannot signal height. Elevation is carried by luminance; containment is
+  still carried by the shadow.
+
+A pack states the actual values. What is not domain-negotiable is the direction:
+in a dark theme, up is lighter.
 
 ### Alpha steps are tokens too
 
@@ -527,6 +567,11 @@ dimensions. A spinner in a zero-height box guarantees a jump.
 
 ## Motion
 
+This file is about movement the interface chooses: what moves, how fast, and
+how it eases. What the interface owes a user *while they wait* — busy states,
+spinners, skeletons, progress — is a different problem with a different clock,
+and it lives in `08-feedback.md`.
+
 ### Duration comes from repetition count, not from taste
 
 The right question is never "does this feel nice once". It is "how many times a
@@ -555,6 +600,40 @@ interactions are always the fastest thing on the screen.
   moves at a constant speed.
 - **Never `ease-in`** alone for something arriving. It starts slow, which reads
   as lag before it reads as motion.
+
+### Pick the movement that explains the change
+
+Left to default, everything fades. A fade is the one transition that carries no
+information: it says something replaced something else and nothing about how the
+two are related. The result is an interface where the user re-reads the screen
+after every state change, because nothing told them what survived it.
+
+Choose from a small vocabulary instead. Each entry answers a different question
+the user is about to ask.
+
+| Movement | What it tells the user | Use it when |
+|---|---|---|
+| **Transformation** | This is still the same object, doing a different job. | A submit button becoming a progress state, then a result. |
+| **Parenting** | These two things are bound — one drives the other. | A header shrinking as its content scrolls; a panel tracking a drag. |
+| **Masking** | The thing you selected is the thing that opened. | A summary expanding into its detail view. |
+| **Offset and delay** | These arrived as a sequence, and this is its order. | A list or grid populating — a small stagger, not a per-item show. |
+| **Obscuration** | This layer is now on top; what is behind it is out of play. | Dialogs, sheets, a global search overlay. |
+| **Value change** | The number moved, and by roughly this much. | A total updating after an action the user just took. |
+
+Two notes that are easy to get wrong:
+
+- **Value change requires `tabular-nums`.** An animated figure without it
+  reflows on every frame, which is the digit-jitter failure in `02-typography.md`
+  at sixty frames a second. And animate it only where the *change* is the
+  message — a dashboard whose every tile counts up on load has turned reading
+  into waiting.
+- **Masking is a promise about identity.** If the panel that opens is not the
+  thing that was clicked, the transition has lied, and the user hunts for what
+  they actually selected.
+
+The rest — parallax, depth-of-field, cards flipping to reveal a back face — are
+legitimate and are decoration. They earn a place when the movement *is* the
+content, and they are the first thing to cut under `prefers-reduced-motion`.
 
 ### Animate the cheap properties
 
@@ -720,6 +799,45 @@ elements. Check the accent against **every** surface it lands on.
 Placeholder text, disabled labels and "subtle" grey-on-grey metadata are where
 this fails most often — and disabled controls still need to be readable, because
 a user has to understand what is unavailable.
+
+#### When the background is not a colour
+
+A contrast ratio is measured against what is actually behind the glyphs. Put
+text over a photograph, a video, a gradient or a blurred backdrop and the ratio
+is no longer one number — it changes as the image changes, and a check that
+passed against the sample asset fails against the one a user uploads.
+
+Nothing about the text can fix this reliably; a heavier weight raises legibility
+but not the measured ratio. What works is putting something between them: a
+scrim over the whole image, or a solid plate behind the text block. Then check
+the worst case the background can reach, not the one in the mock.
+
+### Target size
+
+See `09-input.md`. The floor is 24×24 CSS pixels with the standard's spacing
+exception, it is one of the minimums a pack may raise and may not lower, and the
+usual fix is padding the control rather than enlarging what is drawn inside it.
+
+### Preferences beyond reduced motion
+
+Three system preferences are exposed, and most interfaces honour one of them.
+
+```css
+@media (prefers-reduced-transparency: reduce) { … }   /* blur and see-through */
+@media (prefers-contrast: more)              { … }    /* borders and ratios   */
+@media (forced-colors: active)               { … }    /* the system's palette */
+```
+
+- **Reduced transparency** is set by people for whom a translucent surface with
+  moving content behind it is unreadable. Honouring it means an opaque
+  fallback — the same fallback you already need for browsers without
+  `backdrop-filter`, so it costs one extra media query, not a second design.
+- **Increased contrast** wants stated boundaries. Surfaces separated only by a
+  one-step luminance difference need a real border here.
+- **Forced colours** replaces your palette outright. Anything encoded purely as
+  a background colour disappears; test that state is still legible when every
+  colour you chose is gone. `forced-color-adjust` should be reserved for the few
+  places where a colour carries meaning that cannot be re-expressed.
 
 ### Motion and vestibular safety
 
@@ -1012,6 +1130,278 @@ geographic projection, force layouts, or more than a few thousand marks. Then
 budget real time for restyling it to your tokens and fixing its keyboard
 support — both are usually more work than the chart was.
 
+## Feedback
+
+`04-motion.md` governs how a thing moves once it is moving. This file governs
+something else: what the interface owes the user **between the click and the
+answer**, and how that debt grows with the wait.
+
+The two get confused because both are measured in milliseconds. An animation
+duration is a design choice. A response time is a fact you are handed, and the
+only decision left is what to show while it elapses.
+
+### The clock picks the affordance
+
+Measure the work, then pick the row. Do not pick by how important the action
+feels.
+
+| Elapsed | Show |
+|---|---|
+| **< 100ms** | Nothing. The result is already there; it reads as direct manipulation. |
+| **100 – 300ms** | The control's own busy state. No overlay, no spinner — the thing the user touched acknowledges the touch. |
+| **300ms – 1s** | A spinner **inside the region that is about to change**, at the size of the thing it replaces. |
+| **1s – 5s** | A skeleton at the real dimensions of the content. |
+| **> 5s** | Determinate progress — a percentage or a count — and a way to cancel. |
+
+Three of these go wrong constantly:
+
+- **A spinner under 300ms makes the interface slower.** It appears, the user
+  registers it, it vanishes. A flash of "waiting" where there was no wait reads
+  as a stutter. If the work is usually fast and occasionally slow, delay the
+  spinner by ~300ms rather than rendering it immediately.
+- **A spinner past a second is an apology with no information.** It says
+  something is happening and nothing about what or how long. A skeleton says
+  both, because it has the shape of the answer.
+- **Indeterminate progress past five seconds is abandonment.** A user who cannot
+  tell 10% from 90% cannot decide whether to wait, and a bar that has been
+  ambiguous for thirty seconds is indistinguishable from a hang.
+
+A skeleton is only honest at the real dimensions. A generic grey box that
+collapses into a different layout is a spinner with extra steps — see the
+space-reservation rule in `03-layout.md`, which this is the same argument for.
+
+### Why the bands break where they do
+
+Under **100ms** a response is attributed to the user's own action. Past it, the
+user perceives the system as a separate actor that is responding.
+
+The **Doherty threshold** — roughly 400ms — is where the interaction stops being
+a conversation and starts being a queue. Below it, attention stays on the task;
+above it, attention leaves, and the cost is not the 400ms, it is the time the
+user spends coming back.
+
+This is why the bands tighten around the actions people repeat. A 900ms save on
+something done once a day is nothing. The same 900ms on a filter someone
+adjusts forty times an hour is the reason they stop adjusting it, and the
+feature is dead without anyone filing a bug.
+
+### An optimistic update needs all three
+
+Rendering success before the server confirms it is correct for a like button
+and wrong for a transfer. The test is not "is it fast" — it is whether all
+three hold:
+
+1. **It nearly always succeeds.** Not "should" — measured.
+2. **Failure is cheap.** Nothing downstream has acted on the assumption.
+3. **It can be reversed in the interface**, without a reload and without the
+   user re-entering anything.
+
+Delete all three and the cost is a user who believes something happened that
+did not.
+
+When it does fail, **the rollback is announced, not silent.** Reverting the
+state and saying nothing produces the worst outcome available: the user saw it
+work, looks again, and now distrusts every other state on the screen. Restore
+the value, say what failed, and leave their input where they can retry it.
+
+```
+optimistic    → render the new state, keep the previous one
+on failure    → restore it, surface the reason, preserve the user's input
+never         → restore it and stay quiet
+```
+
+### Every interaction has four parts, and two are usually missing
+
+A complete interaction — a toggle, a save, a drag, a pull-to-refresh — has the
+same four parts. Work through them in order; the failures cluster in the two
+nobody writes down.
+
+| Part | Question it answers |
+|---|---|
+| **Trigger** | What starts this, and can the user tell it exists, what it does and what state it is in? |
+| **Rules** | What is allowed, in what order, and what happens at the edges — empty, one item, too many, offline, already running, triggered twice? |
+| **Feedback** | How does the user learn which rule just applied? Visual, audible or haptic. |
+| **Loops and modes** | How long does it persist, does it repeat, and what does it look like the hundredth time? |
+
+**Rules** is where the bugs live, because rules are invisible until one is
+wrong. Double submission, an action fired on an item that vanished under it,
+a confirm dialog that runs the action twice — none of these are feedback
+problems.
+
+**Loops and modes** is where the charm becomes the cost. A mode that changes
+what the surrounding controls do must be visible and must be escapable, or the
+user issues the right command into the wrong mode — and blames themselves.
+
+### Design for the hundredth time, not the first
+
+Any flourish attached to a repeated action is seen hundreds of times by the
+people who use the product most. A confetti burst on the first invoice is a
+gift; on the four-hundredth it is a delay standing between someone and their
+job.
+
+Two ways out, both better than removing it: decay it — full the first few
+times, reduced after — or attach it to the milestone rather than to the
+repetition. The rule in `04-motion.md` about repeated interactions being the
+fastest thing on screen is the same principle applied to duration.
+
+### Spend the attention at the peak and at the end
+
+People do not remember an average. They remember the most intense moment of an
+experience and how it ended, and they rate the whole against those two.
+
+Practically, that redirects the polish budget:
+
+- **The error at the final step outweighs everything before it.** A failure on
+  confirm erases a flow that was pleasant up to that point, so the recovery path
+  from the last step deserves more care than the entrance to the first.
+- **Finish deliberately.** An action that completes by having the spinner stop
+  has no ending. State what happened, what changed and what is next.
+- **The worst moment is a design surface.** Waiting, empty, rejected, expired —
+  these are the moments that get remembered, and they are usually the ones
+  written last and fastest.
+
+## Input
+
+An interface is not shaped by its screen size. It is shaped by what the user is
+pointing with, and how far away they are sitting.
+
+A phone and a desktop browser at the same CSS width are not the same problem:
+one has a pointer accurate to a pixel and a hover state, the other has a finger
+roughly ten millimetres wide and no hover at all. Treating width as the variable
+is how a "responsive" layout ends up with 28px icon buttons on a touchscreen.
+
+This file holds the method. The numbers a domain settles on belong to its pack —
+except the floor, which is an accessibility minimum and belongs to nobody.
+
+### Target size follows the pointer, not the screen
+
+Time to hit a target falls as the target grows and rises as it gets further
+away. Two consequences, and they compound:
+
+- **The less precise the input, the larger the target must be.** A mouse
+  cursor is a point; a fingertip is a contact patch; a gaze cursor drifts
+  continuously because the eye never holds still.
+- **The further away the screen, the larger the target must be** — at
+  arm's length a 40px control and a 60px control are different sizes, at three
+  metres they are the same blur.
+
+The ordering that holds everywhere:
+
+```
+fine pointer, close    smallest targets the domain can justify
+coarse pointer, close  targets sized to a fingertip, with spacing between them
+remote or gaze, far    targets sized to be identified before they are selected
+```
+
+**The floor is 24×24 CSS pixels**, from WCAG 2.2 Target Size (Minimum), and it
+is not domain-negotiable — it is one of the accessibility minimums that cannot
+be overridden, because the cost lands on someone who is not in the room. A
+smaller control is allowed only where the standard's own exceptions apply: it
+has 24px of clear spacing around it, or it is an inline target inside a
+sentence.
+
+Packs raise this floor. None may lower it.
+
+**Spacing counts as much as size.** Two targets that each meet the minimum but
+sit flush against each other produce mis-taps that read to the user as the
+interface ignoring them — they hit the thing, something else happened. Gaps
+between adjacent actions are part of the target, not decoration.
+
+**The hit area is not the visual size.** A 16px icon can carry a 44px target by
+padding the control or projecting the area with a pseudo-element. Growing the
+hit area is almost always the right fix; growing the icon is almost never.
+
+### Hover does not exist everywhere
+
+Roughly half the world's sessions have no hover state at all, and the failure is
+total rather than degraded: the content is not merely hard to reach, it is
+unreachable.
+
+**Never put information or an action behind hover alone.** A row's delete button
+that appears on hover, a truncated cell whose full value is in a tooltip, a menu
+that opens on hover — on touch these either do not exist or fire on the tap that
+was meant to select something else.
+
+Hover is a *refinement*, and the capability is detectable:
+
+```css
+/* the control exists and is reachable for everyone … */
+.row-action { opacity: 1; }
+
+/* … and only quietens itself where a hover state is actually available */
+@media (hover: hover) and (pointer: fine) {
+  .row-action { opacity: 0; }
+  .row:hover .row-action,
+  .row-action:focus-visible { opacity: 1; }
+}
+```
+
+Query the **capability**, never the device. `pointer` and `hover` describe the
+primary input; `any-pointer` and `any-hover` describe everything available. A
+laptop with a touchscreen answers yes to both, a tablet with a keyboard changes
+its answer when the user picks it up, and neither is an edge case.
+
+The parallel keyboard rule is in `05-accessibility.md` — if a hover reveals
+something, focus must reveal the same thing, and the same markup usually solves
+both.
+
+### On a desktop, the edges are infinite
+
+A cursor cannot overshoot past the edge of the screen, so the four edges and
+especially the four corners behave as targets of unbounded size — the user can
+throw the pointer at them without aiming.
+
+That is why system menus, close buttons and docks live there, and it is worth
+spending: an action used constantly earns an edge. Nothing about this transfers
+to touch, where the edges are the hardest places to reach and are already
+claimed by system gestures.
+
+### Reach is not uniform
+
+Where a hand rests determines which part of the screen is cheap. On a held
+device the anchor is the thumb, which sweeps an arc — near the bottom centre is
+cheap, the far top corner requires regripping, and regripping while walking is
+how phones get dropped.
+
+The method, independent of any device:
+
+- **Put the primary action where the hand already is.** Not where the visual
+  hierarchy would like it.
+- **Put destructive actions where the hand is not.** Distance is the cheapest
+  confirmation there is, and it costs nothing to the people who are not about to
+  make a mistake.
+- **Never put a frequent action in the most expensive corner** just because that
+  is where the convention on another form factor placed it.
+
+### When focus is the only cursor
+
+With a remote, a D-pad, a keyboard or a gaze, the user cannot point at a target.
+They can only move from the current one — so focus is not a highlight, it is the
+cursor, and it must be unmissable.
+
+- **Give it weight.** At a distance a 2px outline is invisible; the focused item
+  needs to change size, elevation or fill enough to be located from across a
+  room. The 3:1 contrast requirement in `05-accessibility.md` is the floor, not
+  the target.
+- **Movement follows geometry, not source order.** If pressing right lands
+  somewhere the user would not call right, the model is broken, and no amount of
+  visual polish repairs it.
+- **No dead ends and no traps.** Every focusable element is reachable from every
+  other, and every container can be left in the direction the user entered it.
+- **One unambiguous focus at all times.** Never zero — a screen that loads with
+  nothing focused cannot be operated at all — and never two.
+
+### Physical feedback is feedback
+
+Where the hardware offers haptics, a short pulse confirms an action without
+requiring the user to look. It is the cheapest confirmation available on a
+device held in the hand, and the only one that survives glare.
+
+Two rules: haptics **confirm**, they never **inform** — anything conveyed by a
+buzz alone is lost to anyone who has them disabled — and they follow the same
+restraint as motion. A device that vibrates on every scroll tick gets its
+haptics turned off, taking the useful confirmations with them.
+
 ## Review
 
 The universal pass. A pack adds its own domain checks on top; nothing here is
@@ -1055,6 +1445,27 @@ waived by any domain.
 - [ ] Errors show what actually happened, not a generic apology.
 - [ ] Async work shows determinate progress where the duration is knowable.
 
+#### Feedback
+- [ ] The waiting affordance matches the wait: nothing under 300ms, a skeleton
+      at real dimensions past a second, cancellable progress past five.
+- [ ] No spinner appears and vanishes inside 300ms.
+- [ ] Every optimistic update is reversible in the interface, and a failed one
+      announces the rollback instead of quietly undoing it.
+- [ ] Double-triggering, an empty result and an item that disappeared mid-action
+      all behave.
+- [ ] A completion says what changed, rather than ending when a spinner stops.
+- [ ] Nothing celebratory is attached to an action someone performs all day.
+
+#### Input
+- [ ] Targets clear 24×24px, or carry the spacing the exception requires.
+- [ ] Adjacent actions are separated; nothing destructive sits against something
+      routine.
+- [ ] No information or action is behind hover alone; hover is inside
+      `@media (hover: hover)` and focus reveals the same thing.
+- [ ] Capability is queried (`pointer`, `hover`), never the device.
+- [ ] Focus is locatable at the viewing distance the screen is used at, never
+      absent and never duplicated.
+
 #### Accessibility
 - [ ] Nothing is mouse-only.
 - [ ] Tab order matches the visual order.
@@ -1064,10 +1475,17 @@ waived by any domain.
 - [ ] Greyscale test passes — no state indicated by hue alone.
 - [ ] Contrast: 4.5:1 body, 3:1 large text and interactive boundaries, including
       placeholders and disabled labels.
+- [ ] Text over an image, video or blur has a scrim or plate, checked against
+      the worst background it can be given.
+- [ ] `prefers-reduced-transparency` and `prefers-contrast` are answered, not
+      only `prefers-reduced-motion`.
 - [ ] Dialogs trap focus, restore it on close, and close on Escape.
 
 #### Motion
 - [ ] Repeated interactions are the fastest thing on screen.
+- [ ] Transitions that replace content say what survived — not everything is a
+      fade.
+- [ ] Animated figures carry `tabular-nums`.
 - [ ] Only `transform` and `opacity` animate on long lists.
 - [ ] `prefers-reduced-motion` honoured, with end states stated explicitly —
       no `opacity: revert`.
@@ -1123,6 +1541,25 @@ accessibility tree, so the label it was carrying no longer exists.
 
 **Placeholder text used as a label.** It disappears at the moment the user wants
 to check what they are filling in.
+
+**A spinner where the wait did not need one.** It appears and vanishes inside a
+third of a second, and the user reads the flash as a stutter in an interface
+that was actually fast.
+
+**An indeterminate spinner on a long wait.** It reports that something is
+happening and nothing about what or how long, so at thirty seconds it is
+indistinguishable from a hang.
+
+**A silent optimistic rollback.** The user saw it succeed, looks again, and it
+is gone. They now distrust every other state on the screen, which is a worse
+outcome than never having shown success.
+
+**An action that only exists on hover.** The row's delete button, the tooltip
+carrying the full value. On touch it is not degraded, it is absent.
+
+**Shadows carrying elevation on a dark surface.** There is nothing left to
+darken, so every layer lands on the same plane and a menu looks painted onto the
+panel behind it.
 
 **Palette drift.** The most common way a system dies — not with a decision, but
 with a page written in a hurry, shipping literals that exist nowhere in the
@@ -1822,7 +2259,7 @@ A page that is fast in the office and slow in the field is slow.
 
 ## Domain review checklist
 
-Run **`core/08-review.md` first** — tokens, type, layout, state, accessibility,
+Run **`core/99-review.md` first** — tokens, type, layout, state, accessibility,
 motion, charts, i18n. Nothing there is waived by this domain.
 
 This file is what a public page needs on top.

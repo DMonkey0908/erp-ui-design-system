@@ -41,6 +41,27 @@ waived by any domain.
 - [ ] Errors show what actually happened, not a generic apology.
 - [ ] Async work shows determinate progress where the duration is knowable.
 
+### Feedback
+- [ ] The waiting affordance matches the wait: nothing under 300ms, a skeleton
+      at real dimensions past a second, cancellable progress past five.
+- [ ] No spinner appears and vanishes inside 300ms.
+- [ ] Every optimistic update is reversible in the interface, and a failed one
+      announces the rollback instead of quietly undoing it.
+- [ ] Double-triggering, an empty result and an item that disappeared mid-action
+      all behave.
+- [ ] A completion says what changed, rather than ending when a spinner stops.
+- [ ] Nothing celebratory is attached to an action someone performs all day.
+
+### Input
+- [ ] Targets clear 24×24px, or carry the spacing the exception requires.
+- [ ] Adjacent actions are separated; nothing destructive sits against something
+      routine.
+- [ ] No information or action is behind hover alone; hover is inside
+      `@media (hover: hover)` and focus reveals the same thing.
+- [ ] Capability is queried (`pointer`, `hover`), never the device.
+- [ ] Focus is locatable at the viewing distance the screen is used at, never
+      absent and never duplicated.
+
 ### Accessibility
 - [ ] Nothing is mouse-only.
 - [ ] Tab order matches the visual order.
@@ -50,10 +71,17 @@ waived by any domain.
 - [ ] Greyscale test passes — no state indicated by hue alone.
 - [ ] Contrast: 4.5:1 body, 3:1 large text and interactive boundaries, including
       placeholders and disabled labels.
+- [ ] Text over an image, video or blur has a scrim or plate, checked against
+      the worst background it can be given.
+- [ ] `prefers-reduced-transparency` and `prefers-contrast` are answered, not
+      only `prefers-reduced-motion`.
 - [ ] Dialogs trap focus, restore it on close, and close on Escape.
 
 ### Motion
 - [ ] Repeated interactions are the fastest thing on screen.
+- [ ] Transitions that replace content say what survived — not everything is a
+      fade.
+- [ ] Animated figures carry `tabular-nums`.
 - [ ] Only `transform` and `opacity` animate on long lists.
 - [ ] `prefers-reduced-motion` honoured, with end states stated explicitly —
       no `opacity: revert`.
@@ -109,6 +137,25 @@ accessibility tree, so the label it was carrying no longer exists.
 
 **Placeholder text used as a label.** It disappears at the moment the user wants
 to check what they are filling in.
+
+**A spinner where the wait did not need one.** It appears and vanishes inside a
+third of a second, and the user reads the flash as a stutter in an interface
+that was actually fast.
+
+**An indeterminate spinner on a long wait.** It reports that something is
+happening and nothing about what or how long, so at thirty seconds it is
+indistinguishable from a hang.
+
+**A silent optimistic rollback.** The user saw it succeed, looks again, and it
+is gone. They now distrust every other state on the screen, which is a worse
+outcome than never having shown success.
+
+**An action that only exists on hover.** The row's delete button, the tooltip
+carrying the full value. On touch it is not degraded, it is absent.
+
+**Shadows carrying elevation on a dark surface.** There is nothing left to
+darken, so every layer lands on the same plane and a menu looks painted onto the
+panel behind it.
 
 **Palette drift.** The most common way a system dies — not with a decision, but
 with a page written in a hurry, shipping literals that exist nowhere in the

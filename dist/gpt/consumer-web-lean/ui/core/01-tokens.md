@@ -38,6 +38,42 @@ menu — it needs both values.
 
 Same logic applies to semantic colours the moment they appear on two surfaces.
 
+## In a dark theme, depth is luminance
+
+A shadow is a darker area. On a light surface that reads as height; on a dark
+surface there is nothing left to darken, so the shadow is invisible and every
+layer collapses into the same plane — a menu that looks painted onto the panel
+behind it, a dialog with no edge.
+
+The mechanism that replaces it: **the higher a surface sits, the lighter it
+gets.** Define the steps as tokens, in one place, so elevation is a scale rather
+than a per-component guess.
+
+```css
+--surface-0: …;   /* the base — the page or workspace  */
+--surface-1: …;   /* raised: cards, panels             */
+--surface-2: …;   /* floating: menus, popovers, sheets */
+--surface-3: …;   /* transient: dialogs, toasts        */
+```
+
+Derive each step by mixing a small, increasing amount of white into the base
+rather than picking four unrelated greys. Picked by hand, the steps drift out
+of order the first time someone adds a fifth, and a floating layer ends up
+darker than the panel under it.
+
+Two rules that come with it:
+
+- **Not pure black for a large surface.** Maximum contrast against white text
+  makes the text bloom and smear at the edges, which is why long sessions on it
+  are tiring. Start from a very dark grey and let the scale climb from there.
+- **Keep the shadows anyway, and make them do the second job.** A shadow on a
+  dark surface still separates a floating layer from what it covers, even where
+  it cannot signal height. Elevation is carried by luminance; containment is
+  still carried by the shadow.
+
+A pack states the actual values. What is not domain-negotiable is the direction:
+in a dark theme, up is lighter.
+
 ## Alpha steps are tokens too
 
 Focus rings, glows, hover washes, chart fills and hatch patterns all want the

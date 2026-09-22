@@ -14,6 +14,8 @@ Apply these whether or not the skill is loaded:
 - `font-variant-numeric: tabular-nums` on every figure - tables, tiles, axis labels, tooltips.
 - Never remove a focus outline without replacing it. Always `:focus-visible`, never `:focus`.
 - Colour is never the only signal for a state. Pair it with an icon, a label or a position.
+- Never put information or an action behind hover alone - a touchscreen has no hover, so it is absent rather than awkward.
+- Match the waiting affordance to the wait: nothing under 300ms, a skeleton at real dimensions past a second, cancellable progress past five.
 - `min-width: 0` on grid and flex children that can hold wide content; `minmax(0, 1fr)` on tracks.
 - Honour `prefers-reduced-motion`, and state the end value explicitly - `opacity: revert` yields 1, not your value.
 - Start a value axis at zero whenever magnitude is compared.

@@ -47,7 +47,7 @@
     "leadWith": [
       "01-tokens",
       "03-layout",
-      "08-review"
+      "99-review"
     ],
     "overrides": []
   },

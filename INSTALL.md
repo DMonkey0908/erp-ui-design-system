@@ -128,8 +128,8 @@ human will use this with a different tool than you, install that tool's format.
 | Assistant | Install | Always in context |
 |---|---|---|
 | Claude Code, Claude Desktop | `dist/claude/<skill-name>/` -> `.claude/skills/<skill-name>/` | ~200 tokens (the description only) |
-| Gemini CLI / Code Assist | `dist/gemini/<id>-lean/` -> repo root | **~1,550 tokens** |
-| Codex, Cursor, any `AGENTS.md` tool | `dist/gpt/<id>-lean/` -> repo root | **~1,550 tokens** |
+| Gemini CLI / Code Assist | `dist/gemini/<id>-lean/` -> repo root | **~1,700 tokens** |
+| Codex, Cursor, any `AGENTS.md` tool | `dist/gpt/<id>-lean/` -> repo root | **~1,700 tokens** |
 | Gemini Gem | `dist/gemini/<id>.GEMINI.md` | whole file - paste-in only |
 | Custom GPT | `dist/gpt/<id>.custom-gpt-instructions.md` | Fenced block -> Instructions; `<id>.AGENTS.md` -> Knowledge |
 
@@ -140,7 +140,7 @@ references beside it under `ui/`. The entry carries what must always be true:
 the activation block, the thesis, the hard rules, and an index. The assistant
 opens the one reference its task needs, the way the Claude skill already does.
 
-That is **~1,550 tokens instead of ~21,000**, on every request, including every
+That is **~1,700 tokens instead of ~26,000**, on every request, including every
 request with nothing to do with UI.
 
 The single merged `<id>.GEMINI.md` and `<id>.AGENTS.md` still exist, because a
@@ -323,7 +323,7 @@ Idle cost, per request, when nobody is doing UI work:
 | Cursor `.mdc` | 0 until a matching file is opened | **No.** It is already conditional. |
 | Copilot instructions | 0 until a matching file is opened | **No.** Same. |
 | Project rules snippet | ~340 tokens, every request | Marginal. |
-| `GEMINI.md` / `AGENTS.md` | **~21,000 tokens, every request** | **Yes.** This is the one that matters. |
+| `GEMINI.md` / `AGENTS.md` | **~26,000 tokens, every request** | **Yes.** This is the one that matters. |
 
 So: on a merged build this is a real optimisation and worth offering
 unprompted. On a Claude skill it is close to pointless, and it costs the
@@ -371,15 +371,15 @@ a different session, say so and stop.
 
 ## Step 7 — When no pack fits
 
-Common, and not a failure. Install **core only**: roughly eighty domain-neutral
-rules — tokens, typography, layout, motion, accessibility, i18n, charts, review
-— each with its consequence attached.
+Common, and not a failure. Install **core only**: roughly a hundred
+domain-neutral rules — tokens, typography, layout, motion, accessibility, i18n,
+charts, feedback, input, review — each with its consequence attached.
 
 ```bash
 BASE=https://raw.githubusercontent.com/DMonkey0908/ui-design-ecosystem/main
 mkdir -p .claude/skills/ui-core/core
-for f in 01-tokens 02-typography 03-layout 04-motion \
-         05-accessibility 06-i18n 07-charts 08-review; do
+for f in 01-tokens 02-typography 03-layout 04-motion 05-accessibility \
+         06-i18n 07-charts 08-feedback 09-input 99-review; do
   curl -fsSL "$BASE/core/references/$f.md" -o ".claude/skills/ui-core/core/$f.md"
 done
 curl -fsSL "$BASE/core/CORE.md" -o .claude/skills/ui-core/core/CORE.md

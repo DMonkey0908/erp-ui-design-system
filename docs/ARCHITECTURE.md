@@ -80,7 +80,7 @@ about.
 
 ### 1. Merged file size - RESOLVED
 
-Adding core pushed the merged `GEMINI.md` and `AGENTS.md` to ~21,000 tokens,
+Adding core pushed the merged `GEMINI.md` and `AGENTS.md` to ~26,000 tokens,
 and those files sit in context on **every** request, including every request
 with nothing to do with UI. Claude's build was unaffected, because it only
 loads the reference it needs.
@@ -91,7 +91,7 @@ disk. The entry carries only what must always be true - the activation block,
 the domain thesis, the hard rules, and an index of what to open. The assistant
 opens the one reference its task needs.
 
-**~1,550 tokens instead of ~21,000.** The merged single file stays, because a
+**~1,700 tokens instead of ~26,000.** The merged single file stays, because a
 Gem's Instructions field and a Custom GPT take text rather than a directory.
 
 What this trades: an agent can answer from the index without opening anything.

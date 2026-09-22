@@ -82,7 +82,7 @@ cp -r packs/_template packs/<your-id>
    makes the pack usable rather than aspirational.
 4. **Add the domain's own references.** Split by what a reader needs at one
    time, not by taxonomy. Four to six files is typical.
-5. **Add a `NN-checklist.md` last.** It points at `core/08-review.md` first,
+5. **Add a `NN-checklist.md` last.** It points at `core/99-review.md` first,
    then lists only domain checks.
 6. **Build.**
 
@@ -176,7 +176,7 @@ grep -rn "tabular-nums\|placeholder\|min-width: 0\|focus-visible" packs/<id>/ref
 - Does every rule state a consequence?
 - Are overrides declared in `pack.json`, not just prose?
 - Does `01-surfaces.md` contain real values, or placeholders?
-- Does the checklist defer to `core/08-review.md` first?
+- Does the checklist defer to `core/99-review.md` first?
 - Does `skill.description` name trigger phrases a user would type?
 - Does `notFor` genuinely exclude, or does it just restate `when` in the negative?
 - Would an agent reading only `when` and `notFor` pick this pack for the right

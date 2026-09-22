@@ -15,11 +15,16 @@ adds domain rules on top, or explicitly overrides a core one and says why.
 | `references/01-tokens.md` | How to build a token system. Naming, surfaces, the two-value accent rule, semantic separation, rebranding. |
 | `references/02-typography.md` | Family choice, `rem` vs `em`, how to construct a scale, measure, numerals. |
 | `references/03-layout.md` | Grid and flex traps, the responsive method, stylesheet order, pre-paint state. |
-| `references/04-motion.md` | Duration bands, easing, and honouring reduced motion correctly. |
-| `references/05-accessibility.md` | Focus, keyboard, landmarks, contrast, colour-not-alone, live regions. |
+| `references/04-motion.md` | Duration bands, easing, the movement vocabulary, honouring reduced motion correctly. |
+| `references/05-accessibility.md` | Focus, keyboard, landmarks, contrast, colour-not-alone, live regions, system preferences. |
 | `references/06-i18n.md` | Marking strings, width headroom, locale formatting, the language-flash guard. |
 | `references/07-charts.md` | Scales, axes, hit testing, keyboard access, the table fallback, series colour. |
-| `references/08-review.md` | The checklist and the failure modes that recur in every domain. |
+| `references/08-feedback.md` | Response-time bands, waiting affordances, optimistic updates, the anatomy of an interaction. |
+| `references/09-input.md` | Pointer precision, target size, hover as a capability, reach, focus as a cursor. |
+| `references/99-review.md` | The checklist and the failure modes that recur in every domain. |
+
+Review is numbered `99` so it stays last as the set grows; a new reference
+takes the next free number and needs no renumbering.
 
 ## What does not belong in core
 
@@ -54,4 +59,4 @@ which is what lets core talk about them at all.
 
 A pack's `PACK.md` states which core files matter most for its domain. Absent
 that guidance: `01-tokens` first, then the file matching the task, then
-`08-review` before calling the work done.
+`99-review` before calling the work done.

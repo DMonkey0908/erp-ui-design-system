@@ -1,6 +1,6 @@
 # Domain review checklist
 
-Run **`core/08-review.md` first** — tokens, type, layout, state, accessibility,
+Run **`core/99-review.md` first** — tokens, type, layout, state, accessibility,
 motion, charts, i18n. Nothing there is waived by this domain.
 
 This file is what a public page needs on top.

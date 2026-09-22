@@ -94,6 +94,45 @@ Placeholder text, disabled labels and "subtle" grey-on-grey metadata are where
 this fails most often — and disabled controls still need to be readable, because
 a user has to understand what is unavailable.
 
+### When the background is not a colour
+
+A contrast ratio is measured against what is actually behind the glyphs. Put
+text over a photograph, a video, a gradient or a blurred backdrop and the ratio
+is no longer one number — it changes as the image changes, and a check that
+passed against the sample asset fails against the one a user uploads.
+
+Nothing about the text can fix this reliably; a heavier weight raises legibility
+but not the measured ratio. What works is putting something between them: a
+scrim over the whole image, or a solid plate behind the text block. Then check
+the worst case the background can reach, not the one in the mock.
+
+## Target size
+
+See `09-input.md`. The floor is 24×24 CSS pixels with the standard's spacing
+exception, it is one of the minimums a pack may raise and may not lower, and the
+usual fix is padding the control rather than enlarging what is drawn inside it.
+
+## Preferences beyond reduced motion
+
+Three system preferences are exposed, and most interfaces honour one of them.
+
+```css
+@media (prefers-reduced-transparency: reduce) { … }   /* blur and see-through */
+@media (prefers-contrast: more)              { … }    /* borders and ratios   */
+@media (forced-colors: active)               { … }    /* the system's palette */
+```
+
+- **Reduced transparency** is set by people for whom a translucent surface with
+  moving content behind it is unreadable. Honouring it means an opaque
+  fallback — the same fallback you already need for browsers without
+  `backdrop-filter`, so it costs one extra media query, not a second design.
+- **Increased contrast** wants stated boundaries. Surfaces separated only by a
+  one-step luminance difference need a real border here.
+- **Forced colours** replaces your palette outright. Anything encoded purely as
+  a background colour disappears; test that state is still legible when every
+  colour you chose is gone. `forced-color-adjust` should be reserved for the few
+  places where a colour carries meaning that cannot be re-expressed.
+
 ## Motion and vestibular safety
 
 See `04-motion.md`. The rule that gets broken: honouring
