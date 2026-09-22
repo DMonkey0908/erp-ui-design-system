@@ -41,6 +41,12 @@
     "accent": "deep crimson #b3121b on light, #f2555e on dark",
     "semantic": "success/warning/danger/info, danger pushed off the accent hue"
   },
+  "platform": {
+    "input": [
+      "fine-pointer"
+    ],
+    "note": "The density assumes a mouse and a full keyboard. On a touchscreen the row height and the hit areas are both wrong, and relaxing them relaxes the thesis."
+  },
   "density": "high - 13px base, 8px/12px table cells",
   "core": {
     "include": "all",

@@ -94,6 +94,14 @@
         }
       ],
       "skillName": "consumer-web-design",
+      "platform": {
+        "input": [
+          "touch",
+          "fine-pointer"
+        ],
+        "minTarget": "44px",
+        "note": "Touch first: most strangers arrive on a phone. A pointer is the refinement, never the assumption."
+      },
       "install": {
         "claude": "dist/claude/consumer-web-design/",
         "gemini": "dist/gemini/consumer-web-lean/",
@@ -149,6 +157,12 @@
       },
       "overrides": [],
       "skillName": "erp-ui-design",
+      "platform": {
+        "input": [
+          "fine-pointer"
+        ],
+        "note": "The density assumes a mouse and a full keyboard. On a touchscreen the row height and the hit areas are both wrong, and relaxing them relaxes the thesis."
+      },
       "install": {
         "claude": "dist/claude/erp-ui-design/",
         "gemini": "dist/gemini/erp-lean/",

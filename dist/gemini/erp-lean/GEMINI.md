@@ -128,6 +128,8 @@ uses colour to create delight. An ERP uses colour as a *signal*, so when
 something is red it means something. Spend the accent anywhere else and you have
 spent the only tool you had for saying "look here".
 
+**Designed for a mouse or trackpad at desk distance.** The method is in `09-input.md`; this is what this domain assumes.
+
 ## Hard rules - apply even before you open anything
 
 - Use the project token file. Never write a raw colour outside it; if there is no token file, create one first.

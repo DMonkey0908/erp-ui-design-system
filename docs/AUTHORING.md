@@ -45,6 +45,9 @@ packs/<id>/
 | `keywords` | — | Search terms for the catalogue. |
 | `surfaces` | — | The role table, so packs can be compared. |
 | `density` | — | One line. |
+| `platform.input` | **yes** | What the user is pointing with: one or more of `fine-pointer`, `touch`, `glance`, `remote`, `gaze`, first being what the domain is designed around. Printed into every build beside the thesis. |
+| `platform.minTarget` | — | Required as soon as `input` contains anything other than `fine-pointer`. May raise the 24px accessibility floor, never lower it; the build checks. |
+| `platform.note` | — | One sentence on why, in the pack's own voice. |
 | `core.include` | — | `"all"` today. Reserved for selective inclusion. |
 | `core.leadWith` | — | Core file ids to read first, e.g. `["01-tokens"]`. |
 | `core.overrides` | — | `[{ "rule": "...", "why": "..." }]`. Declare every contradiction. |

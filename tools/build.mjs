@@ -23,8 +23,8 @@
  *   dist/snippets/<id>.{project-rules,lifecycle}.md          append to a rules file
  *
  * Lean is the default for a repo; merged exists because a Gem's Instructions
- * field and a Custom GPT take text, not a directory. The difference is ~1.5k
- * tokens against ~21k, on every request.
+ * field and a Custom GPT take text, not a directory. The difference is ~1.7k
+ * tokens against ~26k, on every request.
  *
  * And once, for the catalogue:
  *   dist/index.json                                          machine-readable pack list
@@ -86,6 +86,27 @@ const HARD_RULES = [
   'Start a value axis at zero whenever magnitude is compared.',
   'Say which rules shaped the result when you are done.',
 ];
+
+/**
+ * The input modalities a pack can be designed around.
+ *
+ * Device is not domain - a fintech app and a warehouse console are different
+ * domains, and either can be built for a finger or for a mouse. Rather than
+ * make packs composable along a second axis, a pack DECLARES which input it
+ * assumes, core/09-input.md holds the method that applies to all of them, and
+ * the declaration is printed where the assistant will see it. See open
+ * decision 6 in docs/ARCHITECTURE.md.
+ */
+const INPUTS = {
+  'fine-pointer': 'a mouse or trackpad at desk distance',
+  'touch': 'a finger on a held device',
+  'glance': 'a wrist, read in under five seconds',
+  'remote': 'a D-pad or remote across a room',
+  'gaze': 'eye and hand in a spatial environment',
+};
+
+/** The accessibility floor, in CSS pixels. A pack may raise it, never lower it. */
+const TARGET_FLOOR = 24;
 
 const read = (p) => readFileSync(p, 'utf8');
 const rel = (p) => relative(ROOT, p).split('\\').join('/');
@@ -175,6 +196,33 @@ function loadPack(id) {
   for (const a of meta.assets || []) {
     if (!existsSync(join(dir, 'assets', a.file))) {
       problems.push(`${id}: assets/${a.file} is listed in pack.json but missing`);
+    }
+  }
+
+  // What the pack assumes the user is pointing with, and how big that makes a
+  // target. Declared rather than inferred, because a screen width does not
+  // tell you: a phone and a desktop browser at the same CSS width have
+  // different pointers, and sizing by width is how a "responsive" layout ends
+  // up with 28px icon buttons on a touchscreen.
+  const inputs = meta.platform?.input;
+  if (!Array.isArray(inputs) || !inputs.length) {
+    problems.push(`${id}: pack.json needs "platform": { "input": [...] } - one or more of ${Object.keys(INPUTS).join(', ')}`);
+  } else {
+    for (const i of inputs) {
+      if (!INPUTS[i]) problems.push(`${id}: unknown platform input "${i}" - expected one of ${Object.keys(INPUTS).join(', ')}`);
+    }
+    // Anything less precise than a mouse needs the pack to say how big a
+    // target gets. core/09-input.md holds the method; this is the value.
+    const coarse = inputs.filter((i) => i !== 'fine-pointer');
+    const min = meta.platform?.minTarget;
+    if (coarse.length && !min) {
+      problems.push(`${id}: platform.input includes ${coarse.join(', ')}, so pack.json needs "platform": { "minTarget": "44px" } - core/09-input.md sets the floor, the pack sets its own`);
+    }
+    if (min) {
+      const px = parseFloat(String(min));
+      if (!(px >= TARGET_FLOOR)) {
+        problems.push(`${id}: platform.minTarget is ${min}, below the ${TARGET_FLOOR}px accessibility floor - a pack may raise it and may not lower it`);
+      }
     }
   }
 
@@ -322,6 +370,23 @@ function activationBlock() {
   return rules.trim();
 }
 
+/**
+ * One line naming what the user is pointing with, and how big that makes a
+ * target. It goes into every build near the thesis, because it is the
+ * assumption that silently decides half the layout and the only one nothing
+ * else in the output states.
+ */
+function platformLine(meta) {
+  const inputs = meta.platform?.input || [];
+  if (!inputs.length) return '';
+
+  const [first, ...rest] = inputs;
+  let line = `**Designed for ${INPUTS[first] ?? first}.**`;
+  if (rest.length) line += ` Also reached with ${rest.map((i) => INPUTS[i] ?? i).join(', and ')}.`;
+  if (meta.platform.minTarget) line += ` Interactive targets are at least ${meta.platform.minTarget}.`;
+  return line + ` The method is in \`09-input.md\`; this is what this domain assumes.`;
+}
+
 function buildClaude(pack, core) {
   const { meta, dir } = pack;
   const skillDir = join(DIST, 'claude', meta.skill.name);
@@ -352,6 +417,10 @@ function buildClaude(pack, core) {
     '',
     packBody,
     '',
+    platformLine(meta) ? '## What this domain assumes about the input' : '',
+    platformLine(meta) ? '' : '',
+    platformLine(meta),
+    platformLine(meta) ? '' : '',
     '## How to use this skill',
     '',
     'Read **`core/`** for the rules that hold for any interface, and **`pack/`**',
@@ -544,6 +613,8 @@ function buildLean(pack, core, kind) {
     '',
     thesis,
     '',
+    platformLine(meta),
+    platformLine(meta) ? '' : '',
     '## Hard rules - apply even before you open anything',
     '',
     HARD_RULES.map((r) => `- ${r}`).join(NL),
@@ -738,6 +809,7 @@ function buildIndex(packs) {
       surfaces: meta.surfaces ?? {},
       overrides: meta.core?.overrides ?? [],
       skillName: meta.skill.name,
+      platform: meta.platform ?? null,
       install: {
         claude: `dist/claude/${meta.skill.name}/`,
         gemini: `dist/gemini/${meta.id}-lean/`,
