@@ -1,0 +1,187 @@
+/* ==========================================================================
+   THEME — the single source of truth for the palette.
+   Load this FIRST on every page, before the shell stylesheet and before any
+   page stylesheet, so those files can define their own tokens in terms of
+   these and never in terms of a literal.
+
+   The rule that shapes the whole palette: chrome is dark, accents are the
+   brand, and every container that holds actual content stays white. Only the
+   shell (sidebar, topbar) and the hero KPI tiles are dark — cards, tables,
+   dropdowns and form surfaces remain white so a full working day in front of
+   this stays comfortable.
+
+   TO REBRAND: change the values under "Brand" and re-derive the alpha steps
+   from the new RGB. Nothing below that section needs to move.
+   ========================================================================== */
+
+:root {
+    /* ----- Brand -------------------------------------------------------
+       A deep, slightly desaturated hue, not a bright signal colour: it has
+       to sit under large areas of text and next to --state-danger without
+       the two reading as the same thing. */
+    --brand: #b3121b;
+    --brand-hover: #8d0d15;
+    --brand-dark: #6e0a10;
+    --brand-light: #e11d2e;
+
+    /* The same brand, stepped up so it is legible ON dark chrome. #b3121b
+       against #0a0a0c is unreadable. Every accent needs this second value. */
+    --brand-on-dark: #f2555e;
+
+    /* Washes for backgrounds on white surfaces */
+    --brand-tint: #fdf2f3;
+    --brand-tint-2: #fbdfe1;
+    --brand-tint-3: #f6c9cd;
+    --brand-border: #efc4c7;
+
+    /* Translucent steps — glows, focus rings, chart fills, hatch patterns.
+       Derived from the brand RGB (179, 18, 27). */
+    --brand-a08: rgba(179, 18, 27, 0.08);
+    --brand-a12: rgba(179, 18, 27, 0.12);
+    --brand-a18: rgba(179, 18, 27, 0.18);
+    --brand-a25: rgba(179, 18, 27, 0.25);
+    --brand-a35: rgba(179, 18, 27, 0.35);
+
+    /* Gradients — banners, brand marks, dark-chrome accents */
+    --brand-gradient: linear-gradient(135deg, #7d0d13 0%, #b3121b 45%, #d81f2a 130%);
+    --brand-gradient-soft: linear-gradient(135deg, #b3121b 0%, #e11d2e 100%);
+
+    /* ----- Ink (chrome) ------------------------------------------------ */
+    --ink-950: #0a0a0c;
+    --ink-900: #101013;
+    --ink-850: #16161a;
+    --ink-800: #1c1c21;
+    --ink-700: #26262d;
+    --ink-border: #2a2a32;
+    --ink-border-soft: #1f1f26;
+
+    /* Text on ink */
+    --ink-text: #f1f1f4;
+    --ink-text-dim: #b9b9c2;
+    --ink-text-muted: #7f7f8a;
+
+    /* Hover / active washes on ink */
+    --ink-hover: rgba(255, 255, 255, 0.06);
+    --ink-active: rgba(255, 255, 255, 0.1);
+
+    /* The dark hero tile */
+    --ink-tile: linear-gradient(160deg, #16161a 0%, #0c0c0f 100%);
+
+    /* ----- Paper (content) ---------------------------------------------
+       Everything a user reads or edits lives on these. */
+    --paper: #ffffff;
+    --paper-2: #f7f8fa;
+    --paper-3: #f1f3f5;
+    --paper-bg: #f6f7f9;
+
+    --paper-text: #0f172a;
+    --paper-text-2: #475569;
+    --paper-text-3: #94a3b8;
+
+    --paper-border: #e2e8f0;
+    --paper-border-strong: #cbd5e1;
+
+    /* ----- Semantic ----------------------------------------------------
+       Kept deliberately distinct from the brand. */
+    --state-success: #16a34a;
+    --state-warning: #ca8a04;
+    /* Brighter and more orange than --brand, so an error never reads as
+       just another primary action. */
+    --state-danger: #ef3b3b;
+    --state-danger-dark: #c81e1e;
+    /* No blue anywhere in this palette — "info" borrows the neutral ink.
+       If the brand IS blue, make info a neutral grey instead. */
+    --state-info: #3f3f46;
+
+    /* ----- Shell metrics ----------------------------------------------- */
+    --sidebar-width: 240px;
+    --sidebar-collapsed: 72px;
+    --topbar-height: 64px;
+
+    /* Chrome is sharper than content. This is deliberate. */
+    --radius-chrome-sm: 2px;
+    --radius-chrome: 4px;
+    --radius-control: 6px;
+    --radius-card: 8px;
+    --radius-float: 12px;
+
+    /* ----- Elevation ---------------------------------------------------
+       Slate, never black. The shell itself gets none. */
+    --shadow-float: 0 18px 40px -12px rgba(15, 23, 42, 0.25),
+        0 6px 12px -6px rgba(15, 23, 42, 0.12);
+    --shadow-tooltip: 0 8px 24px rgba(15, 23, 42, 0.14);
+    --shadow-raised: 0 1px 2px rgba(15, 23, 42, 0.12);
+}
+
+/* Density is the point: 13px base, not 16px. An operator reading the same
+   table all day gains a third more rows per screen from this one line. */
+body {
+    margin: 0;
+    background: var(--paper-bg);
+    color: var(--paper-text);
+    font-size: 13px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    min-height: 100vh;
+}
+
+code,
+kbd,
+samp,
+pre {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.78rem;
+    color: var(--paper-text-2);
+    overflow-wrap: anywhere;
+}
+
+/* A label that must exist for a screen reader but not show. */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+/* Ship this on every project. Note: state the end value explicitly in any
+   per-component override — `opacity: revert` reverts to the browser default
+   of 1, not to your stylesheet value. */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ==========================================================================
+   ADDED DURING THE RUN — see result.md, finding 2.
+
+   pack/03-components.md specifies these as literals inside the component CSS
+   (`.pill-success { background: #d1fae5; color: #065f46; }`, the dropdown
+   hover fill, the destructive item red). That contradicts the pack's own
+   non-negotiable: never write a raw hex outside the token file. Following the
+   rule rather than the snippet, they become tokens here.
+   ========================================================================== */
+
+:root {
+    /* Pill tints — a tinted background with dark text, never a saturated
+       fill with white text: a row of saturated pills drowns the data. */
+    --pill-success-bg: #d1fae5;
+    --pill-success-text: #065f46;
+    --pill-warning-bg: #fef3c7;
+    --pill-warning-text: #92400e;
+    --pill-danger-bg: #fee2e2;
+    --pill-danger-text: #991b1b;
+
+    /* Hover fill for items on paper, and the destructive pairing. */
+    --paper-hover: #f1f5f9;
+    --danger-text: #dc2626;
+    --danger-text-hover: #b91c1c;
+    --danger-tint: #fef2f2;
+}

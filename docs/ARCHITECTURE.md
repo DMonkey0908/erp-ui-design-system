@@ -156,12 +156,30 @@ were written with it:
 
 Both fail the build. Both were tested by breaking them.
 
-### 5. Nothing is tested against a real build
+### 5. Nothing is tested against a real build — HALF ANSWERED
 
-Every rule here was extracted from shipping code, but the **packaging** has not
-been proven: nobody has yet installed the generated skill and built a screen
-from it end to end. Until that happens, treat the ergonomics — not the content —
-as unverified.
+Every rule here was extracted from shipping code, but the **packaging** had not
+been proven: nobody had installed the generated skill and built a screen from it
+end to end.
+
+Somebody has now. `evals/runs/2026-09-22-erp-01/` is a complete goods-receipt
+screen built from `dist/claude/erp-ui-design/` and nothing else, then scored
+against both checklists: **52 of 53 applicable core items, 27 of 27 pack items**,
+and nine findings — three of them contradictions between a pack's own files that
+were invisible until somebody tried to follow both.
+
+What that settles: the references answer the questions that come up, and the
+build is usable end to end.
+
+What it does not settle, and is now the sharper half of the question: the run was
+administered by the same model that had just written two of the core files. It
+tests whether the answers are **in** the build, not whether a cold assistant
+**goes looking** for them. Activation — the thing the whole `ACTIVATION.md`
+argument rests on — remains unverified, and only a session that has never seen
+this repo can verify it.
+
+`evals/README.md` has the method. A run against `consumer-web`, and a cold run
+against either pack, are the two that would close this.
 
 ## Adding a pack
 
