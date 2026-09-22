@@ -1,0 +1,621 @@
+/* ==========================================================================
+   PAGE — goods receipt list.
+   Loads third. May define tokens in terms of theme tokens, never as literals.
+   ========================================================================== */
+
+/* ── Card: the only container ──────────────────────────────────────────── */
+
+.card {
+    background: var(--paper);
+    border: 1px solid var(--paper-border);
+    border-radius: var(--radius-card);
+    padding: 20px 22px;
+}
+
+.card+.card {
+    margin-top: 16px;
+}
+
+.card-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+}
+
+.card-title {
+    margin: 0 0 4px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--paper-text);
+}
+
+.note {
+    margin: 0;
+    max-width: 72ch;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--paper-text-2);
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ── Buttons ───────────────────────────────────────────────────────────── */
+
+.btn {
+    padding: 8px 16px;
+    /* 24x24 is the floor; this lands at 34px tall. core/09-input.md */
+    min-height: 34px;
+    border: 1px solid var(--paper-border-strong);
+    border-radius: var(--radius-control);
+    background: var(--paper);
+    color: var(--paper-text);
+    font: inherit;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.btn:hover:not(:disabled) {
+    background: var(--paper-2);
+}
+
+.btn:active:not(:disabled) {
+    background: var(--paper-3);
+}
+
+.btn:disabled {
+    opacity: 0.55;
+    cursor: default;
+}
+
+.btn-primary {
+    border-color: var(--brand);
+    background: var(--brand);
+    color: var(--ink-text);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: var(--brand-hover);
+    border-color: var(--brand-hover);
+}
+
+.btn-primary:active:not(:disabled) {
+    background: var(--brand-dark);
+    border-color: var(--brand-dark);
+}
+
+.btn-sm {
+    padding: 5px 12px;
+    min-height: 26px;
+    font-size: 0.75rem;
+}
+
+.link-btn {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--brand);
+    font: inherit;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn:focus-visible,
+.link-btn:focus-visible {
+    outline: 2px solid var(--brand-a35);
+    outline-offset: 2px;
+}
+
+/* The button's own busy state — 100-300ms band, no overlay, no spinner.
+   core/08-feedback.md */
+.btn[aria-busy='true'] {
+    opacity: 0.7;
+    cursor: progress;
+}
+
+/* ── Filter row ────────────────────────────────────────────────────────── */
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 10px 12px;
+    margin-bottom: 10px;
+}
+
+.filters input,
+.filters select {
+    height: 36px;
+}
+
+.filters .field {
+    flex: 0 1 auto;
+}
+
+.filters .field-grow {
+    flex: 1 1 240px;
+    min-width: 220px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--paper-text-2);
+}
+
+.field input,
+.field select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px 10px;
+    border: 1px solid var(--paper-border-strong);
+    border-radius: var(--radius-control);
+    background: var(--paper);
+    color: var(--paper-text);
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 400;
+}
+
+.field :focus-visible {
+    outline: 2px solid var(--brand-a35);
+    outline-offset: 1px;
+    border-color: var(--brand);
+}
+
+.filter-note {
+    margin: 0 0 14px;
+    font-size: 0.75rem;
+    color: var(--paper-text-2);
+    font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 860px) {
+    .filters .field {
+        flex: 1 1 140px;
+    }
+}
+
+/* ── KPI tiles ─────────────────────────────────────────────────────────── */
+
+.tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.tile {
+    padding: 12px 14px;
+    border: 1px solid var(--paper-border);
+    border-radius: var(--radius-card);
+    background: var(--paper-2);
+    min-width: 0;
+}
+
+.tile-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--paper-text-2);
+}
+
+/* Never coloured: tinting it says "good" or "bad" about a figure that may be
+   neither. The judgement goes in .tile-sub, where it can be worded. */
+.tile-value {
+    margin-top: 4px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--paper-text);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tile-sub {
+    margin-top: 2px;
+    font-size: 0.72rem;
+    color: var(--paper-text-3);
+}
+
+/* ── Table ─────────────────────────────────────────────────────────────── */
+
+.table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--paper-border);
+    border-radius: var(--radius-card);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8125rem;
+}
+
+.table th {
+    padding: 8px 12px;
+    text-align: start;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--paper-text-2);
+    background: var(--paper-2);
+    border-bottom: 1px solid var(--paper-border);
+    white-space: nowrap;
+}
+
+.table td {
+    padding: 8px 12px;
+    color: var(--paper-text);
+    border-bottom: 1px solid var(--paper-border);
+}
+
+.table tr:last-child td {
+    border-bottom: 0;
+}
+
+.table .num {
+    text-align: end;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.table td.truncate {
+    max-width: 320px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* No transition here. One row at a time is cheap, but the rule core states is
+   an absolute, and a row hover reads as instant anyway. See result.md,
+   finding 7. */
+.table tbody tr:hover {
+    background: var(--paper-2);
+}
+
+.table .col-action {
+    width: 1%;
+    text-align: end;
+}
+
+.receipt-id {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.78rem;
+    font-variant-numeric: tabular-nums;
+}
+
+/* The row action is present for everyone, at all times. A hover-only control
+   does not exist on a touchscreen. core/09-input.md */
+.row-action {
+    min-height: 26px;
+    padding: 4px 10px;
+    border: 1px solid var(--paper-border-strong);
+    border-radius: var(--radius-control);
+    background: var(--paper);
+    color: var(--paper-text-2);
+    font: inherit;
+    font-size: 0.72rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+
+.row-action:hover:not(:disabled) {
+    background: var(--paper-2);
+    color: var(--paper-text);
+}
+
+/* Inset: the row action sits flush against the right edge of a wrapper that
+   clips on the x axis, so a positive offset is cut. core/05-accessibility.md */
+.row-action:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: -2px;
+}
+
+.row-action:active:not(:disabled) {
+    background: var(--paper-3);
+}
+
+.row-action[aria-pressed='true'] {
+    border-color: var(--brand-border);
+    background: var(--brand-tint);
+    color: var(--brand);
+}
+
+.row-action:disabled {
+    opacity: 0.55;
+    cursor: default;
+}
+
+/* ── Status pills ──────────────────────────────────────────────────────── */
+/* State lives in the data attribute; CSS decides how loud it is. Each pill
+   carries a word as well as a tint — colour is never the only signal. */
+
+.pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
+    background: var(--paper-3);
+    color: var(--paper-text-2);
+}
+
+.pill::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+}
+
+.pill[data-state='received'] {
+    background: var(--pill-success-bg);
+    color: var(--pill-success-text);
+}
+
+.pill[data-state='partial'] {
+    background: var(--pill-warning-bg);
+    color: var(--pill-warning-text);
+}
+
+.pill[data-state='discrepancy'] {
+    background: var(--pill-danger-bg);
+    color: var(--pill-danger-text);
+}
+
+.pill[data-state='on-hold'] {
+    background: var(--paper-3);
+    color: var(--paper-text-2);
+}
+
+/* Shape as well as hue: on hold is the only outlined pill, so it survives
+   greyscale and a black-and-white printout. */
+.pill[data-state='on-hold']::before {
+    background: transparent;
+    box-shadow: inset 0 0 0 2px currentColor;
+}
+
+/* ── Waiting: skeleton, not a spinner ──────────────────────────────────── */
+/* Past a second, at the real dimensions of the rows it replaces.
+   core/08-feedback.md */
+
+.skeleton-cell {
+    display: block;
+    height: 11px;
+    border-radius: 3px;
+    background: linear-gradient(90deg,
+            var(--paper-3) 0%,
+            var(--paper-2) 50%,
+            var(--paper-3) 100%);
+    background-size: 200% 100%;
+    animation: skeleton-sweep 1.1s ease-in-out infinite;
+}
+
+.skeleton-cell.is-short {
+    width: 45%;
+}
+
+.skeleton-cell.is-right {
+    margin-inline-start: auto;
+    width: 60%;
+}
+
+@keyframes skeleton-sweep {
+    from {
+        background-position: 100% 0;
+    }
+
+    to {
+        background-position: -100% 0;
+    }
+}
+
+/* The global guard kills the animation; it does not supply an end state.
+   State the value wanted, explicitly — `revert` yields the browser default. */
+@media (prefers-reduced-motion: reduce) {
+    .skeleton-cell {
+        animation: none;
+        background: var(--paper-3);
+        opacity: 1;
+    }
+}
+
+/* ── Empty states ──────────────────────────────────────────────────────── */
+
+.empty {
+    padding: 18px 12px;
+    text-align: center;
+    font-size: 0.8125rem;
+    color: var(--paper-text-3);
+}
+
+.empty strong {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--paper-text-2);
+    font-weight: 600;
+}
+
+.empty[data-case='error'] {
+    color: var(--danger-text);
+}
+
+/* ── Topbar dropdown ───────────────────────────────────────────────────── */
+/* Paper, even though it hangs off dark chrome: it holds content, so it
+   follows the content rules. Fixed, not absolute — the topbar is a flex
+   container and an absolute child gets clipped by it. pack/02-shell.md */
+
+.dropdown {
+    position: fixed;
+    top: calc(var(--topbar-height) - 4px);
+    inset-inline-end: 16px;
+    z-index: 5;
+    min-width: 220px;
+    padding: 6px;
+    border: 1px solid var(--paper-border);
+    border-radius: var(--radius-float);
+    background: var(--paper);
+    box-shadow: var(--shadow-float);
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+    transform-origin: top right;
+    pointer-events: none;
+    transition: opacity 0.16s ease, transform 0.16s ease;
+}
+
+.dropdown.is-open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+/* The guard kills the animation, not the end state. */
+@media (prefers-reduced-motion: reduce) {
+    .dropdown.is-open {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    border-radius: var(--radius-card);
+    background: transparent;
+    border: none;
+    color: var(--paper-text);
+    text-decoration: none;
+    font: inherit;
+    font-size: 0.9em;
+    font-weight: 500;
+    text-align: start;
+    cursor: pointer;
+    transition: background 0.12s ease, color 0.12s ease;
+}
+
+.dropdown-item:hover {
+    background: var(--paper-hover);
+}
+
+.dropdown-item:focus-visible {
+    outline: 2px solid var(--brand-a35);
+    outline-offset: -2px;
+}
+
+.dropdown-item.is-danger {
+    color: var(--danger-text);
+}
+
+.dropdown-item.is-danger:hover {
+    background: var(--danger-tint);
+    color: var(--danger-text-hover);
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: var(--paper-border);
+    margin: 4px 6px;
+}
+
+@media (max-width: 640px) {
+    .dropdown {
+        inset-inline: 8px;
+        width: auto;
+        max-width: 380px;
+    }
+}
+
+/* ── Toast: how a failed optimistic update announces itself ────────────── */
+
+.toast {
+    position: fixed;
+    inset-inline-end: 16px;
+    inset-block-end: 16px;
+    z-index: 6;
+    max-width: 380px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    border: 1px solid var(--paper-border);
+    border-left: 3px solid var(--state-danger);
+    border-radius: var(--radius-float);
+    background: var(--paper);
+    box-shadow: var(--shadow-float);
+    font-size: 0.8125rem;
+    color: var(--paper-text);
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+    transition: opacity 0.16s ease, transform 0.16s ease;
+}
+
+.toast.is-open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .toast.is-open {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.toast-title {
+    font-weight: 600;
+}
+
+.toast-body {
+    margin: 2px 0 0;
+    color: var(--paper-text-2);
+}
+
+.toast-close {
+    margin-inline-start: auto;
+    min-width: 24px;
+    min-height: 24px;
+    border: 0;
+    border-radius: var(--radius-control);
+    background: none;
+    color: var(--paper-text-3);
+    font: inherit;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.toast-close:hover {
+    background: var(--paper-hover);
+    color: var(--paper-text);
+}
+
+.toast-close:focus-visible {
+    outline: 2px solid var(--brand-a35);
+    outline-offset: 1px;
+}

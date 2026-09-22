@@ -244,9 +244,17 @@ including the palette drift in the source system's own older pages. A guide that
 documents only the polished parts will not help anyone avoid the trap that
 already sprang.
 
-What is **not** yet proven is the packaging: nobody has installed a generated
-skill and built a screen from it end to end. Treat the ergonomics as unverified
-until that happens.
+The packaging now has one data point of its own.
+[`evals/`](evals/) holds a complete screen built from the generated `erp` skill
+and nothing else, scored against both checklists: 52 of 53 applicable core items
+and 27 of 27 pack items, with nine findings — including three places where a
+pack's own files contradicted each other, invisible until somebody tried to
+follow both.
+
+That run was administered by the model that had just edited the rules, so it
+says the answers are in the build. It does not say a cold assistant goes looking
+for them. Until a fresh session runs one, treat activation as the part still
+unverified.
 
 ## Contributing
 

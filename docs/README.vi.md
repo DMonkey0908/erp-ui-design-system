@@ -237,9 +237,16 @@ không phải bịa. Phần failure modes cũng là thật — mỗi mục đề
 palette drift trong chính các trang cũ của hệ nguồn. Một tài liệu chỉ ghi lại
 phần đã đánh bóng sẽ không giúp ai tránh được cái bẫy đã sập.
 
-Thứ **chưa** được kiểm chứng là phần đóng gói: chưa ai cài bản skill sinh ra rồi
-dựng một màn hình từ đầu đến cuối bằng nó. Hãy coi phần trải nghiệm sử dụng là
-chưa xác minh cho tới khi đó.
+Phần đóng gói giờ đã có một điểm dữ liệu. [`evals/`](../evals/) chứa một màn
+hình hoàn chỉnh dựng hoàn toàn từ bản skill `erp` sinh ra, chấm theo cả hai
+checklist: 52/53 mục core áp dụng được và 27/27 mục của pack, kèm chín phát
+hiện — trong đó ba chỗ là các file của chính một pack mâu thuẫn nhau, không thể
+thấy cho tới khi có người thử làm theo cả hai.
+
+Lượt chạy đó do chính model vừa sửa luật thực hiện, nên nó chỉ chứng minh rằng
+câu trả lời **có** trong bản build, chứ không chứng minh một trợ lý chưa biết gì
+sẽ **đi tìm** chúng. Cho tới khi một phiên hoàn toàn mới chạy thử, hãy coi phần
+tự kích hoạt là thứ còn chưa xác minh.
 
 ## Góp ý
 
